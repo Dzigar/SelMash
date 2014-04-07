@@ -9,7 +9,7 @@ public interface RequestDAO {
 
 	public List<?> secondRequest();
 
-	public List<?> thirdRequest();
+	public List<Object[]> thirdRequest(String country, String city);
 
 	public List<?> fourthRequest();
 

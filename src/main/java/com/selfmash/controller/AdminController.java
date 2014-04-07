@@ -1,7 +1,6 @@
 package com.selfmash.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,7 +65,25 @@ public class AdminController {
 	@RequestMapping(value = "/sendRequest2", method = RequestMethod.POST)
 	public String performSecondRequest(HttpServletRequest servletRequest,
 			ModelMap map) {
-		map.addAttribute("formRequest", "1");
+		map.addAttribute("formRequest", "2");
+		return "admin_page";
+	}
+
+	@RequestMapping(value = "/sendRequest3", method = RequestMethod.POST)
+	public String performthirdRequest(HttpServletRequest servletRequest,
+			ModelMap map) {
+		map.addAttribute("requestPage", "3");
+		try {
+			String country = servletRequest.getParameter("country");
+			String city = servletRequest.getParameter("city");
+			List<Object[]> userParams = requestService.thirdRequest(country,
+					city);
+			map.addAttribute("country", country);
+			map.addAttribute("city", city);
+			map.addAttribute("userlist", userParams);
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
 		return "admin_page";
 	}
 }

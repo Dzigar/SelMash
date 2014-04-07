@@ -119,7 +119,7 @@
 		</tr>
 		<tr>
 			<td colspan="2" align="right"><input type="submit"
-				value="sendRequest1" class="submit-button_no_style"></td>
+				value="Send" class="submit-button_no_style"></td>
 		</tr>
 	</table>
 </form:form>

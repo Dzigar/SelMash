@@ -9,7 +9,7 @@ public interface RequestService {
 
 	public List secondRequest();
 
-	public List thirdRequest();
+	public List<Object[]> thirdRequest(String coutry, String city);
 
 	public List fourthRequest();
 

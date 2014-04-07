@@ -28,9 +28,8 @@ public class RequestServiceImpl implements RequestService {
 	}
 
 	@Override
-	public List thirdRequest() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Object[]> thirdRequest(String country, String city) {
+		return requestDAO.thirdRequest(country, city);
 	}
 
 	@Override

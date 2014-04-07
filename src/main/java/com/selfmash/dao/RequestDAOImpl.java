@@ -44,8 +44,17 @@ public class RequestDAOImpl implements RequestDAO {
 	}
 
 	@Override
-	public List<?> thirdRequest() {
-		// TODO Auto-generated method stub
+	public List<Object[]> thirdRequest(String country, String city) {
+		try {
+			Query query = getCurrentSession()
+					.createSQLQuery(
+							"Select name,lastname,country,city FROM users where country = :country AND city = :city")
+					.setParameter("country", country)
+					.setParameter("city", city);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
 		return null;
 	}
 
