@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	<definition name="index" template="/WEB-INF/views/jsp/index.jsp">
+		<put-attribute name="title" value="SelfMash" />
+		<put-attribute name="header" value="/WEB-INF/views/jsp/head.jsp" />
+		<put-attribute name="logo" value="/WEB-INF/views/jsp/logo.jsp" />
+	</definition>
+
+	<definition name="access" template="/WEB-INF/views/jsp/access_page.jsp">
+		<put-attribute name="login"
+			value="/WEB-INF/views/jsp/form/login_form.jsp" />
+		<put-attribute name="reg"
+			value="/WEB-INF/views/jsp/form/reg_form.jsp" />
+		<put-attribute name="logo" value="/WEB-INF/views/jsp/logo.jsp" />
+	</definition>
+
+	<definition name="login" extends="access">
+		<put-attribute name="title" value="Welcome SelfMash" />
+		<put-attribute name="logo" value="/WEB-INF/views/jsp/logo.jsp" />
+	</definition>
+
+	<definition name="user_page" template="/WEB-INF/views/jsp/user_page.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/jsp/head.jsp" />
+		<put-attribute name="logo" value="/WEB-INF/views/jsp/logo.jsp" />
+		<put-attribute name="user-list" value="/WEB-INF/views/jsp/user-list.jsp" />
+		<put-attribute name="upload_form"
+			value="/WEB-INF/views/jsp/form/upload_form.jsp" />
+		<put-attribute name="photo_collection"
+			value="/WEB-INF/views/jsp/form/photo_collection.jsp" />
+		<put-attribute name="photo" value="/WEB-INF/views/jsp/form/photo.jsp" />
+	</definition>
+
+	<definition name="user_photo_page" template="/WEB-INF/views/jsp/user_photo_page.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/jsp/head.jsp" />
+		<put-attribute name="logo" value="/WEB-INF/views/jsp/logo.jsp" />
+		<put-attribute name="user-list" value="/WEB-INF/views/jsp/user-list.jsp" />
+		<put-attribute name="photo" value="/WEB-INF/views/jsp/form/photo.jsp" />
+	</definition>
+
+	<definition name="admin" template="/WEB-INF/views/jsp/admin_page.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/jsp/admin_head.jsp" />
+	</definition>
+
+</tiles-definitions>

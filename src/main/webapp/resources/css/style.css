@@ -1,0 +1,154 @@
+@CHARSET "UTF-8";
+
+body {
+	background: #e7e7e7;
+}
+
+a {
+	color: #6a6a6a;
+	text-decoration: none;
+}
+
+a:HOVER {
+	color: #3f0d0d;
+	text-decoration: underline;
+}
+
+a:ACTIVE {
+	color: #3f0d0d;
+}
+
+a:AFTER {
+	color: #3f0d0d;
+}
+
+.head {
+	background: white;
+	padding: 0%;
+	-webkit-box-shadow: 0px 1px 0px 0px rgba(188, 188, 188, 1);
+	-moz-box-shadow: 0px 1px 0px 0px rgba(188, 188, 188, 1);
+	box-shadow: 0px 1px 0px 0px rgba(188, 188, 188, 1);
+}
+
+ul.hr {
+	margin: 0;
+	padding: 4px;
+}
+
+ul.hr li {
+	display: inline;
+	margin-right: 5px;
+	padding: 5px;
+}
+
+.info {
+	margin-left: auto;
+	margin-right: 10%;
+	margin-top: 10px;
+	width: 59%;
+}
+
+.collection {
+	margin-left: auto;
+	margin-right: 10%;
+	margin-top: 10px;
+	width: 59%;
+	height: auto;
+	text-align: center;
+}
+
+.user-list {
+	position: absolute;
+	margin-left: 10%;
+	margin-top: 10px;
+	margin-right: auto;
+	width: 20%;
+	height: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#block {
+	background: white;
+	border-left-style: solid;
+	border-bottom-style: solid;
+	border-right-style: solid;
+	border-top-style: solid;
+	border-width: 1px;
+	border-radius: 10px;
+	border-color: #d9dbdc;
+}
+
+h3 {
+	margin: 10px 10px 0 10px;
+	color: #FFF;
+	font: 18pt Arial, sans-serif;
+	letter-spacing: -1px;
+	font-weight: bold;
+}
+
+.boxgrid {
+	width: 325px;
+	height: 260px;
+	margin: 10px;
+	float: left;
+	background: #161613;
+	border: solid 2px #8399AF;
+	overflow: hidden;
+	position: relative;
+}
+
+.boxgrid img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 0;
+}
+
+.boxgrid p {
+	padding: 10px 10px;
+	color: #afafaf;
+	font-weight: bold;
+	font: 10pt "Lucida Grande", Arial, sans-serif;
+}
+
+.boxcaption {
+	float: left;
+	position: absolute;
+	background: #000;
+	height: 100px;
+	width: 100%;
+	margin-top: 260px;
+	opacity: .8;
+	/* For IE 5-7 */
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+	/* For IE 8 */
+	-MS-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	height: 100px;
+	opacity: .8;
+	opacity: .8;
+}
+
+.captionfull .boxcaption {
+	top: 260;
+	left: 0;
+}
+
+.caption .boxcaption {
+	top: 220;
+	left: 0;
+}
+
+ul.user-info {
+	margin: 0;
+	padding: 1px;
+	margin-left: 5%;
+}
+
+ul.user-info li {
+	display: inline;
+	margin-top: 0px;
+	padding: 1px;
+	height: auto;
+}
+.
