@@ -65,7 +65,8 @@
 
 			<div class="right_header">
 				Welcome Admin, <a href="#">Visit site</a> | <a href="#"
-					class="messages">(3) Messages</a> | <a href="#" class="logout">Logout</a>
+					class="messages">(3) Messages</a> | <a
+					href="<c:url value="j_spring_security_logout" />" class="logout">Logout</a>
 			</div>
 			<div id="clock_a"></div>
 		</div>
@@ -135,13 +136,27 @@
 						<a class="menuitem submenuheader" href="">Requests</a>
 						<div class="submenu">
 							<ul>
-								<li><a href="">Request №1</a></li>
-								<li><a href="">Request №2</a></li>
-								<li><a href="">Request №3</a></li>
-								<li><a href="">Request №4</a></li>
-								<li><a href="">Request №5</a></li>
-								<li><a href="">Request №6</a></li>
-								<li><a href="">Request №7</a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="1" /></c:url>">Request
+										№1 </a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="2" /></c:url>">Request
+										№2</a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="3" /></c:url>">Request
+										№3</a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="4" /></c:url>">Request
+										№4</a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="5" /></c:url>">Request
+										№5</a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="6" /></c:url>">Request
+										№6</a></li>
+								<li><a
+									href="<c:url value="/admin" ><c:param name="requestPage" value="7" /></c:url>">Request
+										№7</a></li>
 							</ul>
 						</div>
 						<a class="menuitem submenuheader" href="">Sidebar Settings</a>
@@ -170,7 +185,7 @@
 					</div>
 				</div>
 				<div class="right_content">
-					<jsp:include page="include/request1.jsp" />
+					<jsp:include page="include/request${requestPage}.jsp" />
 				</div>
 			</div>
 			<div class="clear"></div>

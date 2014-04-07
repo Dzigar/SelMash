@@ -6,23 +6,15 @@
 	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 	<http auto-config="true">
-		<intercept-url pattern="/admin" access="ROLE_ADMIN" />
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/user/**" access="ROLE_USER" />
 		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/**" access="ROLE_USER,ROLE_ADMIN " />
-		<!--<intercept-url pattern="/index" access="ROLE_USER" /> <intercept-url 
-			pattern="/**" access="ROLE_USER, ROLE_ADMIN" /> <intercept-url pattern="/index" 
-			access="ROLE_USER, ROLE_ADMIN" /> <intercept-url pattern="/user/*" access="ROLE_USER, 
-			ROLE_ADMIN" /> <intercept-url pattern="/user" access="ROLE_USER, ROLE_ADMIN" 
-			/> <intercept-url pattern="/photo" access="ROLE_USER, ROLE_ADMIN" /> <intercept-url 
-			pattern="/photo/*" access="ROLE_USER, ROLE_ADMIN" /> -->
-		<form-login login-page="/login" default-target-url="/"
+		<intercept-url pattern="/**" access="ROLE_USER" />
+		<form-login login-page="/login" default-target-url="/index"
 			authentication-failure-url="/error-login" always-use-default-target="true" />
 		<logout logout-success-url="/logout" />
 	</http>
-
-
 
 	<beans:bean id="customUserDetailsService"
 		class="com.selfmash.checking.CustomUserDetailsService" />

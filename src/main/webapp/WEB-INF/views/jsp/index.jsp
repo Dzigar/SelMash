@@ -22,7 +22,7 @@
 							<tr width="80%">
 								<td><a href="/index">SelfMash</a></td>
 
-								<td width="20%" align="left"><a href="/${username}"><c:out
+								<td width="20%" align="left"><a href="/user/${username}"><c:out
 											value="Home"></c:out></a></td>
 								<td align="right">
 									<ul class="hr">

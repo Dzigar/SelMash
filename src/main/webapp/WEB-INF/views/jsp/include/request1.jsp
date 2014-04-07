@@ -6,7 +6,8 @@
 	зареєструвалися в мережі у визначений період часу, та ті, для яких ще
 	не було підтверджено реєстрацію.</h3>
 
-<form action="/admin/sendRequest1" method="post">
+<form:form method="POST" action="/admin/sendRequest1"
+	modelAttribute="sendRequest1">
 	<table width="100%">
 		<th>Select start date</th>
 		<th>Select end date</th>
@@ -118,36 +119,30 @@
 		</tr>
 		<tr>
 			<td colspan="2" align="right"><input type="submit"
-				value="Send request" class="submit-button_no_style"></td>
+				value="sendRequest1" class="submit-button_no_style"></td>
 		</tr>
 	</table>
-</form>
+</form:form>
 <c:if test="${not empty userlist}">
-	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
+	<table id="rounded-corner">
 		<thead>
 			<tr>
-				<th scope="col" class="rounded-company"></th>
-				<th scope="col" class="rounded">Product</th>
-				<th scope="col" class="rounded">Details</th>
-				<th scope="col" class="rounded">Price</th>
-				<th scope="col" class="rounded">Date</th>
-				<th scope="col" class="rounded">Edit</th>
-				<th scope="col" class="rounded-q4">Delete</th>
+				<th scope="col" class="rounded">Name</th>
+				<th scope="col" class="rounded">Lastname</th>
+				<th scope="col" class="rounded">Date reg</th>
+				<th scope="col" class="rounded">Confim reg</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td><input type="checkbox" name="" /></td>
-				<td>Product name</td>
-				<td>details</td>
-				<td>150$</td>
-				<td>12/05/2010</td>
 
-				<td><a href="#"><img src="/resources/images/user_edit.png"
-						alt="" title="" border="0" /></a></td>
-				<td><a href="#" class="ask"><img
-						src="/resources/images/trash.png" alt="" title="" border="0" /></a></td>
-			</tr>
+			<c:forEach var="user" items="${userlist }">
+				<tr>
+					<td><c:out value="${user[0]}" /></td>
+					<td><c:out value="${user[1]}" /></td>
+					<td><c:out value="${user[2]}" /></td>
+					<td><c:out value="${user[3]}" /></td>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 </c:if>

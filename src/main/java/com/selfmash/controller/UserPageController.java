@@ -21,7 +21,7 @@ import com.selfmash.service.PhotoService;
 import com.selfmash.service.UserService;
 
 @Controller
-@RequestMapping("/{login}")
+@RequestMapping(value="/user")
 public class UserPageController {
 
 	@Resource(name = "photoServiceImpl")
@@ -32,7 +32,7 @@ public class UserPageController {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/{login}", method = RequestMethod.GET)
 	public String showUserPage(@PathVariable String login, ModelMap model,
 			Principal principal, HttpServletRequest request) {
 		User user = userService.getUser(login);
