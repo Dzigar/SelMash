@@ -10,9 +10,9 @@ public class FileDeleteHandler {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 
-	public void deleteFilePhoto(String fileName, long userId) {
+	public void deleteFilePhoto(String fileName, String username) {
 		try {
-			new File(Path.PHOTO_PATH + "/user" + userId + "/" + fileName)
+			new File(Path.PHOTO_PATH + "/" + username + "/" + fileName)
 					.delete();
 		} catch (Exception e) {
 			logger.info(e.getLocalizedMessage());

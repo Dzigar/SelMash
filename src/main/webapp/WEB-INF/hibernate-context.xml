@@ -28,21 +28,17 @@
 				<value>com.selfmash.model.User</value>
 				<value>com.selfmash.model.Role</value>
 				<value>com.selfmash.model.Photo</value>
-				<value>com.selfmash.model.Estimation</value>
-				<value>com.selfmash.model.Comment</value>
-				<value>com.selfmash.model.Relation</value>
+				<!-- <value>com.selfmash.model.Estimation</value> <value>com.selfmash.model.Comment</value> -->
 			</list>
 		</property>
-		<!-- <property name="hibernateProperties"> <props> <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop> 
-			<prop key="hibernate.show_sql">true</prop> </props> </property> -->
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.connection.Charset">UTF-8</prop>
 				<prop key="hibernate.connection.CharacterEncoding">UTF-8</prop>
 				<prop key="hibernate.connection.Useunicode">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<!-- <prop key="hbm2ddl.auto">create</prop> -->
-
+				<prop key="show_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
 			</props>
 		</property>
 	</bean>

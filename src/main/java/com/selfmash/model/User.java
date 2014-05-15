@@ -12,18 +12,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.validator.constraints.Email;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "user")
 public class User implements Serializable {
 
 	/**
@@ -33,67 +36,70 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
+	@Column
 	private long id;
 
-	@Column(name = "LOGIN")
+	@Size(min = 4, max = 16)
+	@Column(nullable = false, unique = true)
 	private String login;
 
-	@Column(name = "PASSWORD")
+	@Column(nullable = false)
 	private String password;
 
-	@Column(name = "NAME")
+	@Size(min = 2, max = 16)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(name = "LASTNAME")
+	@Size(min = 2, max = 16)
+	@Column(nullable = false)
 	private String lastname;
 
-	@Column(name = "EMAIL")
+	@Email
+	@Column(nullable = false, unique = true)
 	private String email;
 
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
+	@Past
 	@Temporal(TemporalType.DATE)
-	@Column(name = "BIRTH_DATE")
+	@Column
 	private Date birthDate;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "DATE_REG")
-	private Date dateReg;
-
-	@Column(name = "PHONE")
-	private String phone;
-
-	@Column(name = "LANGUAGE")
-	private String language;
-
-	@Column(name = "CITY")
-	private String city;
-
-	@Column(name = "COUNTRY")
-	private String country;
-
-	@Column(name = "SEX")
-	private String sex;
-
-	@Column(name = "CONFIM_REG")
-	private boolean confimReg;
-
-	@OneToOne
-	@JoinTable(name = "USER_ROLES", joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") })
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
 	private Role role;
-
-	@OneToMany
-	@Cascade({ CascadeType.ALL })
-	@JoinTable(name = "USERS_PHOTOS", joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "PHOTO_ID", referencedColumnName = "ID") })
-	private Set<Photo> photos;
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade({ CascadeType.ALL })
-	@JoinTable(name = "USERS_ESTIMATES", joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "ESTIMATION_ID", referencedColumnName = "ID") })
-	private Set<Estimation> estimations;
+	@JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") })
+	private Set<Photo> photos;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "PHOTO_ID", referencedColumnName = "ID") })
-	private Set<Photo> preferences;
+	// @OneToMany(fetch = FetchType.EAGER)
+	// @Cascade({ CascadeType.ALL })
+	// @JoinTable(name = "USERS_ESTIMATES", joinColumns = { @JoinColumn(name =
+	// "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
+	// @JoinColumn(name = "ESTIMATION_ID", referencedColumnName = "ID") })
+	// private Set<Estimation> estimations;
+	//
+	// @ManyToMany(fetch = FetchType.EAGER)
+	// @JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name =
+	// "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
+	// @JoinColumn(name = "PHOTO_ID", referencedColumnName = "ID") })
+	// private Set<Photo> preferences;
+
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(String name, String lastname, Date birthDate, String login,
+			String password, String email, Role role) {
+		this.name = name;
+		this.lastname = lastname;
+		this.birthDate = birthDate;
+		this.login = login;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+	}
 
 	public long getId() {
 		return id;
@@ -172,20 +178,20 @@ public class User implements Serializable {
 		this.lastname = lastname;
 	}
 
-	/**
-	 * @return the estimation
-	 */
-	public Set<Estimation> getEstimations() {
-		return estimations;
-	}
-
-	/**
-	 * @param estimation
-	 *            the estimation to set
-	 */
-	public void setEstimations(Set<Estimation> estimations) {
-		this.estimations = estimations;
-	}
+	// /**
+	// * @return the estimation
+	// */
+	// public Set<Estimation> getEstimations() {
+	// return estimations;
+	// }
+	//
+	// /**
+	// * @param estimation
+	// * the estimation to set
+	// */
+	// public void setEstimations(Set<Estimation> estimations) {
+	// this.estimations = estimations;
+	// }
 
 	/**
 	 * @return the birthDate
@@ -217,75 +223,19 @@ public class User implements Serializable {
 		this.photos = photos;
 	}
 
-	/**
-	 * @return the preferences
-	 */
-	public Set<Photo> getPreferences() {
-		return preferences;
-	}
-
-	/**
-	 * @param preferences
-	 *            the preferences to set
-	 */
-	public void setPreferences(Set<Photo> preferences) {
-		this.preferences = preferences;
-	}
-
-	public boolean isConfimReg() {
-		return confimReg;
-	}
-
-	public void setConfimReg(boolean confimReg) {
-		this.confimReg = confimReg;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Date getDateReg() {
-		return dateReg;
-	}
-
-	public void setDateReg(Date dateReg) {
-		this.dateReg = dateReg;
-	}
-
-	public String getSex() {
-		return sex;
-	}
-
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+	// /**
+	// * @return the preferences
+	// */
+	// public Set<Photo> getPreferences() {
+	// return preferences;
+	// }
+	//
+	// /**
+	// * @param preferences
+	// * the preferences to set
+	// */
+	// public void setPreferences(Set<Photo> preferences) {
+	// this.preferences = preferences;
+	// }
 
 }

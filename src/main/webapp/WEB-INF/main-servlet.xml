@@ -41,6 +41,11 @@
 		<property name="maxUploadSize" value="500000" />
 	</bean>
 
+	<!-- bind your messages.properties -->
+	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
+		id="messageSource">
+		<property name="basename" value="messages" />
+	</bean>
 
 	<mvc:interceptors>
 		<bean class="com.selfmash.handler.AccountingInterceptor" />

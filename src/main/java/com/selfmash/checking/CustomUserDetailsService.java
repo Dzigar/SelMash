@@ -14,19 +14,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.selfmash.dao.UserDAO;
+import com.selfmash.service.UserService;
 
 @Service
 @Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserDAO userDAO;
+	private UserService userService;
 
 	public UserDetails loadUserByUsername(String login)
 			throws UsernameNotFoundException {
 
-		com.selfmash.model.User domainUser = userDAO.getUser(login);
+		com.selfmash.model.User domainUser = userService.getUser(login);
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;

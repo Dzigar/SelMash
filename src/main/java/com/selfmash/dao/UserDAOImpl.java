@@ -1,8 +1,13 @@
 package com.selfmash.dao;
 
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +30,13 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	@Transactional
-	public void addUser(User user) {
+	public boolean addUser(User user) {
 		try {
 			getCurrentSession().save(user);
+			return true;
 		} catch (Exception e) {
 			logger.info("Error in 'saveUser':" + e.getLocalizedMessage());
+			return false;
 		}
 	}
 
@@ -76,5 +83,48 @@ public class UserDAOImpl implements UserDAO {
 			logger.info(e.getLocalizedMessage());
 		}
 		return false;
+	}
+
+	@Override
+	public int getDaysOnline(String login) {
+		try {
+			String query = "SELECT DATEDIFF('"
+					+ new SimpleDateFormat("yyyy-MM-dd").format(new Date())
+					+ "', u.dateReg) from user u where u.login = '" + login
+					+ "'";
+			return ((BigInteger) getCurrentSession().createSQLQuery(query)
+					.uniqueResult()).intValue();
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+		return 0;
+	}
+
+	@Override
+	public void addFriend(long idFirstUser, long idSecondUser) {
+		try {
+			String query = "insert into friends values (" + idFirstUser + ","
+					+ idSecondUser + ")";
+			getCurrentSession().createSQLQuery(query).executeUpdate();
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getFriendsList(long userId) {
+		try {
+			String queryCode = "select * from user as u "
+				;
+			Query query = getCurrentSession().createSQLQuery(queryCode)
+					.addEntity(User.class);
+		//	query.setLong("user_id", userId);
+			List<User> friendsList = query.list();
+			return friendsList;
+		} catch (Exception e) {
+			logger.error(e.getStackTrace());
+		}
+		return null;
 	}
 }

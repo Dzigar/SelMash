@@ -2,7 +2,6 @@ package com.selfmash.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,7 +20,7 @@ import com.selfmash.service.PhotoService;
 import com.selfmash.service.UserService;
 
 @Controller
-@RequestMapping(value="/user")
+@RequestMapping(value = "/")
 public class UserPageController {
 
 	@Resource(name = "photoServiceImpl")
@@ -32,30 +31,32 @@ public class UserPageController {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 
-	@RequestMapping(value = "/{login}", method = RequestMethod.GET)
-	public String showUserPage(@PathVariable String login, ModelMap model,
-			Principal principal, HttpServletRequest request) {
-		User user = userService.getUser(login);
-		model.addAttribute("userList", userService.getUserList());
-		model.addAttribute("userId", user.getId());
-		model.addAttribute("login", login);
-		model.addAttribute("name", user.getName());
-		model.addAttribute("lastname", user.getLastname());
-		model.addAttribute("photoRows", createUserPhotoCollection(login));
-		model.addAttribute("birthdate", user.getBirthDate());
-		model.addAttribute("city", user.getCity());
-		model.addAttribute("country", user.getCountry());
-		model.addAttribute("daysonline", getDaysOnline(user.getDateReg()));
-		model.addAttribute("language", user.getLanguage());
+	@RequestMapping(value = "{login}", method = RequestMethod.GET)
+	public String showUserPage(@PathVariable String login, ModelMap model) {
 		try {
-			model.addAttribute("profilePhoto",
-					photoService.getAccoutPhoto(userService.getUser(login))
-							.getName());
+			User user = userService.getUser(login);
+			model.addAttribute("user", user);
+			model.addAttribute("friendList",
+					userService.getFriendsList(user.getId()));
+			model.addAttribute("photoRows", createUserPhotoCollection(login));
+			model.addAttribute("daysonline", userService.getDaysOnline(login));
+			model.addAttribute("profilePhoto", photoService
+					.getAccoutPhoto(user).getTitle());
 		} catch (Exception e) {
-			logger.info(e);
+			logger.error(e.getLocalizedMessage());
 		}
-
 		return "user_page";
+	}
+
+	@RequestMapping(value = "/addfriend", method = RequestMethod.POST)
+	public String addFriend(HttpServletRequest request, Principal principal) {
+		try {
+			userService.addFriend(userService.getUserId(principal.getName()),
+					Long.parseLong(request.getParameter("user")));
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+		return "redirect:/" + request.getParameter("login");
 	}
 
 	// Creating a collection of photo
@@ -66,7 +67,7 @@ public class UserPageController {
 		int i = 0;
 		while (i < photos.size()) {
 			List<Photo> array = new ArrayList<Photo>();
-			for (int j = 0; j < 4; j++) {
+			for (int j = 0; j < 2; j++) {
 				try {
 					array.add(photos.get(i));
 				} catch (Exception e) {
@@ -78,11 +79,5 @@ public class UserPageController {
 			photoColection.add(array);
 		}
 		return photoColection;
-	}
-
-	private int getDaysOnline(Date dateReg) {
-		Date currentDate = new Date();
-		long difference = currentDate.getTime() - dateReg.getTime();
-		return (int) (difference / (24 * 60 * 60 * 1000));
 	}
 }

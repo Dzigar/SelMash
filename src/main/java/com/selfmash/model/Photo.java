@@ -22,7 +22,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name = "PHOTO")
+@Table(name = "photo")
 public class Photo implements Serializable {
 
 	/**
@@ -32,31 +32,41 @@ public class Photo implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", unique = true)
+	@Column(unique = true)
 	private long id;
 
-	@Column(name = "NAME", nullable = false)
-	private String name;
-	
+	@Column(nullable = false)
+	private String title;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "DATE_UPLOAD")
+	@Column
 	private Date dateUpload;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.EVICT })
-	@JoinTable(name = "USERS_PHOTOS", joinColumns = { @JoinColumn(name = "PHOTO_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") })
+	@JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
 	private User user;
-	
-	@Column(name = "IS_ACCOUNT_PHOTO", nullable = false, columnDefinition = "boolean default false")
+
+	@Column(name = "account_photo", nullable = false,  columnDefinition = "boolean default false")
 	private Boolean isAccountPhoto;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "PHOTO_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") })
+	@JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
 	private Set<User> fans;
 
-	@Column(name = "AVAREGE", nullable = true)
+	@Column(nullable = true)
 	private float averageRating;
+
+	public Photo() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Photo(String title, Date dateUpload, User user) {
+		this.title = title;
+		this.dateUpload = dateUpload;
+		this.user = user;
+		this.isAccountPhoto = false;
+	}
 
 	/**
 	 * @return the id
@@ -76,16 +86,16 @@ public class Photo implements Serializable {
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
 	/**
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**

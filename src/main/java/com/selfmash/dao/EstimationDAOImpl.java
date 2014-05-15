@@ -35,10 +35,10 @@ public class EstimationDAOImpl implements EstimationDAO {
 	public void removeEstimationsByPhotoId(long id) {
 		try {
 			List<Estimation> estimations = getEstimationsByPhotoId(id);
-			for (Estimation estimation : estimations) {
-				estimation.getUser().getEstimations().remove(estimation);
-				getCurrentSession().delete(estimation);
-			}
+//			for (Estimation estimation : estimations) {
+//				estimation.getUser().getEstimations().remove(estimation);
+//				getCurrentSession().delete(estimation);
+//			}
 		} catch (Exception e) {
 			logger.info(e.getLocalizedMessage());
 		}

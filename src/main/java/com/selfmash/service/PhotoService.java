@@ -19,4 +19,5 @@ public interface PhotoService {
 
 	public void deletePhoto(long id);
 
+	public long getLastId();
 }

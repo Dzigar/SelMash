@@ -12,21 +12,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name = "ROLES")
+@Table(name = "role")
 public class Role {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "ID")
+	@Column
 	private long id;
 
-	@Column(name = "ROLE")
+	@Column
 	private String role;
 
 	@OneToMany
-	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+	@Cascade({ CascadeType.SAVE_UPDATE })
 	@JoinTable(name = "USER_ROLES", joinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") })
 	private Set<User> userRoles;
 
@@ -46,10 +47,17 @@ public class Role {
 		this.role = role;
 	}
 
+	/**
+	 * @return the userRoles
+	 */
 	public Set<User> getUserRoles() {
 		return userRoles;
 	}
 
+	/**
+	 * @param userRoles
+	 *            the userRoles to set
+	 */
 	public void setUserRoles(Set<User> userRoles) {
 		this.userRoles = userRoles;
 	}

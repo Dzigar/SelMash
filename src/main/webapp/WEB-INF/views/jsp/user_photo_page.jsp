@@ -71,13 +71,12 @@
 					<table width="100%">
 						<tr>
 							<td width="100%" colspan="4"><img
-								alt="<c:out value="${photo.name}" />"
-								src="<c:out value="/resources/selfshots/user${userId}/${photo.name}" />"
+								alt="<c:out value="${photo.title}" />"
+								src="<c:out value="/resources/selfshots/${login}/${photo.title}" />"
 								width="100%">
 						</tr>
 						<tr>
-							<td><form:form action="/${login}/photo/${photo.id}"
-									method="POST">
+							<td><form:form action="/photo/${photo.id}" method="POST">
 									<div align="center">
 										<c:out value="Estimation:" />
 										<input type="text" name="estimation" /> <input type="submit"
@@ -89,8 +88,7 @@
 							<td><c:out value="Средняя оценка: ${photo.averageRating}" /></td>
 							<td><c:choose>
 									<c:when test="${login == username }">
-										<form:form action="/${login}/photo/delete/${photo.id}"
-											method="POST">
+										<form:form action="/photo/delete/${photo.id}" method="POST">
 											<div align="center">
 												<input type="submit" value="Delete" />
 											</div>

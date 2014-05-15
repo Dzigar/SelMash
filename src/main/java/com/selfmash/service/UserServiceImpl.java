@@ -26,9 +26,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addUser(User user) {
+	public boolean addUser(User user) {
 		loger.debug("Added user " + user);
-		userDAO.addUser(user);
+		return userDAO.addUser(user);
 	}
 
 	@Override
@@ -49,6 +49,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean containsPreferencesPhoto(long userId, long photoId) {
 		return userDAO.containsPreferencesPhoto(userId, photoId);
+	}
+
+	@Override
+	public int getDaysOnline(String login) {
+		return userDAO.getDaysOnline(login);
+	}
+
+	@Override
+	public void addFriend(long idFirstUser, long idSecondUser) {
+		userDAO.addFriend(idFirstUser, idSecondUser);
+	}
+
+	@Override
+	public List<User> getFriendsList(long userId) {
+		return userDAO.getFriendsList(userId);
 	}
 
 }

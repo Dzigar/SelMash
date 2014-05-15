@@ -23,7 +23,7 @@ public class PhotoServiceImpl implements PhotoService {
 	@Override
 	public void addphoto(Photo selfShot) {
 		photoDAO.addphoto(selfShot);
-		logger.info("Upload new photo:" + selfShot.getName());
+		logger.info("Upload new photo:" + selfShot.getTitle());
 	}
 
 	@Override
@@ -49,6 +49,11 @@ public class PhotoServiceImpl implements PhotoService {
 	@Override
 	public void deletePhoto(long id) {
 		photoDAO.deletePhoto(id);
+	}
+
+	@Override
+	public long getLastId() {
+		return photoDAO.getLastId();
 	}
 
 }

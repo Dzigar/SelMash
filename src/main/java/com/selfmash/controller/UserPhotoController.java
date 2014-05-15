@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ import com.selfmash.service.UserService;
 import com.selfmash.strings.Path;
 
 @Controller
-@RequestMapping("/{login}/photo")
+@RequestMapping("/photo")
 public class UserPhotoController {
 
 	@Resource(name = "photoServiceImpl")
@@ -48,54 +47,43 @@ public class UserPhotoController {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public String showUserSelectedPhoto(@PathVariable long id,
-			@PathVariable String login, HttpServletRequest request,
-			ModelMap model) {
+			HttpServletRequest request, ModelMap model) {
 		model.addAttribute("photo", photoService.getPhotoById(id));
-		model.addAttribute("login", login);
-		model.addAttribute("userId", userService.getUserId(login));
-		model.addAttribute("Estimations",
-				estimationService.getEstimationsByPhotoId(id));
+		model.addAttribute("login", request.getParameter("value"));
+		model.addAttribute("userId",
+				userService.getUserId(request.getParameter("value")));
+		// model.addAttribute("Estimations",
+		// estimationService.getEstimationsByPhotoId(id));
 		return "user_photo_page";
 	}
 
-	/**
-	 * Upload user's photo
-	 * 
-	 * @param file
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws IOException
-	 */
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String handleFileUpload(@RequestParam("image") MultipartFile file,
 			Model model, Principal principal) throws IOException {
-		Photo photo = new Photo();
-		photo.setName(file.getOriginalFilename());
-		photo.setAccountPhoto(false);
-		photo.setDateUpload(new Date());
-		User user = userService.getUser(principal.getName());
-		photo.setUser(user);
+		try {
+			User user = userService.getUser(principal.getName());
+			Photo photo = new Photo(Long.toString(photoService.getLastId() + 1)
+					+ "." + getExtensionFile(file), new Date(), user);
+			photoService.addphoto(photo); // save photo in DB
+			if (!file.isEmpty()) {
+				File userFolder = new File(Path.PHOTO_PATH + "/"
+						+ user.getLogin());
+				if (!userFolder.exists()) {
+					userFolder.mkdir(); // create directory if it not exists
+				}
 
-		if (!file.isEmpty()) {
-			File filePhoto = new File(Path.PHOTO_PATH + "/user" + user.getId());
-			if (!filePhoto.exists()) {
-				filePhoto.mkdir(); // create directory if it not exists
-			}
-			try {
 				byte[] bytes = file.getBytes();
 				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(new File(Path.PHOTO_PATH + "/user"
-								+ user.getId() + "/"
-								+ file.getOriginalFilename())));
+						new FileOutputStream(new File(Path.PHOTO_PATH + "/"
+								+ user.getLogin() + "/" + photo.getTitle())));
 				stream.write(bytes); // write file to user directory
 				stream.close();
-				photoService.addphoto(photo); // save photo in DB
-			} catch (Exception e) {
-				logger.info(e.getLocalizedMessage());
-				model.addAttribute("message", "You failed to upload photo");
 			}
+		} catch (Exception e) {
+			logger.info(e.getLocalizedMessage());
+			// model.addAttribute("message", "You failed to upload photo");
 		}
+
 		return "redirect:/" + principal.getName();
 	}
 
@@ -108,9 +96,9 @@ public class UserPhotoController {
 				estimationService.addEstimation(new Estimation(Float
 						.parseFloat(request.getParameter("estimation")
 								.toString()), id, user));
-				Set<Photo> set = user.getPreferences();
-				set.add(setAverageRating(id));
-				user.setPreferences(set);
+				// Set<Photo> set = user.getPreferences();
+				// set.add(setAverageRating(id));
+				// user.setPreferences(set);
 				userService.updateUser(user);
 			}
 		} catch (Exception e) {
@@ -119,18 +107,22 @@ public class UserPhotoController {
 		return "redirect:" + id;
 	}
 
-	@RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
 	public String deletePhoto(@PathVariable long id, Principal principal) {
 		try {
 
 			new FileDeleteHandler().deleteFilePhoto(
-					photoService.getPhotoById(id).getName(),
-					userService.getUserId(principal.getName()));
+					photoService.getPhotoById(id).getTitle(),
+					principal.getName());
 			photoService.deletePhoto(id);
 		} catch (Exception e) {
 			logger.info(e.getLocalizedMessage());
 		}
 		return "redirect:/" + principal.getName();
+	}
+
+	private String getExtensionFile(MultipartFile file) {
+		return file.getOriginalFilename().split("\\.")[1];
 	}
 
 	private Photo setAverageRating(long id) {

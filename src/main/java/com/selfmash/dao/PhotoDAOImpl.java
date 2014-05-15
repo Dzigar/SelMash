@@ -43,9 +43,15 @@ public class PhotoDAOImpl implements PhotoDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Photo> getUserPhotos(User user) {
-		return getCurrentSession()
-				.createQuery("from Photo as u where u.user = :user")
-				.setParameter("user", user).list();
+		try {
+			List<Photo> list = getCurrentSession()
+					.createQuery("from Photo as p where p.user = :user")
+					.setParameter("user", user).list();
+			return list;
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+		return null;
 	}
 
 	@Override
@@ -62,11 +68,16 @@ public class PhotoDAOImpl implements PhotoDAO {
 
 	@Override
 	public Photo getAccoutPhoto(User user) {
-		return (Photo) getCurrentSession()
-				.createQuery(
-						"from Photo as u where u.user = :user and u.isAccountPhoto = :isAccountPhoto")
-				.setParameter("user", user)
-				.setParameter("isAccountPhoto", true).uniqueResult();
+		try {
+			return (Photo) getCurrentSession()
+					.createQuery(
+							"from Photo as u where u.user = :user and u.isAccountPhoto = :isAccountPhoto")
+					.setParameter("user", user)
+					.setParameter("isAccountPhoto", true).uniqueResult();
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+		return null;
 	}
 
 	@Override
@@ -76,12 +87,25 @@ public class PhotoDAOImpl implements PhotoDAO {
 			estimationService.removeEstimationsByPhotoId(id);
 			getCurrentSession().delete(getPhotoById(id));
 			getCurrentSession().getTransaction().commit();
+		} catch (Exception e) {
+			logger.info(e.getLocalizedMessage());
+		} finally {
 			if (getCurrentSession() != null) {
 				getCurrentSession().close();
 			}
-		} catch (Exception e) {
-			logger.info(e.getLocalizedMessage());
 		}
 	}
 
+	@Override
+	public long getLastId() {
+		try {
+			return Long.parseLong(getCurrentSession()
+					.createQuery(
+							"SELECT id FROM Photo ORDER BY id DESC LIMIT 1")
+					.uniqueResult().toString());
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+		return 0;
+	}
 }
