@@ -2,7 +2,9 @@ package com.selfmash.strings;
 
 public class QueryString {
 
-	public static final String addFriend = "";
+	public static final String getUser = "from User as u where u.login = :login";
+	
+	public static final String addFriend = "insert into friends values ( :userId, :friendId, 0)";
 	
 	public static final String selectFriends = "select distinct * from user as u "
 			+ "inner join friends as f on f.friend_id = u.id and accepted = 1 "

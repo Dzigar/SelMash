@@ -2,12 +2,10 @@ package com.selfmash.dao.impl;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +48,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public User getUser(String login) {
-		return (User) getCurrentSession()
-				.createQuery("from User as u where u.login = :login")
+		return (User) getCurrentSession().createQuery(QueryString.getUser)
 				.setParameter("login", login).uniqueResult();
 	}
 
@@ -105,9 +102,9 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void addFriend(long userId, long friendId) {
 		try {
-			String query = "insert into friends values ( :userId, :friendId, 0)";
-			getCurrentSession().createSQLQuery(query).setLong("userId", userId)
-					.setLong("friendId", friendId).executeUpdate();
+			getCurrentSession().createSQLQuery(QueryString.addFriend)
+					.setLong("userId", userId).setLong("friendId", friendId)
+					.executeUpdate();
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}

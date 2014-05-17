@@ -32,12 +32,16 @@ public class UserPageController {
 	private Logger logger = Logger.getLogger(getClass().getName());
 
 	@RequestMapping(value = "{login}", method = RequestMethod.GET)
-	public String showUserPage(@PathVariable String login, ModelMap model) {
+	public String showUserPage(@PathVariable String login, ModelMap model,
+			Principal principal) {
 		try {
 			User user = userService.getUser(login);
+			List<User> friendsList = userService.getFriendsList(user.getId());
 			model.addAttribute("user", user);
-			model.addAttribute("friendList",
-					userService.getFriendsList(user.getId()));
+			model.addAttribute("friendList", friendsList);
+			if (isFriends(principal.getName(), friendsList)) {
+				model.addAttribute("isFriends", true);
+			}
 			model.addAttribute("photoRows", createUserPhotoCollection(login));
 			model.addAttribute("daysonline", userService.getDaysOnline(login));
 			model.addAttribute("profilePhoto", photoService
@@ -57,6 +61,14 @@ public class UserPageController {
 			logger.error(e.getLocalizedMessage());
 		}
 		return "redirect:/" + request.getParameter("login");
+	}
+
+	private boolean isFriends(String login, List<User> friendsList) {
+		for (User user : friendsList) {
+			if (user.getLogin().equals(login))
+				return true;
+		}
+		return false;
 	}
 
 	// Creating a collection of photo

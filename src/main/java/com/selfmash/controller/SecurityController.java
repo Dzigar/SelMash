@@ -1,9 +1,7 @@
 package com.selfmash.controller;
 
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.selfmash.model.Role;
 import com.selfmash.model.User;
 import com.selfmash.service.RoleService;
 import com.selfmash.service.UserService;

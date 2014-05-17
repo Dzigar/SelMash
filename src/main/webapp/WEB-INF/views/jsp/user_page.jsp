@@ -192,7 +192,6 @@
 							</td>
 							<td>
 								<ul style="list-style-type: none;">
-
 									<li><c:out value="${user.birthDate}" /></li>
 								</ul>
 							</td>
@@ -205,11 +204,13 @@
 				<td>
 					<!-- Add friend to friends list button --> <c:if
 						test="${username ne user.login}">
-						<form action="/addfriend?user=${user.id}&login=${user.login}"
-							method="post">
-							<input type="submit" value="Add friend"
-								class="submit-button_no_style">
-						</form>
+						<c:if test="${!isFriends}">
+							<form action="/addfriend?user=${user.id}&login=${user.login}"
+								method="post">
+								<input type="submit" value="Add friend"
+									class="submit-button_no_style">
+							</form>
+						</c:if>
 					</c:if>
 				</td>
 			</tr>
