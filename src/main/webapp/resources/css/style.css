@@ -151,4 +151,8 @@ ul.user-info li {
 	padding: 1px;
 	height: auto;
 }
+.message-text {
+	margin-top: 0px;
+	color: #cdcdcd;
+}
 .

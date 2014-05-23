@@ -26,10 +26,12 @@
 		<property name="definitions"> <list> <value>/WEB-INF/tiles.xml</value> </list> 
 		</property> </bean> -->
 
+
+
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
-			<value>/WEB-INF/views/jsp/</value>
+			<value>/resources/views/jsp/</value>
 		</property>
 		<property name="suffix">
 			<value>.jsp</value>
@@ -41,24 +43,28 @@
 		<property name="maxUploadSize" value="500000" />
 	</bean>
 
-	<!-- bind your messages.properties -->
+	<!-- bind messages.properties -->
 	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
 		id="messageSource">
 		<property name="basename" value="messages" />
 	</bean>
 
+
 	<mvc:interceptors>
-		<bean class="com.selfmash.handler.AccountingInterceptor" />
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+			p:paramName="lang" />
+	</mvc:interceptors>
+	<mvc:interceptors>
+		<bean class="com.selfmash.interceptors.UserPageInterceptor" />
 		<mvc:interceptor>
-			<mvc:mapping path="/*" />
-			<bean class="com.selfmash.handler.AccountingInterceptor" />
+			<mvc:mapping path="/**" />
+			<bean class="com.selfmash.interceptors.UserPageInterceptor" />
 		</mvc:interceptor>
-		<!-- <bean class="com.docs.interceptors.NewProductInterceptor" /> <mvc:interceptor> 
-			<mvc:mapping path="/admin/add_product" /> <bean class="com.docs.interceptors.NewProductInterceptor" 
-			/> </mvc:interceptor> -->
 	</mvc:interceptors>
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
-	<!-- <import resource="spring-security.xml" /> -->
+
+	<!-- Import config files -->
 	<import resource="hibernate-context.xml" />
+	<import resource="config/bean-config.xml" />
 </beans>

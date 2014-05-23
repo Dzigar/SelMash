@@ -5,19 +5,60 @@ import java.util.List;
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
 
+/**
+ * @author Dzigar.
+ */
 public interface PhotoService {
 
-	public void addphoto(Photo photo);
+    /**
+     * 
+     * @param photo
+     *            - link to Photo object
+     */
+    void addphoto(Photo photo);
 
-	public List<Photo> getUserPhotos(User user);
+    /**
+     * 
+     * @param user
+     *            - link to User object
+     * @return list user photos
+     */
+    List<Photo> getUserPhotos(User user);
 
-	public Photo getPhotoById(long id);
+    /**
+     * 
+     * @param id
+     *            - User id
+     * @return object Photo
+     */
+    Photo getPhotoById(long id);
 
-	public void updatePhoto(Photo photo);
+    /**
+     * 
+     * @param photo
+     *            - object Photo for update
+     */
+    void updatePhoto(Photo photo);
 
-	public Photo getAccoutPhoto(User user);
+    /**
+     * 
+     * @param user
+     *            - object User
+     * @return object Photo if user has account photo and return null if he
+     *         don't have is
+     */
+    Photo getAccoutPhoto(User user);
 
-	public void deletePhoto(long id);
+    /**
+     * 
+     * @param id
+     *            - id photo deleting
+     */
+    void deletePhoto(long id);
 
-	public long getLastId();
+    /**
+     * 
+     * @return last id photos
+     */
+    long getLastId();
 }

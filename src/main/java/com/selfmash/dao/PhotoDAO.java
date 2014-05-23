@@ -5,20 +5,58 @@ import java.util.List;
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
 
+/**
+ * 
+ * @author Dzigar.
+ * 
+ */
 public interface PhotoDAO {
 
-	public void addphoto(Photo photo);
+    /**
+     * Save Photo in DB.
+     * 
+     * @param photo
+     *            - object Photo class.
+     */
+    void addphoto(Photo photo);
 
-	public List<Photo> getUserPhotos(User user);
+    /**
+     * Get list of photo from DB by User object.
+     * @param user - object User class
+     * @return list of Photo
+     */
+    List<Photo> getUserPhotos(User user);
 
-	public Photo getPhotoById(long id);
+    /**
+     * Get photo from DB by photo id.
+     * @param id - Photo id.
+     * @return object Photo class
+     */
+    Photo getPhotoById(long id);
 
-	public void updatePhoto(Photo photo);
+    /**
+     * Update changed photo.
+     * @param photo - object Photo for update
+     */
+    void updatePhoto(Photo photo);
 
-	public Photo getAccoutPhoto(User user);
+    /**
+     * Get account photo if it is.
+     * @param user - object User class
+     * @return account Photo
+     */
+    Photo getAccoutPhoto(User user);
 
-	public void deletePhoto(long id);
+    /**
+     * Delete photo by id.
+     * @param id - Photo id
+     */
+    void deletePhoto(long id);
 
-	public long getLastId();
+    /**
+     * Get last photo id in DB.
+     * @return id Photo
+     */
+    long getLastId();
 
 }

@@ -19,77 +19,99 @@ import com.selfmash.model.User;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.UserService;
 
+/**
+ * @author Dzigar.
+ */
 @Controller
 @RequestMapping(value = "/")
 public class UserPageController {
 
-	@Resource(name = "photoServiceImpl")
-	private PhotoService photoService;
+    /**
+     * Photo Service object.
+     */
+    @Resource(name = "photoServiceImpl")
+    private PhotoService photoService;
 
-	@Resource(name = "userServiceImpl")
-	private UserService userService;
+    /**
+     * UserService.
+     */
+    @Resource(name = "userServiceImpl")
+    private UserService userService;
 
-	private Logger logger = Logger.getLogger(getClass().getName());
+    /**
+     * Create logger.
+     */
+    private Logger logger = Logger.getLogger(getClass().getName());
 
-	@RequestMapping(value = "{login}", method = RequestMethod.GET)
-	public String showUserPage(@PathVariable String login, ModelMap model,
-			Principal principal) {
-		try {
-			User user = userService.getUser(login);
-			List<User> friendsList = userService.getFriendsList(user.getId());
-			model.addAttribute("user", user);
-			model.addAttribute("friendList", friendsList);
-			if (isFriends(principal.getName(), friendsList)) {
-				model.addAttribute("isFriends", true);
-			}
-			model.addAttribute("photoRows", createUserPhotoCollection(login));
-			model.addAttribute("daysonline", userService.getDaysOnline(login));
-			model.addAttribute("profilePhoto", photoService
-					.getAccoutPhoto(user).getTitle());
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return "user_page";
-	}
+    /**
+     * 
+     * @param login
+     *            - User login
+     * @param model
+     *            - link to Model object
+     * @param principal
+     *            - link to Principal object
+     * @return user_page -
+     */
+    @RequestMapping(value = "{login}", method = RequestMethod.GET)
+    public String showUserPage(@PathVariable String login, ModelMap model) {
+        try {
+            User user = userService.getUser(login);
+            model.addAttribute("user", user);
+            model.addAttribute("photoRows", createUserPhotoCollection(login));
+            model.addAttribute("profilePhoto", photoService
+                    .getAccoutPhoto(user).getTitle());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return "user_page";
+    }
 
-	@RequestMapping(value = "/addfriend", method = RequestMethod.POST)
-	public String addFriend(HttpServletRequest request, Principal principal) {
-		try {
-			userService.addFriend(userService.getUserId(principal.getName()),
-					Long.parseLong(request.getParameter("user")));
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return "redirect:/" + request.getParameter("login");
-	}
+    /**
+     * 
+     * @param request
+     *            - - link to HttpServletRequest object
+     * @param principal
+     *            - link to Principal object
+     * @return method redirect to user_page
+     */
+    @RequestMapping(value = "/addfriend", method = RequestMethod.POST)
+    public final String addFriend(final HttpServletRequest request,
+            final Principal principal) {
+        try {
+            userService.addFriend(userService.getUserId(principal.getName()),
+                    Long.parseLong(request.getParameter("user")));
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return "redirect:/" + request.getParameter("login");
+    }
 
-	private boolean isFriends(String login, List<User> friendsList) {
-		for (User user : friendsList) {
-			if (user.getLogin().equals(login))
-				return true;
-		}
-		return false;
-	}
-
-	// Creating a collection of photo
-	private List<List<Photo>> createUserPhotoCollection(String login) {
-		List<Photo> photos = photoService.getUserPhotos(userService
-				.getUser(login));
-		List<List<Photo>> photoColection = new ArrayList<List<Photo>>();
-		int i = 0;
-		while (i < photos.size()) {
-			List<Photo> array = new ArrayList<Photo>();
-			for (int j = 0; j < 2; j++) {
-				try {
-					array.add(photos.get(i));
-				} catch (Exception e) {
-					logger.info(e.getLocalizedMessage());
-					break;
-				}
-				i++;
-			}
-			photoColection.add(array);
-		}
-		return photoColection;
-	}
+    /**
+     * Creating a collection of photo.
+     * 
+     * @param login
+     *            - User login
+     * @return collection of photos
+     */
+    private List<List<Photo>> createUserPhotoCollection(final String login) {
+        List<Photo> photos = photoService.getUserPhotos(userService
+                .getUser(login));
+        List<List<Photo>> photoColection = new ArrayList<List<Photo>>();
+        int i = 0;
+        while (i < photos.size()) {
+            List<Photo> array = new ArrayList<Photo>();
+            for (int j = 0; j < 2; j++) {
+                try {
+                    array.add(photos.get(i));
+                } catch (Exception e) {
+                    logger.info(e.getLocalizedMessage());
+                    break;
+                }
+                i++;
+            }
+            photoColection.add(array);
+        }
+        return photoColection;
+    }
 }

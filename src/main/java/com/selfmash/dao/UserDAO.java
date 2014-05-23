@@ -6,21 +6,23 @@ import com.selfmash.model.User;
 
 public interface UserDAO {
 
-	public boolean addUser(User user);
+    boolean addUser(User user);
 
-	public User getUser(String login);
+    User getUser(String login);
 
-	public List<User> getUserList();
+    User getUserById(long id);
+    
+    List<User> getUserList();
 
-	public long getUserId(String login);
+    long getUserId(String login);
 
-	public void updateUser(User user);
+    boolean updateUser(User user);
 
-	public boolean containsPreferencesPhoto(long userId, long photoId);
+    boolean containsPreferencesPhoto(long userId, long photoId);
 
-	public int getDaysOnline(String login);
+    int getDaysOnline(String login);
 
-	public void addFriend(long idFirstUser, long idSecondUser);
+    boolean addFriend(long idFirstUser, long idSecondUser);
 
-	public List<User> getFriendsList(long userId);
+    List<User> getFriendsList(long userId);
 }

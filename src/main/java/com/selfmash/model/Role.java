@@ -10,12 +10,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name = "role")
+@Table(name = "role", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
 public class Role {
 
 	@Id
@@ -28,7 +29,7 @@ public class Role {
 
 	@OneToMany
 	@Cascade({ CascadeType.SAVE_UPDATE })
-	@JoinTable(name = "USER_ROLES", joinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") })
+	@JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID") })
 	private Set<User> userRoles;
 
 	public long getId() {
