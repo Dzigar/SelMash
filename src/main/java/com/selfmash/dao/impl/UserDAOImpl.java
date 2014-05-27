@@ -141,4 +141,18 @@ public class UserDAOImpl implements UserDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean confirmFriendship(long userId, long friendId) {
+        try {
+            getCurrentSession()
+                    .createSQLQuery(Queries.QUERY_CONFIRM_FRIENDSHIP)
+                    .setParameter("userId", userId)
+                    .setParameter("friendId", friendId).executeUpdate();
+            return true;
+        } catch (Exception e) {
+            logger.equals(e.getLocalizedMessage());
+        }
+        return false;
+    }
 }

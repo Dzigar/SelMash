@@ -50,8 +50,8 @@ public class Photo extends Model implements Serializable {
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;
 
-    @Column(name = "account_photo", nullable = false, columnDefinition = "boolean default false")
-    private Boolean isAccountPhoto;
+    @Column(name = "is_profile", nullable = false, columnDefinition = "boolean default false")
+    private Boolean isProfilePhoto;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
@@ -68,7 +68,7 @@ public class Photo extends Model implements Serializable {
         this.title = title;
         this.dateUpload = dateUpload;
         this.user = user;
-        this.isAccountPhoto = false;
+        this.isProfilePhoto = false;
     }
 
     /**
@@ -117,21 +117,6 @@ public class Photo extends Model implements Serializable {
     }
 
     /**
-     * @return the isAccountPhoto
-     */
-    public Boolean isAccountPhoto() {
-        return isAccountPhoto;
-    }
-
-    /**
-     * @param isAccountPhoto
-     *            the isAccountPhoto to set
-     */
-    public void setAccountPhoto(Boolean isAccountPhoto) {
-        this.isAccountPhoto = isAccountPhoto;
-    }
-
-    /**
      * @return the fans
      */
     public Set<User> getFans() {
@@ -160,6 +145,21 @@ public class Photo extends Model implements Serializable {
 
     public void setDateUpload(Date dateUpload) {
         this.dateUpload = dateUpload;
+    }
+
+    /**
+     * @return the isProfilePhoto
+     */
+    public Boolean getIsProfilePhoto() {
+        return isProfilePhoto;
+    }
+
+    /**
+     * @param isProfilePhoto
+     *            the isProfilePhoto to set
+     */
+    public void setIsProfilePhoto(Boolean isProfilePhoto) {
+        this.isProfilePhoto = isProfilePhoto;
     }
 
 }

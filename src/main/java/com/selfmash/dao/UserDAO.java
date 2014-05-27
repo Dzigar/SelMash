@@ -11,7 +11,7 @@ public interface UserDAO {
     User getUser(String login);
 
     User getUserById(long id);
-    
+
     List<User> getUserList();
 
     long getUserId(String login);
@@ -23,6 +23,8 @@ public interface UserDAO {
     int getDaysOnline(String login);
 
     boolean addFriend(long idFirstUser, long idSecondUser);
+
+    boolean confirmFriendship(long idFirstUser, long idSecondUser);
 
     List<User> getFriendsList(long userId);
 }

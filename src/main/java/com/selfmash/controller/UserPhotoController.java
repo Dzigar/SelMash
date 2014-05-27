@@ -57,9 +57,12 @@ public class UserPhotoController {
     public String showUserSelectedPhoto(@PathVariable long id,
             HttpServletRequest request, ModelMap model) {
         model.addAttribute("photo", photoService.getPhotoById(id));
-        model.addAttribute("login", request.getParameter("value"));
-        model.addAttribute("userId",
-                userService.getUserId(request.getParameter("value")));
+        model.addAttribute("login",
+                request.getSession().getAttribute("userLogin"));
+        model.addAttribute(
+                "userId",
+                userService.getUserId(request.getSession()
+                        .getAttribute("userLogin").toString()));
         // model.addAttribute("Estimations",
         // estimationService.getEstimationsByPhotoId(id));
         return "photo_page";
@@ -107,8 +110,21 @@ public class UserPhotoController {
         return "redirect:/" + principal.getName();
     }
 
+    /**
+     * This method make selected photo is profile.
+     * 
+     * @param id
+     *            - photo id
+     * @return redirect to selected photo page.
+     */
+    @RequestMapping(value = "/makeProfile/{id}", method = RequestMethod.POST)
+    public String makeProfile(@PathVariable long id, HttpServletRequest request) {
+        photoService.makePhotoAsProfile(id, request.getSession().getAttribute("userLogin").toString());
+        return "redirect:/photo/" + id;
+    }
+
     @RequestMapping(value = "{id}", method = RequestMethod.POST)
-    public String estimatePhoto(@PathVariable long id, Principal principal,
+    public String appreciatePhoto(@PathVariable long id, Principal principal,
             HttpServletRequest request) {
         try {
             User user = userService.getUser(principal.getName());

@@ -20,93 +20,103 @@ import com.selfmash.service.UserService;
 @Repository
 public class PhotoDAOImpl implements PhotoDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	@Resource(name = "userServiceImpl")
-	private UserService userService;
+    @Resource(name = "userServiceImpl")
+    private UserService userService;
 
-	@Resource(name = "estimationServiceImpl")
-	private EstimationService estimationService;
+    @Resource(name = "estimationServiceImpl")
+    private EstimationService estimationService;
 
-	private Logger logger = Logger.getLogger(getClass().getName());
+    private Logger logger = Logger.getLogger(getClass().getName());
 
-	private Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();
-	}
+    private Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
 
-	@Override
-	@Transactional
-	public void addphoto(Photo selfShot) {
-		getCurrentSession().save(selfShot);
-	}
+    @Override
+    @Transactional
+    public void addphoto(Photo selfShot) {
+        getCurrentSession().save(selfShot);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Photo> getUserPhotos(User user) {
-		try {
-			List<Photo> list = getCurrentSession()
-					.createQuery("from Photo as p where p.user = :user")
-					.setParameter("user", user).list();
-			return list;
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return null;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Photo> getUserPhotos(User user) {
+        try {
+            List<Photo> list = getCurrentSession()
+                    .createQuery("from Photo as p where p.user = :user")
+                    .setParameter("user", user).list();
+            return list;
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return null;
+    }
 
-	@Override
-	public Photo getPhotoById(long id) {
-		return (Photo) getCurrentSession()
-				.createQuery("from Photo as u where u.id = :id")
-				.setParameter("id", id).uniqueResult();
-	}
+    @Override
+    public Photo getPhotoById(long id) {
+        return (Photo) getCurrentSession()
+                .createQuery("from Photo as u where u.id = :id")
+                .setParameter("id", id).uniqueResult();
+    }
 
-	@Override
-	public void updatePhoto(Photo photo) {
-		getCurrentSession().update(photo);
-	}
+    @Override
+    public void updatePhoto(Photo photo) {
+        getCurrentSession().update(photo);
+    }
 
-	@Override
-	public Photo getAccoutPhoto(User user) {
-		try {
-			return (Photo) getCurrentSession()
-					.createQuery(
-							"from Photo as u where u.user = :user and u.isAccountPhoto = :isAccountPhoto")
-					.setParameter("user", user)
-					.setParameter("isAccountPhoto", true).uniqueResult();
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return null;
-	}
+    @Override
+    public Photo getAccoutPhoto(User user) {
+        try {
+            return (Photo) getCurrentSession()
+                    .createQuery(
+                            "from Photo as u where u.user = :user and u.isProfilePhoto = :isProfilePhoto")
+                    .setParameter("user", user)
+                    .setParameter("isProfilePhoto", true).uniqueResult();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return null;
+    }
 
-	@Override
-	public void deletePhoto(long id) {
-		try {
-			getCurrentSession().beginTransaction();
-			estimationService.removeEstimationsByPhotoId(id);
-			getCurrentSession().delete(getPhotoById(id));
-			getCurrentSession().getTransaction().commit();
-		} catch (Exception e) {
-			logger.info(e.getLocalizedMessage());
-		} finally {
-			if (getCurrentSession() != null) {
-				getCurrentSession().close();
-			}
-		}
-	}
+    @Override
+    public void deletePhoto(long id) {
+        try {
+            getCurrentSession().beginTransaction();
+            estimationService.removeEstimationsByPhotoId(id);
+            getCurrentSession().delete(getPhotoById(id));
+            getCurrentSession().getTransaction().commit();
+        } catch (Exception e) {
+            logger.info(e.getLocalizedMessage());
+        } finally {
+            if (getCurrentSession() != null) {
+                getCurrentSession().close();
+            }
+        }
+    }
 
-	@Override
-	public long getLastId() {
-		try {
-			return Long.parseLong(getCurrentSession()
-					.createQuery(
-							"SELECT id FROM Photo ORDER BY id DESC LIMIT 1")
-					.uniqueResult().toString());
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return 0;
-	}
+    @Override
+    public long getLastId() {
+        try {
+            return Long.parseLong(getCurrentSession()
+                    .createQuery(
+                            "SELECT id FROM Photo ORDER BY id DESC LIMIT 1")
+                    .uniqueResult().toString());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return 0;
+    }
+
+    @Override
+    public void makePhotoAsProfile(Photo photo) {
+        try {
+            photo.setIsProfilePhoto(true);
+            getCurrentSession().saveOrUpdate(photo);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
 }

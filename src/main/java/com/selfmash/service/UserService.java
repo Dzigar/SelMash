@@ -21,6 +21,7 @@ public interface UserService {
 
     /**
      * Get user by id.
+     * 
      * @param id
      *            User id
      * @return object User class
@@ -88,6 +89,14 @@ public interface UserService {
      *            - id user which adds
      */
     boolean addFriend(long idFirstUser, long idSecondUser);
+
+    /**
+     * Confirm friendship between users.
+     * 
+     * @param userId
+     * @param friendId
+     */
+    boolean confirmFriendship(long userId, long friendId, long notificationId);
 
     /**
      * Get friends list by user id.

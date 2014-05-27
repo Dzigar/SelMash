@@ -22,41 +22,59 @@ public interface PhotoDAO {
 
     /**
      * Get list of photo from DB by User object.
-     * @param user - object User class
+     * 
+     * @param user
+     *            - object User class
      * @return list of Photo
      */
     List<Photo> getUserPhotos(User user);
 
     /**
      * Get photo from DB by photo id.
-     * @param id - Photo id.
+     * 
+     * @param id
+     *            - Photo id.
      * @return object Photo class
      */
     Photo getPhotoById(long id);
 
     /**
      * Update changed photo.
-     * @param photo - object Photo for update
+     * 
+     * @param photo
+     *            - object Photo for update
      */
     void updatePhoto(Photo photo);
 
     /**
      * Get account photo if it is.
-     * @param user - object User class
+     * 
+     * @param user
+     *            - object User class
      * @return account Photo
      */
     Photo getAccoutPhoto(User user);
 
     /**
      * Delete photo by id.
-     * @param id - Photo id
+     * 
+     * @param id
+     *            - Photo id
      */
     void deletePhoto(long id);
 
     /**
      * Get last photo id in DB.
+     * 
      * @return id Photo
      */
     long getLastId();
+
+    /**
+     * Make the selected photo as profile.
+     * 
+     * @param photo 
+     */
+    void makePhotoAsProfile(Photo photo);
 
 }

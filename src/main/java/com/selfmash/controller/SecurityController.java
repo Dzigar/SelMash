@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.selfmash.model.User;
+import com.selfmash.service.PostService;
 import com.selfmash.service.RoleService;
 import com.selfmash.service.UserService;
 
@@ -70,6 +71,9 @@ public class SecurityController {
     @Qualifier("org.springframework.security.authenticationManager")
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private PostService postService;
+
     /**
      * 
      * @param request
@@ -78,7 +82,6 @@ public class SecurityController {
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public final String openIndexPage(final HttpServletRequest request) {
-
         return "redirect:/index";
     }
 
@@ -88,8 +91,15 @@ public class SecurityController {
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public final String welcomePage(Principal principal, ModelMap modelMap) {
-        modelMap.addAttribute("posts", userService.getUser(principal.getName())
-                .getUserPosts());
+        try {
+            modelMap.addAttribute(
+                    "posts",
+                    postService.getFriendsPosts(userService.getUser(
+                            principal.getName()).getId()));
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+
         return "index";
     }
 

@@ -47,7 +47,7 @@ public interface PhotoService {
      * @return object Photo if user has account photo and return null if he
      *         don't have is
      */
-    Photo getAccoutPhoto(User user);
+    Photo getProfilePhoto(User user);
 
     /**
      * 
@@ -61,4 +61,12 @@ public interface PhotoService {
      * @return last id photos
      */
     long getLastId();
+
+    /**
+     * Make the selected photo as profile.
+     * 
+     * @param photoId
+     *            - id selected photo
+     */
+    void makePhotoAsProfile(long photoId, String login);
 }

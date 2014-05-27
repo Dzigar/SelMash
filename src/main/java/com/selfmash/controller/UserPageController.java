@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
@@ -54,13 +55,16 @@ public class UserPageController {
      * @return user_page -
      */
     @RequestMapping(value = "{login}", method = RequestMethod.GET)
-    public String showUserPage(@PathVariable String login, ModelMap model) {
+    public String showUserPage(@PathVariable String login, ModelMap model,
+            HttpServletRequest request) {
         try {
+            request.getSession().setAttribute("userLogin", login);
             User user = userService.getUser(login);
             model.addAttribute("user", user);
             model.addAttribute("photoRows", createUserPhotoCollection(login));
-            model.addAttribute("profilePhoto", photoService
-                    .getAccoutPhoto(user).getTitle());
+            model.addAttribute("profilePhoto",
+                    photoService.getProfilePhoto(user).getTitle());
+
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -85,6 +89,22 @@ public class UserPageController {
             logger.error(e.getLocalizedMessage());
         }
         return "redirect:/" + request.getParameter("login");
+    }
+
+    @RequestMapping(value = "/confirmFriendship", method = RequestMethod.POST)
+    public String confirmFriendShip(@RequestParam long friendId,
+            @RequestParam long notId, Principal principal) {
+        try {
+            if (userService.confirmFriendship(friendId,
+                    userService.getUserId(principal.getName()), notId)) {
+                return "redirect:/notifications";
+            } else {
+                System.out.println("Error");
+            }
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return "redirect:/notifications";
     }
 
     /**
