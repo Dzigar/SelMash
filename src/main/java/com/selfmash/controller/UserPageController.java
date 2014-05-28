@@ -62,8 +62,7 @@ public class UserPageController {
             User user = userService.getUser(login);
             model.addAttribute("user", user);
             model.addAttribute("photoRows", createUserPhotoCollection(login));
-            model.addAttribute("profilePhoto",
-                    photoService.getProfilePhoto(user).getTitle());
+
 
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());

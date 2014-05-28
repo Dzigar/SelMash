@@ -92,10 +92,9 @@ public class SecurityController {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public final String welcomePage(Principal principal, ModelMap modelMap) {
         try {
-            modelMap.addAttribute(
-                    "posts",
-                    postService.getFriendsPosts(userService.getUser(
-                            principal.getName()).getId()));
+            String login = principal.getName();
+            modelMap.addAttribute("posts", postService
+                    .getFriendsPosts(userService.getUser(login).getId()));
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

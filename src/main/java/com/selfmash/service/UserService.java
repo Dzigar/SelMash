@@ -106,4 +106,6 @@ public interface UserService {
      * @return list User
      */
     List<User> getFriendsList(long userId);
+    
+    void setProfilePhoto(String userLogin, long photoId);
 }

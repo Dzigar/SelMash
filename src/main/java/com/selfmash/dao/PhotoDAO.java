@@ -47,15 +47,6 @@ public interface PhotoDAO {
     void updatePhoto(Photo photo);
 
     /**
-     * Get account photo if it is.
-     * 
-     * @param user
-     *            - object User class
-     * @return account Photo
-     */
-    Photo getAccoutPhoto(User user);
-
-    /**
      * Delete photo by id.
      * 
      * @param id
@@ -69,12 +60,5 @@ public interface PhotoDAO {
      * @return id Photo
      */
     long getLastId();
-
-    /**
-     * Make the selected photo as profile.
-     * 
-     * @param photo 
-     */
-    void makePhotoAsProfile(Photo photo);
 
 }

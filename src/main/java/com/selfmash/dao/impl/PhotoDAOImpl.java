@@ -68,20 +68,6 @@ public class PhotoDAOImpl implements PhotoDAO {
     }
 
     @Override
-    public Photo getAccoutPhoto(User user) {
-        try {
-            return (Photo) getCurrentSession()
-                    .createQuery(
-                            "from Photo as u where u.user = :user and u.isProfilePhoto = :isProfilePhoto")
-                    .setParameter("user", user)
-                    .setParameter("isProfilePhoto", true).uniqueResult();
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        return null;
-    }
-
-    @Override
     public void deletePhoto(long id) {
         try {
             getCurrentSession().beginTransaction();
@@ -108,15 +94,5 @@ public class PhotoDAOImpl implements PhotoDAO {
             logger.error(e.getLocalizedMessage());
         }
         return 0;
-    }
-
-    @Override
-    public void makePhotoAsProfile(Photo photo) {
-        try {
-            photo.setIsProfilePhoto(true);
-            getCurrentSession().saveOrUpdate(photo);
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
     }
 }

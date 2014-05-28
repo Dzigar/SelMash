@@ -48,6 +48,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUser(String login) {
+        
         return (User) getCurrentSession()
                 .createQuery(Queries.QUERY_GET_USER_BY_LOGIN)
                 .setParameter("login", login).uniqueResult();
@@ -61,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public boolean updateUser(User user) {
         try {
-            sessionFactory.getCurrentSession().update(user);
+            getCurrentSession().update(user);
             return true;
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());

@@ -50,9 +50,6 @@ public class Photo extends Model implements Serializable {
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;
 
-    @Column(name = "is_profile", nullable = false, columnDefinition = "boolean default false")
-    private Boolean isProfilePhoto;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private Set<User> fans;
@@ -68,7 +65,6 @@ public class Photo extends Model implements Serializable {
         this.title = title;
         this.dateUpload = dateUpload;
         this.user = user;
-        this.isProfilePhoto = false;
     }
 
     /**
@@ -145,21 +141,6 @@ public class Photo extends Model implements Serializable {
 
     public void setDateUpload(Date dateUpload) {
         this.dateUpload = dateUpload;
-    }
-
-    /**
-     * @return the isProfilePhoto
-     */
-    public Boolean getIsProfilePhoto() {
-        return isProfilePhoto;
-    }
-
-    /**
-     * @param isProfilePhoto
-     *            the isProfilePhoto to set
-     */
-    public void setIsProfilePhoto(Boolean isProfilePhoto) {
-        this.isProfilePhoto = isProfilePhoto;
     }
 
 }

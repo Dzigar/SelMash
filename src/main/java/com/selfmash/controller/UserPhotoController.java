@@ -119,7 +119,8 @@ public class UserPhotoController {
      */
     @RequestMapping(value = "/makeProfile/{id}", method = RequestMethod.POST)
     public String makeProfile(@PathVariable long id, HttpServletRequest request) {
-        photoService.makePhotoAsProfile(id, request.getSession().getAttribute("userLogin").toString());
+        userService.setProfilePhoto(
+                request.getSession().getAttribute("userLogin").toString(), id);
         return "redirect:/photo/" + id;
     }
 
@@ -154,7 +155,6 @@ public class UserPhotoController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deletePhoto(@PathVariable long id, Principal principal) {
         try {
-
             new FileDeleteHandler().deleteFilePhoto(
                     photoService.getPhotoById(id).getTitle(),
                     principal.getName());

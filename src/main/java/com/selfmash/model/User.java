@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,11 +28,9 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.selfmash.model.base.Model;
-
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-public class User extends Model implements Serializable {
+public class User implements Serializable {
 
     /**
 	 * 
@@ -86,6 +85,11 @@ public class User extends Model implements Serializable {
     @Cascade({ CascadeType.ALL })
     @JoinTable(name = "notification_user", joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "notification_id", nullable = false, updatable = false) })
     private List<Notification> notifications;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @Cascade({ CascadeType.ALL })
+   //@JoinTable(name = "user_profilephoto", joinColumns = { @JoinColumn(name = "user_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true, updatable = false) })
+    private Photo profilePhoto;
 
     // @OneToMany(fetch = FetchType.EAGER)
     // @Cascade({ CascadeType.ALL })
@@ -250,6 +254,21 @@ public class User extends Model implements Serializable {
      */
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    /**
+     * @return the profilePhoto
+     */
+    public Photo getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    /**
+     * @param profilePhoto
+     *            the profilePhoto to set
+     */
+    public void setProfilePhoto(Photo profilePhoto) {
+        this.profilePhoto = profilePhoto;
     }
 
 }
