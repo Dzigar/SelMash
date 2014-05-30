@@ -39,9 +39,9 @@ public class PostDAOImpl implements PostDAO {
     }
 
     @Override
-    public List<Post> getFriendsPosts(List<User> frinds) {
+    public List<Post> getFollowPosts(List<User> following) {
         List<Post> posts = new ArrayList<Post>();
-        for (User user : frinds) {
+        for (User user : following) {
             posts.addAll(user.getUserPosts());
         }
         return posts;

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.selfmash.beans.NotificationBean;
 import com.selfmash.beans.PostBean;
 import com.selfmash.beans.enums.ActionBody;
-import com.selfmash.dao.NotificationDAO;
 import com.selfmash.dao.UserDAO;
 import com.selfmash.model.User;
 import com.selfmash.service.NotificationService;
@@ -38,32 +37,26 @@ public class UserServiceImpl implements UserService {
     /**
      * Logger for UserServiceImpl class.
      */
-    private Logger loger = Logger.getLogger(getClass().getName());
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     @Override
-    public User getUser(String login) {
-        return userDAO.getUser(login);
+    public User getUserById(long id) {
+        return userDAO.getUserById(id);
     }
 
     @Override
-    public boolean addUser(User user) {
-        loger.debug("Added user " + user);
-        return userDAO.addUser(user);
+    public User getUserByLogin(String login) {
+        return userDAO.getUserByLogin(login);
     }
 
     @Override
-    public List<User> getUserList() {
-        return userDAO.getUserList();
+    public void addUser(User user) {
+        userDAO.addUser(user);
     }
 
     @Override
-    public long getUserId(String login) {
-        return userDAO.getUserId(login);
-    }
-
-    @Override
-    public boolean updateUser(User user) {
-        return userDAO.updateUser(user);
+    public void updateUser(User user) {
+        userDAO.updateUser(user);
     }
 
     @Override
@@ -77,42 +70,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addFriend(long userId, long friendId) {
-        if (userDAO.addFriend(userId, friendId)) {
-            notificationService.saveNotification(notificationBean
-                    .createAddFriendNotification(userId, friendId));
-            return true;
+    public void subscribe(long userId, long admirerId) {
+        try {
+            userDAO.subscribe(userId, admirerId);
+            // Create new notification
+            notificationService.saveNotification(notificationBean.addFollow(
+                    userId, admirerId));
+            // Create new Post
+            postBean.addPost(userId, admirerId, null, ActionBody.SUBSCRIBE);
+        } catch (Exception e) {
+            logger.equals(e.getLocalizedMessage());
         }
-        return false;
-    }
 
-    @Override
-    public List<User> getFriendsList(long userId) {
-        return userDAO.getFriendsList(userId);
-    }
-
-    @Override
-    public User getUserById(long id) {
-        return userDAO.getUserById(id);
-    }
-
-    @Override
-    public boolean confirmFriendship(long userId, long friendId,
-            long notificationId) {
-        if (userDAO.confirmFriendship(userId, friendId)) {
-            // Remove notification
-            notificationService.removeNotificationById(notificationId);
-            // Add new Post
-            postBean.addPost(userId, friendId, null, ActionBody.ADD_USER);
-            return true;
-        } else
-            return false;
     }
 
     @Override
     public void setProfilePhoto(String userLogin, long photoId) {
-        User user = getUser(userLogin);
+        User user = getUserByLogin(userLogin);
         user.setProfilePhoto(photoService.getPhotoById(photoId));
         updateUser(user);
+    }
+
+    @Override
+    public List<User> getFollowing(long userId) {
+        return userDAO.getFollowing(userId);
+    }
+
+    @Override
+    public List<User> getAdmirers(long userId) {
+        return userDAO.getAdmirers(userId);
+    }
+
+    @Override
+    public void unsubscribe(long followerId, long admirerId) {
+        userDAO.unsubscribe(followerId, admirerId);
     }
 }

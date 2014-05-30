@@ -2,14 +2,32 @@ package com.selfmash.service;
 
 import java.util.List;
 
-import com.selfmash.dao.NotificationDAO;
 import com.selfmash.model.Notification;
 
 public interface NotificationService {
 
+    /**
+     * 
+     * @param notification
+     */
     void saveNotification(Notification notification);
 
+    /**
+     * 
+     * @param idNotification
+     */
     void removeNotificationById(long idNotification);
 
+    /**
+     * 
+     * @param userId
+     * @return
+     */
     public List<Notification> getNotificationsByUserId(long userId);
+
+    /**
+     * 
+     * @param notificationId
+     */
+    void setNotificationIsReview(long notificationId);
 }

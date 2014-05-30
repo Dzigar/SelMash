@@ -27,8 +27,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getFriendsPosts(long userId) {
-        return postDAO.getFriendsPosts(userService.getFriendsList(userId));
+    public List<Post> getFollowPosts(long userId) {
+        return postDAO.getFollowPosts(userService.getFollowing(userId));
     }
 
 }

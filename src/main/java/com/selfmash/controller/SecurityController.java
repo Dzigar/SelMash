@@ -94,7 +94,7 @@ public class SecurityController {
         try {
             String login = principal.getName();
             modelMap.addAttribute("posts", postService
-                    .getFriendsPosts(userService.getUser(login).getId()));
+                    .getFollowPosts(userService.getUserByLogin(login).getId()));
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -156,11 +156,8 @@ public class SecurityController {
                 String password = user.getPassword();
                 user.setPassword(passwordEncoder.encodePassword(password,
                         user.getLogin()));
-                if (userService.addUser(user)) {
-                    addUserToAuthenticatedList(user.getLogin(), password);
-                } else {
-                    return "redirect:/login";
-                }
+                userService.addUser(user);
+                addUserToAuthenticatedList(user.getLogin(), password);
             }
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());

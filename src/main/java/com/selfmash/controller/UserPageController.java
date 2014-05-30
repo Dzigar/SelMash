@@ -13,7 +13,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
@@ -59,10 +58,11 @@ public class UserPageController {
             HttpServletRequest request) {
         try {
             request.getSession().setAttribute("userLogin", login);
-            User user = userService.getUser(login);
+            User user = userService.getUserByLogin(login);
             model.addAttribute("user", user);
+            model.addAttribute("admirers",
+                    userService.getAdmirers(user.getId()));
             model.addAttribute("photoRows", createUserPhotoCollection(login));
-
 
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -73,37 +73,33 @@ public class UserPageController {
     /**
      * 
      * @param request
-     *            - - link to HttpServletRequest object
+     *            -link to HttpServletRequest object
      * @param principal
      *            - link to Principal object
      * @return method redirect to user_page
      */
-    @RequestMapping(value = "/addfriend", method = RequestMethod.POST)
-    public final String addFriend(final HttpServletRequest request,
-            final Principal principal) {
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
+    public String follow(HttpServletRequest request, Principal principal) {
         try {
-            userService.addFriend(userService.getUserId(principal.getName()),
-                    Long.parseLong(request.getParameter("user")));
+            userService.subscribe(
+                    userService.getUserByLogin(principal.getName()).getId(),
+                    Long.parseLong(request.getParameter("userId")));
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        return "redirect:/" + request.getParameter("login");
+        return "redirect:/" + request.getParameter("userLogin");
     }
 
-    @RequestMapping(value = "/confirmFriendship", method = RequestMethod.POST)
-    public String confirmFriendShip(@RequestParam long friendId,
-            @RequestParam long notId, Principal principal) {
+    @RequestMapping(value = "/unsubscribe", method = RequestMethod.POST)
+    public String unsubscribe(HttpServletRequest request, Principal principal) {
         try {
-            if (userService.confirmFriendship(friendId,
-                    userService.getUserId(principal.getName()), notId)) {
-                return "redirect:/notifications";
-            } else {
-                System.out.println("Error");
-            }
+            userService.unsubscribe(Long.parseLong(request
+                    .getParameter("userId")),
+                    userService.getUserByLogin(principal.getName()).getId());
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        return "redirect:/notifications";
+        return "redirect:/" + request.getParameter("userLogin");
     }
 
     /**
@@ -115,7 +111,7 @@ public class UserPageController {
      */
     private List<List<Photo>> createUserPhotoCollection(final String login) {
         List<Photo> photos = photoService.getUserPhotos(userService
-                .getUser(login));
+                .getUserByLogin(login));
         List<List<Photo>> photoColection = new ArrayList<List<Photo>>();
         int i = 0;
         while (i < photos.size()) {

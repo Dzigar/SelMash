@@ -41,13 +41,6 @@ ul.hr li {
 	padding: 5px;
 }
 
-.info {
-	margin-left: auto;
-	margin-right: 10%;
-	margin-top: 10px;
-	width: 59%;
-}
-
 .collection {
 	margin-left: auto;
 	margin-right: 10%;
@@ -57,15 +50,10 @@ ul.hr li {
 	text-align: center;
 }
 
-.user-list {
-	position: absolute;
-	margin-left: 10%;
-	margin-top: 10px;
-	margin-right: auto;
-	width: 20%;
-	height: auto;
-	margin-right: auto;
+.following {
+	vertical-align: top;
 	text-align: center;
+	height: auto;
 }
 
 #block {
@@ -151,6 +139,7 @@ ul.user-info li {
 	padding: 1px;
 	height: auto;
 }
+
 .message-text {
 	margin-top: 0px;
 	color: #cdcdcd;

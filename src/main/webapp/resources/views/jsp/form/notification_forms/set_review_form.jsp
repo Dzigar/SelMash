@@ -6,10 +6,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%><%@taglib uri="http://www.springframework.org/tags"
 	prefix="spring"%>
-<div align="left">
-	<c:out value="${post.user.name}" />
-	<c:out value="${post.user.lastname}" />
-	<spring:message code="action.add.friend" />
-	<c:out value="${post.friend.name}" />
-	<c:out value="${post.friend.lastname}" />
-</div>
+<form action="/notifications/${notification.id}/review?notificationId=${notification.id}" method="post">
+	<input type="submit" value='<spring:message code="lable.review" />'
+		class="submit-button_no_style">
+</form>

@@ -17,7 +17,7 @@ public interface UserService {
      *            - User login.
      * @return object User class.
      */
-    User getUser(String login);
+    User getUserByLogin(String login);
 
     /**
      * Get user by id.
@@ -33,25 +33,8 @@ public interface UserService {
      * 
      * @param user
      *            - object User class
-     * @return true if User saved successfully and return false id not.
      */
-    boolean addUser(User user);
-
-    /**
-     * Get all users who have registered in service.
-     * 
-     * @return User list
-     */
-    List<User> getUserList();
-
-    /**
-     * Get User id.
-     * 
-     * @param login
-     *            - User login
-     * @return id User
-     */
-    long getUserId(String login);
+    void addUser(User user);
 
     /**
      * Update changed User.
@@ -59,7 +42,7 @@ public interface UserService {
      * @param user
      *            - object User
      */
-    boolean updateUser(User user);
+    void updateUser(User user);
 
     /**
      * 
@@ -81,31 +64,40 @@ public interface UserService {
     int getDaysOnline(String login);
 
     /**
-     * Add User to friends list.
+     * Add new admirer.
      * 
      * @param idFirstUser
      *            - id user who adds
      * @param idSecondUser
      *            - id user which adds
      */
-    boolean addFriend(long idFirstUser, long idSecondUser);
+    void subscribe(long idFirstUser, long idSecondUser);
 
     /**
-     * Confirm friendship between users.
      * 
-     * @param userId
-     * @param friendId
+     * @param followerId
+     * @param admirerId
      */
-    boolean confirmFriendship(long userId, long friendId, long notificationId);
+    void unsubscribe(long followerId, long admirerId);
 
     /**
-     * Get friends list by user id.
      * 
-     * @param userId
-     *            - User id
-     * @return list User
+     * @param userLogin
+     * @param photoId
      */
-    List<User> getFriendsList(long userId);
-    
     void setProfilePhoto(String userLogin, long photoId);
+
+    /**
+     * 
+     * @param userId
+     * @return
+     */
+    List<User> getFollowing(long userId);
+
+    /**
+     * 
+     * @param userId
+     * @return list of admirers users.
+     */
+    List<User> getAdmirers(long userId);
 }

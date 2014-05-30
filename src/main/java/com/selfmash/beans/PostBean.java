@@ -29,18 +29,6 @@ public class PostBean {
 
     public void addPost(long userId1, long userId2, Photo photo, ActionBody body) {
         postService.savePost(new Post(userService.getUserById(userId1),
-                userService.getUserById(userId2), photo,
-                getBodyOfAction(body)));
-    }
-
-    private ActionBody getBodyOfAction(ActionBody actionBody) {
-        switch (actionBody) {
-        case ADD_USER:
-            actionBody.setActionBody("action.add.friend");
-            break;
-        default:
-            break;
-        }
-        return actionBody;
+                userService.getUserById(userId2), photo, ActionBody.SUBSCRIBE));
     }
 }

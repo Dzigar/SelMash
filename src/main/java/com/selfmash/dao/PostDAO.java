@@ -22,6 +22,6 @@ public interface PostDAO {
      * 
      * @return list of friends posts
      */
-    List<Post> getFriendsPosts(List<User> friends);
+    List<Post> getFollowPosts(List<User> friends);
 
 }

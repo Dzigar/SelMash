@@ -88,7 +88,6 @@ public class User implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @Cascade({ CascadeType.ALL })
-   //@JoinTable(name = "user_profilephoto", joinColumns = { @JoinColumn(name = "user_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true, updatable = false) })
     private Photo profilePhoto;
 
     // @OneToMany(fetch = FetchType.EAGER)

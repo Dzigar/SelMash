@@ -19,23 +19,44 @@
 		<%@include file="form/head.jsp"%>
 		<!-- end head -->
 
-		<!-- users list   -->
-		<%@include file="form/friends.jsp"%>
-		<!-- end users list -->
+		<table width="80%">
+			<tr>
+				<td width="20%">
+					<!-- following --> <%@include file="form/following.jsp"%>
+					<!-- end following -->
+				</td>
+				<td width="60%" valign="top">
+					<!-- Posts -->
+					<div align="left" id="block">
+						<c:choose>
+							<c:when test="${not empty posts}">
+								<c:forEach var="post" items="${posts}">
+									<c:choose>
+										<c:when test="${post.action eq 'SUBSCRIBE'}">
+											<%@include file="form/post_forms/subscribe_to.jsp"%>
+										</c:when>
+									</c:choose>
+									<br />
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<div align="center">
+									<spring:message code="lable.empty" />
+								</div>
+							</c:otherwise>
+						</c:choose>
+						<!--  -->
+					</div>
+				</td>
+				<td width="20%" valign="top"><div align="center" id="block">
+						<c:out value="something" />
+					</div></td>
+			</tr>
+		</table>
 
-		<!-- Posts -->
-		<div align="left" class="info" id="block">
-			<c:forEach var="post" items="${posts}">
-				<c:choose>
-					<c:when test="${post.action eq 'ADD_USER'}">
-						<%@include file="form/post_forms/add_new_friend_form.jsp"%>
-					</c:when>
-				</c:choose>
-				<br />
-			</c:forEach>
 
-			<!--  -->
-		</div>
+
+
 	</div>
 </body>
 </html>

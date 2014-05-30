@@ -109,7 +109,7 @@
 	});
 </script>
 
-<div class="collection" id="block">
+<div id="block">
 	<table align="center">
 		<tr>
 			<td colspan="4">

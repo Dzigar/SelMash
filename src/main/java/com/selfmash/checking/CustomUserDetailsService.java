@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String login)
             throws UsernameNotFoundException {
 
-        com.selfmash.model.User domainUser = userService.getUser(login);
+        com.selfmash.model.User domainUser = userService.getUserByLogin(login);
 
         boolean enabled = true;
         boolean accountNonExpired = true;

@@ -52,8 +52,8 @@ public class Post extends Model implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @Cascade({ CascadeType.ALL })
-    @JoinTable(name = "post_friend", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "user_friend_id", nullable = true, updatable = false) })
-    private User friend;
+    @JoinTable(name = "post_follower", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "follower_id", nullable = true, updatable = false) })
+    private User follower;
 
     @OneToOne(fetch = FetchType.LAZY)
     @Cascade({ CascadeType.ALL })
@@ -67,9 +67,9 @@ public class Post extends Model implements Serializable {
         // TODO Auto-generated constructor stub
     }
 
-    public Post(User user, User friend, Photo photo, ActionBody actiont) {
+    public Post(User user, User follower, Photo photo, ActionBody actiont) {
         this.user = user;
-        this.friend = friend;
+        this.setFollower(follower);
         this.photo = photo;
         this.setAction(actiont);
     }
@@ -154,18 +154,18 @@ public class Post extends Model implements Serializable {
     }
 
     /**
-     * @return the friend
+     * @return the follower
      */
-    public User getFriend() {
-        return friend;
+    public User getFollower() {
+        return follower;
     }
 
     /**
-     * @param friend
-     *            the friend to set
+     * @param follower
+     *            the follower to set
      */
-    public void setFriend(User friend) {
-        this.friend = friend;
+    public void setFollower(User follower) {
+        this.follower = follower;
     }
 
 }

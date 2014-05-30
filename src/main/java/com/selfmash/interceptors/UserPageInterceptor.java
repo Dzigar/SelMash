@@ -29,9 +29,9 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     /**
-     * 
+     * List following users
      */
-    private List<User> friendsList;
+    private List<User> following;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -45,12 +45,12 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
             HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
         try {
-            friendsList = userService.getFriendsList(userService.getUser(
+            following = userService.getFollowing(userService.getUserByLogin(
                     getAuthenticationUserName()).getId());
-            modelAndView.addObject("friendList", friendsList);
-            if (isFriends(request.getSession().getAttribute("userLogin")
+            modelAndView.addObject("following", following);
+            if (subsrcibed(request.getSession().getAttribute("userLogin")
                     .toString())) {
-                modelAndView.addObject("isFriends", true);
+                modelAndView.addObject("isSubscribed", true);
             }
 
         } catch (Exception e) {
@@ -60,8 +60,9 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
         try {
             int notificationCount = notificationService
                     .getNotificationsByUserId(
-                            userService.getUser(getAuthenticationUserName())
-                                    .getId()).size();
+                            userService.getUserByLogin(
+                                    getAuthenticationUserName()).getId())
+                    .size();
             if (notificationCount != 0) {
                 modelAndView.addObject("notificationCount", notificationCount);
             }
@@ -84,15 +85,13 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
 
     /**
      * 
-     * @param login
+     * @param userLogin
      *            - User login
-     * @param friendList
-     *            - list of users
      * @return true if user login is listed and return false if user login not's
      *         listed
      */
-    private boolean isFriends(String userLogin) {
-        for (User user : friendsList) {
+    private boolean subsrcibed(String userLogin) {
+        for (User user : following) {
             if (user.getLogin().equals(userLogin)) {
                 return true;
             }

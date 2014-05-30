@@ -52,7 +52,6 @@ public class NotificationDAOImpl implements NotificationDAO {
     @Override
     public List<Notification> getNotificationsByUserId(long userId) {
         try {
-
             List<Notification> notifications = getCurrentSession()
                     .createSQLQuery(Queries.QUERY_GET_NOTIFICATIONS_BY_USER_ID)
                     .addEntity(Notification.class)
@@ -75,5 +74,14 @@ public class NotificationDAOImpl implements NotificationDAO {
             logger.error(e.getLocalizedMessage());
         }
         return null;
+    }
+
+    @Override
+    public void updateNotification(Notification notification) {
+        try {
+            getCurrentSession().update(notification);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 }

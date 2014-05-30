@@ -32,4 +32,12 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationDAO.getNotificationsByUserId(userId);
     }
 
+    @Override
+    public void setNotificationIsReview(long notificationId) {
+        Notification notification = notificationDAO
+                .getNotificationById(notificationId);
+        notification.setReview(true);
+        notificationDAO.updateNotification(notification);
+    }
+
 }

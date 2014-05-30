@@ -46,6 +46,9 @@ public class Notification extends Model implements Serializable {
     @Enumerated(EnumType.STRING)
     private NotificationBody notificationMessage;
 
+    @Column(nullable = false, columnDefinition = "TINYINT(4) default '0'")
+    private boolean review;
+
     public Notification() {
         // TODO Auto-generated constructor stub
     }
@@ -115,5 +118,20 @@ public class Notification extends Model implements Serializable {
      */
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    /**
+     * @return the review
+     */
+    public boolean isReview() {
+        return review;
+    }
+
+    /**
+     * @param review
+     *            the review to set
+     */
+    public void setReview(boolean review) {
+        this.review = review;
     }
 }

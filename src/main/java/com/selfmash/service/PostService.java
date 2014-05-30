@@ -8,5 +8,5 @@ public interface PostService {
 
     void savePost(Post post);
 
-    List<Post> getFriendsPosts(long userId);
+    List<Post> getFollowPosts(long userId);
 }

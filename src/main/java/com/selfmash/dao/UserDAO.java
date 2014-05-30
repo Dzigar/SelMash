@@ -6,25 +6,78 @@ import com.selfmash.model.User;
 
 public interface UserDAO {
 
-    boolean addUser(User user);
+    /**
+     * Save user in DB.
+     * 
+     * @param user
+     *            - object User entity
+     */
+    void addUser(User user);
 
-    User getUser(String login);
+    /**
+     * 
+     * @param login
+     * @return user by user login
+     */
+    User getUserByLogin(String login);
 
+    /**
+     * 
+     * @param id
+     *            - id of user
+     * @return user by user id
+     */
     User getUserById(long id);
 
-    List<User> getUserList();
+    /**
+     * Update changed user entity.
+     * 
+     * @param user
+     *            - object User entity
+     * @return
+     */
+    void updateUser(User user);
 
-    long getUserId(String login);
-
-    boolean updateUser(User user);
-
+    /**
+     * 
+     * @param userId
+     * @param photoId
+     * @return
+     */
     boolean containsPreferencesPhoto(long userId, long photoId);
 
+    /**
+     * 
+     * @param login
+     * @return
+     */
     int getDaysOnline(String login);
 
-    boolean addFriend(long idFirstUser, long idSecondUser);
+    /**
+     * 
+     * @param idUser
+     * @param idAdmirer
+     */
+    void subscribe(long idUser, long idAdmirer);
 
-    boolean confirmFriendship(long idFirstUser, long idSecondUser);
+    /**
+     * 
+     * @param idUser
+     * @param idAdmirer
+     */
+    void unsubscribe(long idUser, long idAdmirer);
 
-    List<User> getFriendsList(long userId);
+    /**
+     * 
+     * @param userId
+     * @return
+     */
+    List<User> getFollowing(long userId);
+
+    /**
+     * 
+     * @param userId
+     * @return list of admirers users.
+     */
+    List<User> getAdmirers(long userId);
 }

@@ -1,5 +1,7 @@
 package com.selfmash.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,13 +29,24 @@ public class NotificationController {
     public String notificationsUser(ModelMap map) {
         try {
             map.addAttribute("notifications", notificationService
-                    .getNotificationsByUserId(userService
-                            .getUserId(SecurityContextHolder.getContext()
-                                    .getAuthentication().getName())));
+                    .getNotificationsByUserId(userService.getUserByLogin(
+                            SecurityContextHolder.getContext()
+                                    .getAuthentication().getName()).getId()));
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
 
         return "notifications_page";
+    }
+
+    @RequestMapping(value = "{id}/review", method = RequestMethod.POST)
+    public String reviewNotification(HttpServletRequest request) {
+        try {
+            notificationService.setNotificationIsReview(Long.parseLong(request
+                    .getParameter("notificationId").toString()));
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return "redirect:/notifications";
     }
 }

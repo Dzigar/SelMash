@@ -61,8 +61,9 @@ public class UserPhotoController {
                 request.getSession().getAttribute("userLogin"));
         model.addAttribute(
                 "userId",
-                userService.getUserId(request.getSession()
-                        .getAttribute("userLogin").toString()));
+                userService.getUserByLogin(
+                        request.getSession().getAttribute("userLogin")
+                                .toString()).getId());
         // model.addAttribute("Estimations",
         // estimationService.getEstimationsByPhotoId(id));
         return "photo_page";
@@ -85,7 +86,7 @@ public class UserPhotoController {
     public String handleFileUpload(@RequestParam("image") MultipartFile file,
             Model model, Principal principal) throws IOException {
         try {
-            User user = userService.getUser(principal.getName());
+            User user = userService.getUserByLogin(principal.getName());
             Photo photo = new Photo(Long.toString(photoService.getLastId() + 1)
                     + "." + getExtensionFile(file), new Date(), user);
             photoService.addphoto(photo); // save photo in DB
@@ -128,7 +129,7 @@ public class UserPhotoController {
     public String appreciatePhoto(@PathVariable long id, Principal principal,
             HttpServletRequest request) {
         try {
-            User user = userService.getUser(principal.getName());
+            User user = userService.getUserByLogin(principal.getName());
             if (!userService.containsPreferencesPhoto(user.getId(), id)) {
                 estimationService.addEstimation(new Estimation(Float
                         .parseFloat(request.getParameter("estimation")

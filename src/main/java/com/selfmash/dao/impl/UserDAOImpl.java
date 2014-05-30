@@ -30,44 +30,41 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @Transactional
-    public boolean addUser(User user) {
+    public void addUser(User user) {
         try {
             getCurrentSession().save(user);
-            return true;
         } catch (Exception e) {
-            logger.info("Error in 'saveUser':" + e.getLocalizedMessage());
-            return false;
+            logger.error(e.getLocalizedMessage());
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<User> getUserList() {
-        return getCurrentSession().createQuery("from User").list();
-    }
+    public User getUserByLogin(String login) {
 
-    @Override
-    public User getUser(String login) {
-        
         return (User) getCurrentSession()
                 .createQuery(Queries.QUERY_GET_USER_BY_LOGIN)
                 .setParameter("login", login).uniqueResult();
     }
 
     @Override
-    public long getUserId(String login) {
-        return getUser(login).getId();
+    public User getUserById(long id) {
+        try {
+            return (User) getCurrentSession()
+                    .createQuery(Queries.QUERY_GET_USER_BY_ID)
+                    .setParameter("id", id).uniqueResult();
+        } catch (Exception e) {
+            logger.equals(e.getLocalizedMessage());
+        }
+        return null;
     }
 
     @Override
-    public boolean updateUser(User user) {
+    public void updateUser(User user) {
         try {
             getCurrentSession().update(user);
-            return true;
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }
-        return false;
     }
 
     @Override
@@ -103,57 +100,53 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean addFriend(long userId, long friendId) {
+    public void subscribe(long admirerId, long followerId) {
         try {
-            getCurrentSession().createSQLQuery(Queries.QUERY_ADD_FRIEND)
-                    .setLong("userId", userId).setLong("friendId", friendId)
-                    .executeUpdate();
-            return true;
+            getCurrentSession().createSQLQuery(Queries.QUERY_SUBSCRIBE)
+                    .setLong("followerId", followerId)
+                    .setLong("admirerId", admirerId).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        return false;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<User> getFriendsList(long userId) {
+    public List<User> getFollowing(long userId) {
         try {
-            return getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_SELECT_FRIENDS)
+            List<User> following = getCurrentSession()
+                    .createSQLQuery(Queries.QUERY_SELECT_FOLLOWING)
                     .addEntity(User.class).setLong("userId", userId).list();
+            return following;
         } catch (Exception e) {
             logger.error(e.getStackTrace());
         }
         return null;
     }
 
-    /**
-     * 
-     */
+    @SuppressWarnings("unchecked")
     @Override
-    public User getUserById(long id) {
+    public List<User> getAdmirers(long userId) {
         try {
-            return (User) getCurrentSession()
-                    .createQuery(Queries.QUERY_GET_USER_BY_ID)
-                    .setParameter("id", id).uniqueResult();
+            return getCurrentSession()
+                    .createSQLQuery(Queries.QUERY_SELECT_ADMIRERS)
+                    .addEntity(User.class).setLong("userId", userId).list();
+
         } catch (Exception e) {
-            logger.equals(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage());
         }
         return null;
     }
 
     @Override
-    public boolean confirmFriendship(long userId, long friendId) {
+    public void unsubscribe(long followerId, long admirerId) {
         try {
-            getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_CONFIRM_FRIENDSHIP)
-                    .setParameter("userId", userId)
-                    .setParameter("friendId", friendId).executeUpdate();
-            return true;
+            getCurrentSession().createSQLQuery(Queries.QUERY_UNSUBSCRIBE)
+                    .setLong("followerId", followerId)
+                    .setLong("admirerId", admirerId).executeUpdate();
         } catch (Exception e) {
-            logger.equals(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage());
         }
-        return false;
     }
+
 }
