@@ -56,7 +56,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
-        userDAO.updateUser(user);
+        try {
+            userDAO.updateUser(user);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 
     @Override
@@ -104,5 +108,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void unsubscribe(long followerId, long admirerId) {
         userDAO.unsubscribe(followerId, admirerId);
+    }
+
+    @Override
+    public void removeProfilePhoto(long userId) {
+        userDAO.removeProfilePhoto(userId);
     }
 }

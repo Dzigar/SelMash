@@ -22,11 +22,9 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import com.selfmash.model.base.Model;
-
 @Entity
 @Table(name = "photo", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-public class Photo extends Model implements Serializable {
+public class Photo implements Serializable {
 
     /**
 	 * 
@@ -45,7 +43,7 @@ public class Photo extends Model implements Serializable {
     @Column
     private Date dateUpload;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @Cascade({ CascadeType.EVICT })
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;

@@ -6,12 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.selfmash.handler.FileDeleteHandler;
+import com.selfmash.beans.FileManagerBean;
 import com.selfmash.model.Estimation;
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
@@ -42,6 +42,9 @@ public class UserPhotoController {
 
     @Resource(name = "estimationServiceImpl")
     private EstimationService estimationService;
+
+    @Autowired
+    private FileManagerBean fileManagerBean;
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
@@ -87,8 +90,8 @@ public class UserPhotoController {
             Model model, Principal principal) throws IOException {
         try {
             User user = userService.getUserByLogin(principal.getName());
-            Photo photo = new Photo(Long.toString(photoService.getLastId() + 1)
-                    + "." + getExtensionFile(file), new Date(), user);
+            Photo photo = new Photo(file.getOriginalFilename(), new Date(),
+                    user);
             photoService.addphoto(photo); // save photo in DB
             if (!file.isEmpty()) {
                 File userFolder = new File(Path.PHOTO_PATH + "/"
@@ -156,9 +159,8 @@ public class UserPhotoController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deletePhoto(@PathVariable long id, Principal principal) {
         try {
-            new FileDeleteHandler().deleteFilePhoto(
-                    photoService.getPhotoById(id).getTitle(),
-                    principal.getName());
+            fileManagerBean.deleteFilePhoto(photoService.getPhotoById(id)
+                    .getTitle(), principal.getName());
             photoService.deletePhoto(id);
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
@@ -175,17 +177,14 @@ public class UserPhotoController {
         return file.getOriginalFilename().split("\\.")[1];
     }
 
-    private Photo setAverageRating(long id) {
-        float total = 0;
-        Photo photo = photoService.getPhotoById(id);
-        List<Estimation> estimations = estimationService
-                .getEstimationsByPhotoId(id);
-        for (int i = 0; i < estimations.size(); i++) {
-            total = total + estimations.get(i).getEstimation();
-        }
-
-        photo.setAverageRating(total / estimations.size());
-        photoService.updatePhoto(photo);
-        return photo;
-    }
+    /*
+     * private Photo setAverageRating(long id) { float total = 0; Photo photo =
+     * photoService.getPhotoById(id); List<Estimation> estimations =
+     * estimationService .getEstimationsByPhotoId(id); for (int i = 0; i <
+     * estimations.size(); i++) { total = total +
+     * estimations.get(i).getEstimation(); }
+     * 
+     * photo.setAverageRating(total / estimations.size());
+     * photoService.updatePhoto(photo); return photo; }
+     */
 }

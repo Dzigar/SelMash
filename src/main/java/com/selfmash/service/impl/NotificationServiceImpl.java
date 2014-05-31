@@ -33,6 +33,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public int getNotificationsCountByUserId(long userId) {
+        return getNotificationsByUserId(userId).size();
+    }
+
+    @Override
     public void setNotificationIsReview(long notificationId) {
         Notification notification = notificationDAO
                 .getNotificationById(notificationId);

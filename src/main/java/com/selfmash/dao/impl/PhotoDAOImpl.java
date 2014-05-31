@@ -16,6 +16,7 @@ import com.selfmash.model.Photo;
 import com.selfmash.model.User;
 import com.selfmash.service.EstimationService;
 import com.selfmash.service.UserService;
+import com.selfmash.strings.Queries;
 
 @Repository
 public class PhotoDAOImpl implements PhotoDAO {
@@ -70,29 +71,11 @@ public class PhotoDAOImpl implements PhotoDAO {
     @Override
     public void deletePhoto(long id) {
         try {
-            getCurrentSession().beginTransaction();
-            estimationService.removeEstimationsByPhotoId(id);
-            getCurrentSession().delete(getPhotoById(id));
-            getCurrentSession().getTransaction().commit();
-        } catch (Exception e) {
-            logger.info(e.getLocalizedMessage());
-        } finally {
-            if (getCurrentSession() != null) {
-                getCurrentSession().close();
-            }
-        }
-    }
-
-    @Override
-    public long getLastId() {
-        try {
-            return Long.parseLong(getCurrentSession()
-                    .createQuery(
-                            "SELECT id FROM Photo ORDER BY id DESC LIMIT 1")
-                    .uniqueResult().toString());
+            // estimationService.removeEstimationsByPhotoId(id);
+            getCurrentSession().createQuery(Queries.QUERY_DELETE_PHOTO_BY_ID)
+                    .setParameter("photoId", id).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        return 0;
     }
 }

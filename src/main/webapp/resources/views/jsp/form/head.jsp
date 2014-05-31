@@ -8,11 +8,11 @@
 <link href="" rel="icon" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
 	href="<c:url value='/resources/css/style.css'/>" media="all" />
+<div class="head">
+	<table width="100%" border="0">
+		<tr width="20%">
+			<td width="80%" align="center">
 
-<table width="100%">
-	<tr width="20%">
-		<td width="80%" align="center">
-			<div class="head">
 				<table width="80%">
 					<tr width="80%">
 						<td width="26%"><a href="/index"><spring:message
@@ -40,8 +40,8 @@
 							</ul></td>
 					</tr>
 				</table>
-			</div>
-		</td>
-	</tr>
-</table>
+			</td>
+		</tr>
+	</table>
+</div>
 

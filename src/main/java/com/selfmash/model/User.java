@@ -86,7 +86,7 @@ public class User implements Serializable {
     @JoinTable(name = "notification_user", joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "notification_id", nullable = false, updatable = false) })
     private List<Notification> notifications;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @Cascade({ CascadeType.ALL })
     private Photo profilePhoto;
 

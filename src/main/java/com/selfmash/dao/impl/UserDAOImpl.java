@@ -149,4 +149,16 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public void removeProfilePhoto(long userId) {
+        try {
+            getCurrentSession()
+                    .createSQLQuery(
+                            "UPDATE user as u SET u.profilePhoto_id = NULL WHERE u.id = :userId")
+                    .setParameter("userId", userId).executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
 }

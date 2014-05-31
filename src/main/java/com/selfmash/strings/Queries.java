@@ -22,6 +22,9 @@ public class Queries {
     public static final String QUERY_UNSUBSCRIBE = "delete from followers where user_id = :followerId "
             + "and admirer_id = :admirerId";
 
+    // For Photo entity
+    public static final String QUERY_DELETE_PHOTO_BY_ID = "delete Photo where id = :photoId";
+
     // For Notification entity
     public static final String QUERY_GET_NOTIFICATION_BY_ID = "from Notification as n where n.id = :notificationId";
 

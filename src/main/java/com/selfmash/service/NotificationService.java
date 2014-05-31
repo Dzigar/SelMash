@@ -23,7 +23,14 @@ public interface NotificationService {
      * @param userId
      * @return
      */
-    public List<Notification> getNotificationsByUserId(long userId);
+    List<Notification> getNotificationsByUserId(long userId);
+
+    /**
+     * 
+     * @param userId
+     * @return
+     */
+    int getNotificationsCountByUserId(long userId);
 
     /**
      * 

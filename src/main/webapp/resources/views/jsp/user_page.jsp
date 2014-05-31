@@ -10,16 +10,16 @@
 <link rel="stylesheet" type="text/css"
 	href="<c:url value='/resources/css/style.css'/>" media="all" />
 
-<script type="text/javascript" src="/resources/js/jquery-1.3.1.js"></script>
 <title></title>
 
 </head>
 <body>
 
+
+	<!-- Head -->
+	<%@include file="form/head.jsp"%>
+	<!-- end head -->
 	<div align="center">
-		<!-- Head -->
-		<%@include file="form/head.jsp"%>
-		<!-- end head -->
 		<table width="80%" border="0">
 			<tr>
 				<td width="20%" valign="top">
@@ -73,7 +73,8 @@
 								<td><c:choose>
 										<c:when
 											test="${authentication ne user.login and !isSubscribed}">
-											<form action="/subscribe?userId=${user.id}&userLogin=${user.login}"
+											<form
+												action="/subscribe?userId=${user.id}&userLogin=${user.login}"
 												method="post">
 												<input type="submit"
 													value='<spring:message code="lable.follow" />'
@@ -81,14 +82,28 @@
 											</form>
 										</c:when>
 										<c:otherwise>
-											<form
-												action="/unsubscribe?userId=${user.id}&userLogin=${user.login}"
-												method="post">
-												<input type="submit"
-													value='<spring:message code="lable.unsubscribe" />'>
-											</form>
+											<c:if test="${authentication ne user.login}">
+												<form
+													action="/unsubscribe?userId=${user.id}&userLogin=${user.login}"
+													method="post">
+													<input type="submit"
+														value='<spring:message code="lable.unsubscribe" />'>
+												</form>
+											</c:if>
 										</c:otherwise>
 									</c:choose></td>
+								<td>
+									<table width="100%">
+										<tr>
+											<td><spring:message code="lable.photo.count" />
+												${photoRows.size()}</td>
+											<td><spring:message code="lable.followers.count" />
+												${following.size()}</td>
+											<td><spring:message code="lable.admirers.count" />
+												${admirers.size()}</td>
+										</tr>
+									</table>
+								</td>
 							</tr>
 						</table>
 

@@ -21,6 +21,7 @@
 
 	<bean id="notificationBean" class="com.selfmash.beans.NotificationBean" />
 
+	<bean id="fileDeleteHandlerBean" class="com.selfmash.beans.FileManagerBean" />
 
 	<!-- Spring Message config -->
 	<bean id="messageSource"

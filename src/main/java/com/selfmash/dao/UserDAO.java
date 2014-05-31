@@ -80,4 +80,10 @@ public interface UserDAO {
      * @return list of admirers users.
      */
     List<User> getAdmirers(long userId);
+
+    /**
+     * 
+     * @param userId
+     */
+    void removeProfilePhoto(long userId);
 }

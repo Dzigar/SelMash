@@ -18,11 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.selfmash.beans.enums.NotificationBody;
-import com.selfmash.model.base.Model;
 
 @Entity
 @Table(name = "notification", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-public class Notification extends Model implements Serializable {
+public class Notification  implements Serializable {
 
     /**
      * 

@@ -83,16 +83,17 @@ public class PhotoServiceImpl implements PhotoService {
      * 
      */
     @Override
-    public final void deletePhoto(final long id) {
-        photoDAO.deletePhoto(id);
+    public void deletePhoto(long id) {
+        try {
+            if (getPhotoById(id).getUser().getProfilePhoto()
+                    .equals(getPhotoById(id))) {
+                userService.removeProfilePhoto(getPhotoById(id).getUser()
+                        .getId());
+            }
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        } finally {
+            photoDAO.deletePhoto(id);            
+        }
     }
-
-    /**
-     * @return last Photo id in DB
-     */
-    @Override
-    public final long getLastId() {
-        return photoDAO.getLastId();
-    }
-
 }

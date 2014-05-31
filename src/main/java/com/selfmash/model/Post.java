@@ -1,7 +1,6 @@
 package com.selfmash.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,21 +15,16 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Past;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.selfmash.beans.enums.ActionBody;
-import com.selfmash.model.base.Model;
 
 @Entity
 @Table(name = "post", uniqueConstraints = @UniqueConstraint(columnNames = { "id_post" }))
-public class Post extends Model implements Serializable {
+public class Post implements Serializable {
 
     /**
      * 
@@ -57,7 +51,7 @@ public class Post extends Model implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @Cascade({ CascadeType.ALL })
-    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true, updatable = false) })
+    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "post_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true) })
     private Photo photo;
 
     /**
@@ -120,23 +114,16 @@ public class Post extends Model implements Serializable {
     }
 
     /**
-     * @return the dateCreate
-     */
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    /**
      * @param dateCreate
      *            the dateCreate to set
      */
-    @DateTimeFormat(pattern = "dd.MM.yyyy HH:MM")
-    @Past
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_create")
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
+    // @DateTimeFormat(pattern = "dd.MM.yyyy HH:MM")
+    // @Past
+    // @Temporal(TemporalType.DATE)
+    // @Column(name = "date_create")
+    // public void setDateCreate(Date dateCreate) {
+    // this.dateCreate = dateCreate;
+    // }
 
     /**
      * @return the action

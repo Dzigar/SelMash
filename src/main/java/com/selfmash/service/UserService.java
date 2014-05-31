@@ -100,4 +100,10 @@ public interface UserService {
      * @return list of admirers users.
      */
     List<User> getAdmirers(long userId);
+
+    /**
+     * 
+     * @param userId
+     */
+    void removeProfilePhoto(long userId);
 }

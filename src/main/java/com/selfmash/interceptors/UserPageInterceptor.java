@@ -59,10 +59,9 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
 
         try {
             int notificationCount = notificationService
-                    .getNotificationsByUserId(
-                            userService.getUserByLogin(
-                                    getAuthenticationUserName()).getId())
-                    .size();
+                    .getNotificationsCountByUserId(userService.getUserByLogin(
+                            getAuthenticationUserName()).getId());
+
             if (notificationCount != 0) {
                 modelAndView.addObject("notificationCount", notificationCount);
             }

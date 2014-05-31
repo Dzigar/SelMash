@@ -54,11 +54,4 @@ public interface PhotoDAO {
      */
     void deletePhoto(long id);
 
-    /**
-     * Get last photo id in DB.
-     * 
-     * @return id Photo
-     */
-    long getLastId();
-
 }

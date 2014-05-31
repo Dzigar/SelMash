@@ -46,10 +46,4 @@ public interface PhotoService {
      *            - id photo deleting
      */
     void deletePhoto(long id);
-
-    /**
-     * 
-     * @return last id photos
-     */
-    long getLastId();
 }
