@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.selfmash.beans.NotificationBean;
+import com.selfmash.beans.PostBean;
+import com.selfmash.beans.enums.ActionBody;
 import com.selfmash.dao.PhotoDAO;
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
 import com.selfmash.service.PhotoService;
+import com.selfmash.service.PostService;
 import com.selfmash.service.UserService;
 
 /**
@@ -31,6 +35,12 @@ public class PhotoServiceImpl implements PhotoService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PostBean postBean;
+
+    @Autowired
+    private PostService postService;
+
     /**
      * Logger for PhotoServiceImpl class.
      */
@@ -43,6 +53,8 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public final void addphoto(final Photo photo) {
         photoDAO.addphoto(photo);
+        postBean.addPost(photo.getUser().getId(), 0, photo,
+                ActionBody.UPLOAD_PHOTO);
         logger.info("Upload new photo:" + photo.getTitle());
     }
 
@@ -90,10 +102,17 @@ public class PhotoServiceImpl implements PhotoService {
                 userService.removeProfilePhoto(getPhotoById(id).getUser()
                         .getId());
             }
+
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         } finally {
-            photoDAO.deletePhoto(id);            
+            try {
+                Photo photo = getPhotoById(id);
+                postService.deletePost(photo.getPost());
+                photoDAO.deletePhoto(photo);
+            } catch (Exception e2) {
+                logger.error(e2.getLocalizedMessage());
+            }
         }
     }
 }

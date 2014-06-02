@@ -21,7 +21,7 @@
 
 		<table width="80%">
 			<tr>
-				<td width="20%">
+				<td width="20%" valign="top">
 					<!-- following --> <%@include file="form/following.jsp"%>
 					<!-- end following -->
 				</td>
@@ -34,6 +34,9 @@
 									<c:choose>
 										<c:when test="${post.action eq 'SUBSCRIBE'}">
 											<%@include file="form/post_forms/subscribe_to.jsp"%>
+										</c:when>
+										<c:when test="${post.action eq 'UPLOAD_PHOTO'}">
+											<%@include file="form/post_forms/upload_photo.jsp"%>
 										</c:when>
 									</c:choose>
 									<br />

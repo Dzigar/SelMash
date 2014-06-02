@@ -51,7 +51,7 @@
 					<tr>
 						<td width="100%" colspan="4"><img
 							alt="<c:out value="${photo.title}" />"
-							src="<c:out value="/resources/selfshots/${login}/${photo.title}" />"
+							src="<c:out value="/resources/selfshots/${photo.user.login}/${photo.title}" />"
 							width="100%">
 					</tr>
 					<!-- Footer photo -->
@@ -69,7 +69,7 @@
 						<td><spring:message code="lable.average.rating" />
 							${photo.averageRating}</td>
 						<td><c:choose>
-								<c:when test="${authentication eq login}">
+								<c:when test="${authentication eq photo.user.login}">
 									<form:form action="/photo/makeProfile/${photo.id}"
 										method="POST">
 										<div align="center">

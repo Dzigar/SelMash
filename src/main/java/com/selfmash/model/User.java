@@ -76,8 +76,7 @@ public class User implements Serializable {
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") })
     private Set<Photo> photos;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Cascade({ CascadeType.ALL })
+    @OneToMany(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "post_user", joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = false, updatable = false) })
     private List<Post> userPosts;
 

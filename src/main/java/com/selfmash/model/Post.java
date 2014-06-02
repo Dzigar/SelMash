@@ -17,9 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 import com.selfmash.beans.enums.ActionBody;
 
 @Entity
@@ -36,7 +33,7 @@ public class Post implements Serializable {
     @Column(name = "id_post")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "post_user", joinColumns = { @JoinColumn(name = "post_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false) })
     private User user;
 
@@ -44,13 +41,11 @@ public class Post implements Serializable {
     @Enumerated(EnumType.STRING)
     private ActionBody action;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @Cascade({ CascadeType.ALL })
+    @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "post_follower", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "follower_id", nullable = true, updatable = false) })
     private User follower;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @Cascade({ CascadeType.ALL })
+    @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "post_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true) })
     private Photo photo;
 

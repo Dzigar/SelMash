@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,14 +44,18 @@ public class Photo implements Serializable {
     @Column
     private Date dateUpload;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @Cascade({ CascadeType.EVICT })
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private Set<User> fans;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
+    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "photo_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = true) })
+    private Post post;
 
     @Column(nullable = true)
     private float averageRating;
@@ -139,6 +144,21 @@ public class Photo implements Serializable {
 
     public void setDateUpload(Date dateUpload) {
         this.dateUpload = dateUpload;
+    }
+
+    /**
+     * @return the post
+     */
+    public Post getPost() {
+        return post;
+    }
+
+    /**
+     * @param post
+     *            the post to set
+     */
+    public void setPost(Post post) {
+        this.post = post;
     }
 
 }

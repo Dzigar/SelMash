@@ -9,4 +9,6 @@ public interface PostService {
     void savePost(Post post);
 
     List<Post> getFollowPosts(long userId);
+
+    void deletePost(Post post);
 }

@@ -31,4 +31,10 @@ public class PostServiceImpl implements PostService {
         return postDAO.getFollowPosts(userService.getFollowing(userId));
     }
 
+    @Override
+    public void deletePost(Post post) {
+        // postDAO.removeUser(post.getId(), post.getUser().getId());
+        postDAO.deletePost(post);
+    }
+
 }

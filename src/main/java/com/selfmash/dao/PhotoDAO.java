@@ -52,6 +52,6 @@ public interface PhotoDAO {
      * @param id
      *            - Photo id
      */
-    void deletePhoto(long id);
+    void deletePhoto(Photo photo);
 
 }

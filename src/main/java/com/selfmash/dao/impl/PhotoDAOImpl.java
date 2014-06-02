@@ -69,11 +69,11 @@ public class PhotoDAOImpl implements PhotoDAO {
     }
 
     @Override
-    public void deletePhoto(long id) {
+    public void deletePhoto(Photo photo) {
         try {
             // estimationService.removeEstimationsByPhotoId(id);
             getCurrentSession().createQuery(Queries.QUERY_DELETE_PHOTO_BY_ID)
-                    .setParameter("photoId", id).executeUpdate();
+                    .setParameter("photoId", photo.getId()).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

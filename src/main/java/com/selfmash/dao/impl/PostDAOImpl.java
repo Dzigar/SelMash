@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,45 @@ public class PostDAOImpl implements PostDAO {
             posts.addAll(user.getUserPosts());
         }
         return posts;
+    }
+
+    @Override
+    public void deletePost(Post post) {
+        try {
+            Query query = getCurrentSession().createQuery(
+                    "delete Post where id = :postId").setParameter("postId",
+                    post.getId());
+            query.executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void removeUser(long postId, long userId) {
+        try {
+            Query query = getCurrentSession()
+                    .createSQLQuery(
+                            "delete from post_user where user_id = :userId and post_id = :postId")
+                    .setParameter("userId", userId)
+                    .setParameter("postId", postId);
+            query.executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void removeFollower(long postId, long followerId) {
+        try {
+            getCurrentSession()
+                    .createSQLQuery(
+                            "delete from post_follower where follower_id = :userId and post_id = :postId")
+                    .setParameter("userId", followerId)
+                    .setParameter("postId", postId).executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 
 }

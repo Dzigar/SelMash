@@ -27,8 +27,8 @@ public class PostBean {
     @Autowired
     private PhotoService photoService;
 
-    public void addPost(long userId1, long userId2, Photo photo, ActionBody body) {
-        postService.savePost(new Post(userService.getUserById(userId1),
-                userService.getUserById(userId2), photo, ActionBody.SUBSCRIBE));
+    public void addPost(long userId, long userId2, Photo photo, ActionBody body) {
+        postService.savePost(new Post(userService.getUserById(userId),
+                userService.getUserById(userId2), photo, body));
     }
 }
