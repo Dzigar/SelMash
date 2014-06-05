@@ -2,7 +2,7 @@ package com.selfmash.beans;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.selfmash.beans.enums.ActionBody;
+import com.selfmash.model.Estimation;
 import com.selfmash.model.Photo;
 import com.selfmash.model.Post;
 import com.selfmash.service.PhotoService;
@@ -27,8 +27,37 @@ public class PostBean {
     @Autowired
     private PhotoService photoService;
 
-    public void addPost(long userId, long userId2, Photo photo, ActionBody body) {
+    /**
+     * Called when user subscribes another user.
+     * 
+     * @param userId
+     *            - id user admirer
+     * @param userId2
+     *            - id user follower
+     */
+    public void addPost(long userId, long userId2) {
         postService.savePost(new Post(userService.getUserById(userId),
-                userService.getUserById(userId2), photo, body));
+                userService.getUserById(userId2)));
+    }
+
+    /**
+     * Called when user upload photo.
+     * 
+     * @param userId
+     *            - user who uploaded photo.
+     * @param photo
+     *            - some user photo.
+     */
+    public void addPost(long userId, Photo photo) {
+        postService.savePost(new Post(userService.getUserById(userId), photo));
+    }
+
+    /**
+     * Called when user appreciate photo.
+     * 
+     * @param estimation
+     */
+    public void addPost(Estimation estimation) {
+        postService.savePost(new Post(estimation.getUser(), estimation));
     }
 }

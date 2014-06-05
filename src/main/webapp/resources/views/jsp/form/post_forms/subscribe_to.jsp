@@ -6,7 +6,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%><%@taglib uri="http://www.springframework.org/tags"
 	prefix="spring"%>
-<div align="left">
+<div align="left" id="block">
 	<c:choose>
 		<c:when test="${not empty post.user.profilePhoto}">
 			<img
@@ -22,5 +22,9 @@
 			value="${post.user.name} ${post.user.lastname}" /></a>
 	<spring:message code="action.subscribed" />
 	<a href="/${post.follower.login}"> <c:out
-			value="${post.follower.name}${post.follower.lastname}" /></a>
+			value="${post.follower.name}${post.follower.lastname}" /></a> <br />
+	<div align="right">
+		<c:out value="${post.dateCreate}" />
+	</div>
+
 </div>

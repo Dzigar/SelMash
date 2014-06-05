@@ -65,8 +65,6 @@ public class PhotoController {
             logger.error(e.getLocalizedMessage());
         }
 
-        // model.addAttribute("Estimations",
-        // estimationService.getEstimationsByPhotoId(id));
         return "photo_page";
     }
 
@@ -90,7 +88,7 @@ public class PhotoController {
             User user = userService.getUserByLogin(principal.getName());
             Photo photo = new Photo(file.getOriginalFilename(), new Date(),
                     user);
-            photoService.addphoto(photo); // save photo in DB
+            photoService.addPhoto(photo); // save photo in DB
             if (!file.isEmpty()) {
                 File userFolder = new File(Path.PHOTO_PATH + "/"
                         + user.getLogin());
@@ -126,24 +124,18 @@ public class PhotoController {
         return "redirect:/photo/" + id;
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/appreciate/{id}", method = RequestMethod.POST)
     public String appreciatePhoto(@PathVariable long id, Principal principal,
             HttpServletRequest request) {
         try {
-            User user = userService.getUserByLogin(principal.getName());
-            if (!userService.containsPreferencesPhoto(user.getId(), id)) {
-                estimationService.addEstimation(new Estimation(Float
-                        .parseFloat(request.getParameter("estimation")
-                                .toString()), id, user));
-                // Set<Photo> set = user.getPreferences();
-                // set.add(setAverageRating(id));
-                // user.setPreferences(set);
-                userService.updateUser(user);
-            }
+            estimationService.addEstimation(new Estimation(Float
+                    .parseFloat(request.getParameter("estimation").toString()),
+                    photoService.getPhotoById(id), userService
+                            .getUserByLogin(principal.getName())));
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }
-        return "redirect:" + id;
+        return "redirect:/photo/" + id;
     }
 
     /**
@@ -157,22 +149,14 @@ public class PhotoController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deletePhoto(@PathVariable long id, Principal principal) {
         try {
-            fileManagerBean.deleteFilePhoto(photoService.getPhotoById(id)
-                    .getTitle(), principal.getName());
-            photoService.deletePhoto(id);
+            Photo photo = photoService.getPhotoById(id);
+            photoService.deletePhoto(photo);
+            fileManagerBean.deleteFilePhoto(photo.getTitle(),
+                    principal.getName());
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }
         return "redirect:/" + principal.getName();
-    }
-
-    /**
-     * @param file
-     *            - loaded user photo
-     * @return extension of user loaded file.
-     */
-    private String getExtensionFile(MultipartFile file) {
-        return file.getOriginalFilename().split("\\.")[1];
     }
 
     /*

@@ -27,7 +27,7 @@
 				</td>
 				<td width="60%" valign="top">
 					<!-- Posts -->
-					<div align="left" id="block">
+					<div align="left">
 						<c:choose>
 							<c:when test="${not empty posts}">
 								<c:forEach var="post" items="${posts}">
@@ -38,12 +38,14 @@
 										<c:when test="${post.action eq 'UPLOAD_PHOTO'}">
 											<%@include file="form/post_forms/upload_photo.jsp"%>
 										</c:when>
+										<c:when test="${post.action eq 'APPRECIATE_PHOTO'}">
+											<%@include file="form/post_forms/appreciate_photo.jsp"%>
+										</c:when>
 									</c:choose>
-									<br />
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
-								<div align="center">
+								<div align="center" id="block">
 									<spring:message code="lable.empty" />
 								</div>
 							</c:otherwise>

@@ -33,7 +33,7 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public void savePost(Post post) {
         try {
-            getCurrentSession().save(post);
+            getCurrentSession().merge(post);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

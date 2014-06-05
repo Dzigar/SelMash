@@ -68,23 +68,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean containsPreferencesPhoto(long userId, long photoId) {
-        try {
-            if (getCurrentSession()
-                    .createQuery(
-                            "From Photo p JOIN p.fans u WHERE p.id=:PHOTO_ID AND u.id=:USER_ID")
-                    .setParameter("PHOTO_ID", photoId)
-                    .setParameter("USER_ID", userId).list().size() > 0) {
-                return true;
-            }
-
-        } catch (Exception e) {
-            logger.info(e.getLocalizedMessage());
-        }
-        return false;
-    }
-
-    @Override
     public int getDaysOnline(String login) {
         try {
             String query = "SELECT DATEDIFF('"

@@ -12,16 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "photo", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
@@ -45,13 +42,8 @@ public class Photo implements Serializable {
     private Date dateUpload;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @Cascade({ CascadeType.EVICT })
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
-    private Set<User> fans;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "photo_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = true) })
@@ -59,6 +51,10 @@ public class Photo implements Serializable {
 
     @Column(nullable = true)
     private float averageRating;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
+    @JoinTable(name = "photo_estimation", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "estimation_id", referencedColumnName = "id") })
+    private Set<Estimation> estimations;
 
     public Photo() {
         // TODO Auto-generated constructor stub
@@ -115,21 +111,6 @@ public class Photo implements Serializable {
         this.user = user;
     }
 
-    /**
-     * @return the fans
-     */
-    public Set<User> getFans() {
-        return fans;
-    }
-
-    /**
-     * @param fans
-     *            the fans to set
-     */
-    public void setFans(Set<User> fans) {
-        this.fans = fans;
-    }
-
     public float getAverageRating() {
         return averageRating;
     }
@@ -159,6 +140,26 @@ public class Photo implements Serializable {
      */
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    /**
+     * @return the estimations
+     */
+    public Set<Estimation> getEstimations() {
+        return estimations;
+    }
+
+    /**
+     * @param estimations
+     *            the estimations to set
+     */
+    public void setEstimations(Set<Estimation> estimations) {
+        this.estimations = estimations;
+    }
+
+    public Photo addEstimation(Estimation estimation) {
+        this.estimations.add(estimation);
+        return this;
     }
 
 }

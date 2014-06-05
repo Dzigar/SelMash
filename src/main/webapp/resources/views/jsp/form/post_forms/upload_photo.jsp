@@ -6,7 +6,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%><%@taglib uri="http://www.springframework.org/tags"
 	prefix="spring"%>
-<div align="left">
+<div align="left" id="block">
 	<c:choose>
 		<c:when test="${not empty post.user.profilePhoto}">
 			<img
@@ -24,4 +24,8 @@
 	<a href="/photo/${post.photo.id}"> <img alt="" width="20%"
 		height="20%"
 		src="/resources/selfshots/${post.user.login}/${post.photo.title}" /></a>
+	<br />
+	<div align="right">
+		<c:out value="${post.dateCreate}" />
+	</div>
 </div>

@@ -2,6 +2,6 @@ package com.selfmash.beans.enums;
 
 public enum ActionBody {
 
-    SUBSCRIBE, UPLOAD_PHOTO;
+    SUBSCRIBE, UPLOAD_PHOTO, APPRECIATE_PHOTO;
 
 }

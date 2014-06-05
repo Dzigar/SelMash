@@ -2,6 +2,7 @@ package com.selfmash.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +22,15 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserService userService;
 
+    private Logger logger = Logger.getLogger(getClass().getName());
+
     @Override
     public void savePost(Post post) {
-        postDAO.savePost(post);
+        try {
+            postDAO.savePost(post);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 
     @Override
@@ -33,7 +40,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(Post post) {
-        // postDAO.removeUser(post.getId(), post.getUser().getId());
         postDAO.deletePost(post);
     }
 

@@ -24,75 +24,74 @@
 </head>
 <body>
 	<%@include file="form/head.jsp"%>
-	<table width="80%">
-		<tr>
-			<td width="20%" rowspan="2"><c:choose>
-					<c:when test="${not empty userList }">
-						<c:forEach var="user" items="${userList}">
-							<a href="/${user.login}"> <c:out
-									value="${user.name} ${user.lastname}" /></a>
-							<br>
-						</c:forEach>
-					</c:when>
+	<div align="center">
+		<table width="80%">
+			<tr>
+				<td width="20%" rowspan="2" valign="top"><c:choose>
+						<c:when test="${photo.estimations.size() > 0 }">
+							<spring:message code="lable.who.appreciate" />
+							<div id="block">
+								<c:forEach var="estimation" items="${photo.estimations}">
+									<a href="/${estimation.user.login}"><c:out
+											value="${estimation.user.name}" /></a>
+									<c:out value=" ${estimation.estimation}"></c:out>
+									<br>
+								</c:forEach>
+							</div>
+						</c:when>
 
-				</c:choose> <c:choose>
-					<c:when test="${not empty Estimations }">
-						<c:forEach var="estimation" items="${Estimations}">
-							<a href="/${estimation.user.login}"><c:out
-									value="${estimation.user.name}" /></a>
-							<c:out value=" ${estimation.estimation}"></c:out>
-							<br>
-						</c:forEach>
-					</c:when>
+					</c:choose></td>
+				<td width="60%" align="center" valign="top">
+					<table width="100%">
+						<tr>
+							<td width="100%" colspan="4"><img
+								alt="<c:out value="${photo.title}" />"
+								src="<c:out value="/resources/selfshots/${photo.user.login}/${photo.title}" />"
+								width="100%">
+						</tr>
+						<!-- Footer photo -->
+						<tr>
+							<td><form:form action="/photo/appreciate/${photo.id}"
+									method="POST">
+									<div align="center">
+										<spring:message code="lable.appreciate" />
+										<input type="text" name="estimation" /> <input type="submit"
+											value="Ok" />
+									</div>
+								</form:form></td>
 
-				</c:choose></td>
-			<td width="80%" align="center">
-				<table width="100%">
-					<tr>
-						<td width="100%" colspan="4"><img
-							alt="<c:out value="${photo.title}" />"
-							src="<c:out value="/resources/selfshots/${photo.user.login}/${photo.title}" />"
-							width="100%">
-					</tr>
-					<!-- Footer photo -->
-					<tr>
-						<td><form:form action="/photo/${photo.id}" method="POST">
-								<div align="center">
-									<spring:message code="lable.appreciate" />
-									<input type="text" name="estimation" /> <input type="submit"
-										value="Ok" />
-								</div>
-							</form:form></td>
+							<td><spring:message code="lable.number.evaluations" />
+								${photo.estimations.size()}</td>
+							<td><spring:message code="lable.average.rating" />
+								${photo.averageRating}</td>
+							<td><c:choose>
+									<c:when test="${authentication eq photo.user.login}">
+										<form:form action="/photo/makeProfile/${photo.id}"
+											method="POST">
+											<div align="center">
+												<input type="submit"
+													value='<spring:message code="lable.make.profile" />' />
+											</div>
+										</form:form>
 
-						<td><spring:message code="lable.number.evaluations" />
-							${photo.fans.size()}</td>
-						<td><spring:message code="lable.average.rating" />
-							${photo.averageRating}</td>
-						<td><c:choose>
-								<c:when test="${authentication eq photo.user.login}">
-									<form:form action="/photo/makeProfile/${photo.id}"
-										method="POST">
-										<div align="center">
-											<input type="submit"
-												value='<spring:message code="lable.make.profile" />' />
-										</div>
-									</form:form>
+										<form:form action="/photo/delete/${photo.id}" method="POST">
+											<div align="center">
+												<input type="submit"
+													value='<spring:message code="lable.delete" />' />
+											</div>
+										</form:form>
+									</c:when>
+								</c:choose></td>
+						</tr>
 
-									<form:form action="/photo/delete/${photo.id}" method="POST">
-										<div align="center">
-											<input type="submit"
-												value='<spring:message code="lable.delete" />' />
-										</div>
-									</form:form>
-								</c:when>
-							</c:choose></td>
-					</tr>
+						<!-- end footer -->
+					</table>
+				</td>
+				<td width="20%"></td>
+			</tr>
+		</table>
+	</div>
 
-					<!-- end footer -->
-				</table>
-			</td>
-		</tr>
-	</table>
 </body>
 </html>
 

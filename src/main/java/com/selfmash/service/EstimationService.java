@@ -3,13 +3,33 @@ package com.selfmash.service;
 import java.util.List;
 
 import com.selfmash.model.Estimation;
+import com.selfmash.model.User;
 
 public interface EstimationService {
 
-	public void addEstimation(Estimation estimation);
+    /**
+     * 
+     * @param estimation
+     */
+    void addEstimation(Estimation estimation);
 
-	public List<Estimation> getEstimationsByPhotoId(long id);
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    List<Estimation> getEstimationsByPhotoId(long id);
 
-	public void removeEstimationsByPhotoId(long id);
+    /**
+     * 
+     * @param id
+     */
+    void removeEstimationsByPhotoId(long id);
 
+    /**
+     * 
+     * @param photoId
+     * @return
+     */
+    List<User> getAdmirersByPhotoId(long photoId);
 }

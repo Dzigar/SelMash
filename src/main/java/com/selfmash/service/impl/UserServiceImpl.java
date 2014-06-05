@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.selfmash.beans.NotificationBean;
 import com.selfmash.beans.PostBean;
-import com.selfmash.beans.enums.ActionBody;
 import com.selfmash.dao.UserDAO;
 import com.selfmash.model.User;
 import com.selfmash.service.NotificationService;
@@ -64,11 +63,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean containsPreferencesPhoto(long userId, long photoId) {
-        return userDAO.containsPreferencesPhoto(userId, photoId);
-    }
-
-    @Override
     public int getDaysOnline(String login) {
         return userDAO.getDaysOnline(login);
     }
@@ -80,8 +74,8 @@ public class UserServiceImpl implements UserService {
             // Create new notification
             notificationService.saveNotification(notificationBean.addFollow(
                     userId, admirerId));
-            // Create new Post
-            postBean.addPost(userId, admirerId, null, ActionBody.SUBSCRIBE);
+            // Create post with subscription.
+            postBean.addPost(userId, admirerId);
         } catch (Exception e) {
             logger.equals(e.getLocalizedMessage());
         }

@@ -89,19 +89,6 @@ public class User implements Serializable {
     @Cascade({ CascadeType.ALL })
     private Photo profilePhoto;
 
-    // @OneToMany(fetch = FetchType.EAGER)
-    // @Cascade({ CascadeType.ALL })
-    // @JoinTable(name = "USERS_ESTIMATES", joinColumns = { @JoinColumn(name =
-    // "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
-    // @JoinColumn(name = "ESTIMATION_ID", referencedColumnName = "ID") })
-    // private Set<Estimation> estimations;
-    //
-    // @ManyToMany(fetch = FetchType.EAGER)
-    // @JoinTable(name = "USERS_PREFERENCES", joinColumns = { @JoinColumn(name =
-    // "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
-    // @JoinColumn(name = "PHOTO_ID", referencedColumnName = "ID") })
-    // private Set<Photo> preferences;
-
     public User() {
         // TODO Auto-generated constructor stub
     }

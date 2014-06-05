@@ -40,14 +40,6 @@ public interface UserDAO {
 
     /**
      * 
-     * @param userId
-     * @param photoId
-     * @return
-     */
-    boolean containsPreferencesPhoto(long userId, long photoId);
-
-    /**
-     * 
      * @param login
      * @return
      */

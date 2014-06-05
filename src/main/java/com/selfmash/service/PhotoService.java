@@ -15,7 +15,7 @@ public interface PhotoService {
      * @param photo
      *            - link to Photo object
      */
-    void addphoto(Photo photo);
+    void addPhoto(Photo photo);
 
     /**
      * 
@@ -45,5 +45,5 @@ public interface PhotoService {
      * @param id
      *            - id photo deleting
      */
-    void deletePhoto(long id);
+    void deletePhoto(Photo photo);
 }

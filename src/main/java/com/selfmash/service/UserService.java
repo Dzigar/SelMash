@@ -45,16 +45,6 @@ public interface UserService {
     void updateUser(User user);
 
     /**
-     * 
-     * @param userId
-     *            - User id
-     * @param photoId
-     *            - Photo id
-     * @return true or false
-     */
-    boolean containsPreferencesPhoto(long userId, long photoId);
-
-    /**
      * Get how many days a user is registered on the service.
      * 
      * @param login

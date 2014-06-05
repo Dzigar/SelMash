@@ -1,6 +1,7 @@
 package com.selfmash.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.selfmash.beans.enums.ActionBody;
 
@@ -49,6 +52,14 @@ public class Post implements Serializable {
     @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "post_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true) })
     private Photo photo;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
+    @JoinTable(name = "post_estimation", joinColumns = { @JoinColumn(name = "post_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "estimation_id", nullable = true) })
+    private Estimation estimation;
+
+    @Column
+    @DateTimeFormat(pattern = "HH:mm dd.MM.yyyy")
+    private Date dateCreate;
+
     /**
      * Default constructor
      */
@@ -56,11 +67,46 @@ public class Post implements Serializable {
         // TODO Auto-generated constructor stub
     }
 
-    public Post(User user, User follower, Photo photo, ActionBody actiont) {
-        this.user = user;
-        this.setFollower(follower);
-        this.photo = photo;
-        this.setAction(actiont);
+    /**
+     * This constructor called when user subscribe to another user.
+     * 
+     * @param user
+     *            - user subscriber
+     * @param follower
+     *            - one to sign up.
+     */
+    public Post(User user, User follower) {
+        setUser(user);
+        setFollower(follower);
+        setAction(ActionBody.SUBSCRIBE);
+        setDateCreate(new Date());
+    }
+
+    /**
+     * This constructor called when user uploaded photo.
+     * 
+     * @param user
+     * @param photo
+     */
+    public Post(User user, Photo photo) {
+        setUser(user);
+        setPhoto(photo);
+        setAction(ActionBody.UPLOAD_PHOTO);
+        setDateCreate(new Date());
+    }
+
+    /**
+     * This constructor called when user appreciated photo.
+     * 
+     * @param user
+     * @param estimation
+     *            - estimation for some photo.
+     */
+    public Post(User user, Estimation estimation) {
+        setUser(user);
+        setEstimation(estimation);
+        setAction(ActionBody.APPRECIATE_PHOTO);
+        setDateCreate(new Date());
     }
 
     /**
@@ -148,6 +194,36 @@ public class Post implements Serializable {
      */
     public void setFollower(User follower) {
         this.follower = follower;
+    }
+
+    /**
+     * @return the dateCreate
+     */
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    /**
+     * @param dateCreate
+     *            the dateCreate to set
+     */
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    /**
+     * @return the estimation
+     */
+    public Estimation getEstimation() {
+        return estimation;
+    }
+
+    /**
+     * @param estimation
+     *            the estimation to set
+     */
+    public void setEstimation(Estimation estimation) {
+        this.estimation = estimation;
     }
 
 }

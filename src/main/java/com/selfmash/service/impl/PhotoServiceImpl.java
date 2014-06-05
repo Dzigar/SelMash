@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.selfmash.beans.NotificationBean;
 import com.selfmash.beans.PostBean;
-import com.selfmash.beans.enums.ActionBody;
 import com.selfmash.dao.PhotoDAO;
 import com.selfmash.model.Photo;
 import com.selfmash.model.User;
+import com.selfmash.service.EstimationService;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.PostService;
 import com.selfmash.service.UserService;
@@ -41,6 +40,9 @@ public class PhotoServiceImpl implements PhotoService {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private EstimationService estimationService;
+
     /**
      * Logger for PhotoServiceImpl class.
      */
@@ -51,11 +53,10 @@ public class PhotoServiceImpl implements PhotoService {
      *            - object Photo for saving
      */
     @Override
-    public final void addphoto(final Photo photo) {
+    public void addPhoto(Photo photo) {
         photoDAO.addphoto(photo);
-        postBean.addPost(photo.getUser().getId(), 0, photo,
-                ActionBody.UPLOAD_PHOTO);
-        logger.info("Upload new photo:" + photo.getTitle());
+        // Create post with uploaded photo.
+        postBean.addPost(photo.getUser().getId(), photo);
     }
 
     /**
@@ -95,20 +96,18 @@ public class PhotoServiceImpl implements PhotoService {
      * 
      */
     @Override
-    public void deletePhoto(long id) {
+    public void deletePhoto(Photo photo) {
         try {
-            if (getPhotoById(id).getUser().getProfilePhoto()
-                    .equals(getPhotoById(id))) {
-                userService.removeProfilePhoto(getPhotoById(id).getUser()
-                        .getId());
+            if (photo.getUser().getProfilePhoto().equals(photo)) {
+                userService.removeProfilePhoto(photo.getUser().getId());
             }
-
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         } finally {
             try {
-                Photo photo = getPhotoById(id);
                 postService.deletePost(photo.getPost());
+
+                estimationService.removeEstimationsByPhotoId(photo.getId());
                 photoDAO.deletePhoto(photo);
             } catch (Exception e2) {
                 logger.error(e2.getLocalizedMessage());
