@@ -22,11 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.selfmash.beans.FileManagerBean;
+import com.selfmash.beans.PostBean;
 import com.selfmash.model.Estimation;
+import com.selfmash.model.Notification;
 import com.selfmash.model.Photo;
+import com.selfmash.model.Post;
 import com.selfmash.model.User;
 import com.selfmash.service.EstimationService;
+import com.selfmash.service.NotificationService;
 import com.selfmash.service.PhotoService;
+import com.selfmash.service.PostService;
 import com.selfmash.service.UserService;
 import com.selfmash.strings.Path;
 
@@ -40,11 +45,20 @@ public class PhotoController {
     @Resource(name = "userServiceImpl")
     private UserService userService;
 
-    @Resource(name = "estimationServiceImpl")
+    @Autowired
     private EstimationService estimationService;
 
     @Autowired
     private FileManagerBean fileManagerBean;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private PostBean postBean;
+
+    @Autowired
+    private PostService postService;
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
@@ -58,9 +72,13 @@ public class PhotoController {
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public String showUserSelectedPhoto(@PathVariable long id,
-            HttpServletRequest request, ModelMap model) {
+            HttpServletRequest request, ModelMap model, Principal principal) {
         try {
             model.addAttribute("photo", photoService.getPhotoById(id));
+            model.addAttribute("isAppreciate",
+                    estimationService.isAppreciate(
+                            userService.getUserByLogin(principal.getName())
+                                    .getId(), id));
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -88,7 +106,7 @@ public class PhotoController {
             User user = userService.getUserByLogin(principal.getName());
             Photo photo = new Photo(file.getOriginalFilename(), new Date(),
                     user);
-            photoService.addPhoto(photo); // save photo in DB
+            photoService.addPhoto(user, photo); // save photo in DB
             if (!file.isEmpty()) {
                 File userFolder = new File(Path.PHOTO_PATH + "/"
                         + user.getLogin());
@@ -128,10 +146,31 @@ public class PhotoController {
     public String appreciatePhoto(@PathVariable long id, Principal principal,
             HttpServletRequest request) {
         try {
-            estimationService.addEstimation(new Estimation(Float
-                    .parseFloat(request.getParameter("estimation").toString()),
-                    photoService.getPhotoById(id), userService
-                            .getUserByLogin(principal.getName())));
+            Photo photo = photoService.getPhotoById(id);
+            User user = userService.getUserByLogin(principal.getName());
+            Estimation estimation = new Estimation(Float.parseFloat(request
+                    .getParameter("estimation").toString()), null, user);
+            estimationService.addEstimation(estimation); // save estimation
+
+            // save post
+            Post post = new Post(estimation.getUser(), estimation);
+            postBean.addPost(post);
+
+            // update photo with estimation and post
+            photo.addEstimation(estimation);
+            photo.addPost(post);
+            photoService.updatePhoto(photo);
+            postService.mergeWithEstimation(post.getId(), estimation.getId());
+
+            try {
+                Notification notification = new Notification(user, photo);
+                notificationService.saveNotification(notification);
+                // notification.setReceiver(photo.getUser());
+                // notificationService.updateNotification(notification);
+
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }

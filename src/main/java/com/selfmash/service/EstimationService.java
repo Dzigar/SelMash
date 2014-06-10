@@ -32,4 +32,18 @@ public interface EstimationService {
      * @return
      */
     List<User> getAdmirersByPhotoId(long photoId);
+
+    /**
+     * 
+     * @param estimation
+     */
+    void deleteEstimation(Estimation estimation);
+    
+    /**
+     * 
+     * @param userId
+     * @param photoId
+     * @return
+     */
+    boolean isAppreciate(long userId, long photoId);
 }

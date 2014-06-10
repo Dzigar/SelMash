@@ -15,7 +15,7 @@ public interface PhotoService {
      * @param photo
      *            - link to Photo object
      */
-    void addPhoto(Photo photo);
+    void addPhoto(User user, Photo photo);
 
     /**
      * 

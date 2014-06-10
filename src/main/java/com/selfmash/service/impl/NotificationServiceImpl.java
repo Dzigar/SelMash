@@ -45,4 +45,9 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDAO.updateNotification(notification);
     }
 
+    @Override
+    public void updateNotification(Notification notification) {
+        notificationDAO.updateNotification(notification);
+    }
+
 }

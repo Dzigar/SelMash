@@ -45,9 +45,11 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
             HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
         try {
-            following = userService.getFollowing(userService.getUserByLogin(
-                    getAuthenticationUserName()).getId());
+            User user = userService.getUserByLogin(getAuthenticationUserName());
+            following = userService.getFollowing(user.getId());
             modelAndView.addObject("following", following);
+            modelAndView.addObject("admirers",
+                    userService.getAdmirers(user.getId()));
             if (subsrcibed(request.getSession().getAttribute("userLogin")
                     .toString())) {
                 modelAndView.addObject("isSubscribed", true);

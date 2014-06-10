@@ -1,5 +1,6 @@
 package com.selfmash.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.selfmash.beans.PostBean;
 import com.selfmash.dao.PhotoDAO;
+import com.selfmash.model.Estimation;
 import com.selfmash.model.Photo;
+import com.selfmash.model.Post;
 import com.selfmash.model.User;
 import com.selfmash.service.EstimationService;
 import com.selfmash.service.PhotoService;
@@ -53,10 +56,11 @@ public class PhotoServiceImpl implements PhotoService {
      *            - object Photo for saving
      */
     @Override
-    public void addPhoto(Photo photo) {
+    public void addPhoto(User user, Photo photo) {
         photoDAO.addphoto(photo);
         // Create post with uploaded photo.
-        postBean.addPost(photo.getUser().getId(), photo);
+        postBean.addPost(user, photo);
+
     }
 
     /**
@@ -84,7 +88,7 @@ public class PhotoServiceImpl implements PhotoService {
      *            - object Photo for update
      */
     @Override
-    public final void updatePhoto(final Photo photo) {
+    public void updatePhoto(Photo photo) {
         photoDAO.updatePhoto(photo);
     }
 
@@ -105,7 +109,16 @@ public class PhotoServiceImpl implements PhotoService {
             logger.error(e.getLocalizedMessage());
         } finally {
             try {
-                postService.deletePost(photo.getPost());
+                Iterator<Post> iterator = photo.getPosts().iterator();
+                while (iterator.hasNext()) {
+                    postService.deletePost(iterator.next());
+                }
+
+                Iterator<Estimation> estimations = photo.getEstimations()
+                        .iterator();
+                while (estimations.hasNext()) {
+                    estimationService.deleteEstimation(estimations.next());
+                }
 
                 estimationService.removeEstimationsByPhotoId(photo.getId());
                 photoDAO.deletePhoto(photo);

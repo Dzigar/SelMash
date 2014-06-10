@@ -21,7 +21,7 @@ import com.selfmash.beans.enums.NotificationBody;
 
 @Entity
 @Table(name = "notification", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-public class Notification  implements Serializable {
+public class Notification implements Serializable {
 
     /**
      * 
@@ -34,11 +34,11 @@ public class Notification  implements Serializable {
     private long id;
 
     @OneToOne
-    @JoinTable(name = "sender_notification", joinColumns = { @JoinColumn(name = "notification_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "sender_id", referencedColumnName = "id") })
+    @JoinTable(name = "notification_sender", joinColumns = { @JoinColumn(name = "notification_id", nullable = true, updatable = true, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "sender_id", nullable = true, updatable = true, referencedColumnName = "id") })
     private User sender;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "notification_user", joinColumns = { @JoinColumn(name = "notification_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false) })
+    @JoinTable(name = "notification_user", joinColumns = { @JoinColumn(name = "notification_id", nullable = true, updatable = true, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", nullable = true, updatable = true, referencedColumnName = "id") })
     private User receiver;
 
     @Column(nullable = false)
@@ -48,15 +48,23 @@ public class Notification  implements Serializable {
     @Column(nullable = false, columnDefinition = "TINYINT(4) default '0'")
     private boolean review;
 
+    @OneToOne
+    @JoinColumn
+    private Photo photo;
+
     public Notification() {
         // TODO Auto-generated constructor stub
     }
 
-    public Notification(User sender, User receiver,
-            NotificationBody notificationBody) {
-        this.sender = sender;
-        this.receiver = receiver;
+    public Notification(NotificationBody notificationBody) {
         this.notificationMessage = notificationBody;
+    }
+
+    public Notification(User user, Photo photo) {
+        this.sender = user;
+        this.photo = photo;
+        this.receiver = photo.getUser();
+        this.notificationMessage = NotificationBody.APPRECIATE_PHOTO;
     }
 
     /**
@@ -133,4 +141,20 @@ public class Notification  implements Serializable {
     public void setReview(boolean review) {
         this.review = review;
     }
+
+    /**
+     * @return the photo
+     */
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    /**
+     * @param photo
+     *            the photo to set
+     */
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
+    }
+
 }

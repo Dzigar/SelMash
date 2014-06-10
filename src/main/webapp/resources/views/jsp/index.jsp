@@ -53,9 +53,8 @@
 						<!--  -->
 					</div>
 				</td>
-				<td width="20%" valign="top"><div align="center" id="block">
-						<c:out value="something" />
-					</div></td>
+				<td width="20%" valign="top"><%@include
+						file="form/admirers.jsp"%></td>
 			</tr>
 		</table>
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class EstimationDAOImpl implements EstimationDAO {
     @Override
     public void addEstimation(Estimation estimation) {
         try {
-            getCurrentSession().merge(estimation);
+            getCurrentSession().save(estimation);
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }
@@ -100,5 +101,17 @@ public class EstimationDAOImpl implements EstimationDAO {
             logger.error(e.getLocalizedMessage());
         }
         return false;
+    }
+
+    @Override
+    public void deleteEstimation(Estimation estimation) {
+        try {
+            Query query = getCurrentSession().createQuery(
+                    "delete Estimation where id = :estimationId").setParameter(
+                    "estimationId", estimation.getId());
+            query.executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 }

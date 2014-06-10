@@ -37,7 +37,7 @@ public class Post implements Serializable {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "post_user", joinColumns = { @JoinColumn(name = "post_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false) })
+    @JoinTable(name = "post_user", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "user_id", nullable = true, updatable = true) })
     private User user;
 
     @Column(nullable = false)
@@ -49,11 +49,11 @@ public class Post implements Serializable {
     private User follower;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "post_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true) })
+    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "photo_id", nullable = true, updatable = true) })
     private Photo photo;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "post_estimation", joinColumns = { @JoinColumn(name = "post_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "estimation_id", nullable = true) })
+    @JoinTable(name = "post_estimation", joinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "estimation_id", nullable = true, updatable = false) })
     private Estimation estimation;
 
     @Column
@@ -104,7 +104,7 @@ public class Post implements Serializable {
      */
     public Post(User user, Estimation estimation) {
         setUser(user);
-        setEstimation(estimation);
+        setPhoto(estimation.getPhoto());
         setAction(ActionBody.APPRECIATE_PHOTO);
         setDateCreate(new Date());
     }

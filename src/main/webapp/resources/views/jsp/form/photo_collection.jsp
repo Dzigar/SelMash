@@ -103,7 +103,7 @@
 				top : '220px'
 			}, {
 				queue : false,
-				duration : 300
+				duration : 200
 			});
 		});
 	});

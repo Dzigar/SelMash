@@ -33,7 +33,8 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public void savePost(Post post) {
         try {
-            getCurrentSession().merge(post);
+            getCurrentSession().save(post);
+            associatePhotoWithPost(post, post.getUser());
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -82,6 +83,35 @@ public class PostDAOImpl implements PostDAO {
                             "delete from post_follower where follower_id = :userId and post_id = :postId")
                     .setParameter("userId", followerId)
                     .setParameter("postId", postId).executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void associatePhotoWithPost(Post post, User user) {
+        try {
+            Query query = getCurrentSession()
+                    .createSQLQuery(
+                            "insert into post_user value(:userId, :postId)")
+                    .setParameter("userId", user.getId())
+                    .setParameter("postId", post.getId());
+            query.executeUpdate();
+
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void mergeWithEstimation(long postId, long estimationId) {
+        try {
+            Query query = getCurrentSession()
+                    .createSQLQuery(
+                            "insert into post_estimation value(:estimationId, :postId)")
+                    .setParameter("estimationId", estimationId)
+                    .setParameter("postId", postId);
+            query.executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

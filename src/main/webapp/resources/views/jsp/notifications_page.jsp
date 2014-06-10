@@ -31,7 +31,10 @@
 								test="${notification.notificationMessage eq 'NEW_ADMIRER'}">
 								<%@include file="form/notification_forms/new_admirer_form.jsp"%>
 							</c:when>
-
+							<c:when
+								test="${notification.notificationMessage eq 'APPRECIATE_PHOTO'}">
+								<%@include file="form/notification_forms/new_estimation_form.jsp"%>
+							</c:when>
 						</c:choose>
 					</c:forEach>
 				</td>

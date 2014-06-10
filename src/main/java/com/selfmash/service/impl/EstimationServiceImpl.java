@@ -11,6 +11,7 @@ import com.selfmash.dao.EstimationDAO;
 import com.selfmash.model.Estimation;
 import com.selfmash.model.User;
 import com.selfmash.service.EstimationService;
+import com.selfmash.service.NotificationService;
 import com.selfmash.service.PhotoService;
 
 @Service("estimationServiceImpl")
@@ -26,12 +27,13 @@ public class EstimationServiceImpl implements EstimationService {
     @Autowired
     private PostBean postBean;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public void addEstimation(Estimation estimation) {
-        if (!estimationDAO.isAppreciated(estimation.getUser().getId(),
-                estimation.getPhoto().getId())) {
-            postBean.addPost(estimation); // Create post with estimation photo.
-        }
+        estimationDAO.addEstimation(estimation);
+
     }
 
     @Override
@@ -47,6 +49,16 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     public List<User> getAdmirersByPhotoId(long photoId) {
         return estimationDAO.getAdmirersByPhotoId(photoId);
+    }
+
+    @Override
+    public void deleteEstimation(Estimation estimation) {
+        estimationDAO.deleteEstimation(estimation);
+    }
+
+    @Override
+    public boolean isAppreciate(long userId, long photoId) {
+        return estimationDAO.isAppreciated(userId, photoId);
     }
 
 }

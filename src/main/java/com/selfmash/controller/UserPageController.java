@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.selfmash.model.Photo;
-import com.selfmash.model.User;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.UserService;
 
@@ -58,12 +57,8 @@ public class UserPageController {
             HttpServletRequest request) {
         try {
             request.getSession().setAttribute("userLogin", login);
-            User user = userService.getUserByLogin(login);
-            model.addAttribute("user", user);
-            model.addAttribute("admirers",
-                    userService.getAdmirers(user.getId()));
+            model.addAttribute("user", userService.getUserByLogin(login));
             model.addAttribute("photoRows", createUserPhotoCollection(login));
-
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

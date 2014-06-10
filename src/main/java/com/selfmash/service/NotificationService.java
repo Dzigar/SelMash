@@ -37,4 +37,10 @@ public interface NotificationService {
      * @param notificationId
      */
     void setNotificationIsReview(long notificationId);
+
+    /**
+     * 
+     * @param notification
+     */
+    void updateNotification(Notification notification);
 }

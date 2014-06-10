@@ -31,10 +31,10 @@ public class NotificationDAOImpl implements NotificationDAO {
 
     @Override
     @Transactional
-    public void saveNotification(com.selfmash.model.Notification notification) {
+    public void saveNotification(Notification notification) {
         try {
             getCurrentSession().save(notification);
-        } catch (Exception e) {
+            } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
     }
@@ -79,7 +79,7 @@ public class NotificationDAOImpl implements NotificationDAO {
     @Override
     public void updateNotification(Notification notification) {
         try {
-            getCurrentSession().update(notification);
+            getCurrentSession().merge(notification);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

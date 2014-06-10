@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.selfmash.model.Estimation;
 import com.selfmash.model.Photo;
 import com.selfmash.model.Post;
+import com.selfmash.model.User;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.PostService;
 import com.selfmash.service.UserService;
@@ -48,8 +49,8 @@ public class PostBean {
      * @param photo
      *            - some user photo.
      */
-    public void addPost(long userId, Photo photo) {
-        postService.savePost(new Post(userService.getUserById(userId), photo));
+    public void addPost(User user, Photo photo) {
+        postService.savePost(new Post(user, photo));
     }
 
     /**
@@ -57,6 +58,10 @@ public class PostBean {
      * 
      * @param estimation
      */
+    public void addPost(Post post) {
+        postService.savePost(post);
+    }
+
     public void addPost(Estimation estimation) {
         postService.savePost(new Post(estimation.getUser(), estimation));
     }

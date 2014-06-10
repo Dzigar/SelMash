@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -35,13 +34,11 @@ public class Estimation implements Serializable {
     @Column
     private float estimation;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade({ org.hibernate.annotations.CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "user_estimation", joinColumns = { @JoinColumn(name = "estimation_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade({ org.hibernate.annotations.CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @JoinTable(name = "photo_estimation", joinColumns = { @JoinColumn(name = "estimation_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") })
     private Photo photo;
 

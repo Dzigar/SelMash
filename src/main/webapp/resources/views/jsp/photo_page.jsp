@@ -51,14 +51,18 @@
 						</tr>
 						<!-- Footer photo -->
 						<tr>
-							<td><form:form action="/photo/appreciate/${photo.id}"
-									method="POST">
-									<div align="center">
-										<spring:message code="lable.appreciate" />
-										<input type="text" name="estimation" /> <input type="submit"
-											value="Ok" />
-									</div>
-								</form:form></td>
+							<td><c:choose>
+									<c:when test="${!isAppreciate}">
+										<form:form action="/photo/appreciate/${photo.id}"
+											method="POST">
+											<div align="center">
+												<spring:message code="lable.appreciate" />
+												<input type="text" name="estimation" /> <input
+													type="submit" value="Ok" />
+											</div>
+										</form:form>
+									</c:when>
+								</c:choose></td>
 
 							<td><spring:message code="lable.number.evaluations" />
 								${photo.estimations.size()}</td>

@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,9 +44,9 @@ public class Photo implements Serializable {
     @JoinTable(name = "user_photo", joinColumns = { @JoinColumn(name = "photo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
     private User user;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "photo_id", nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = true) })
-    private Post post;
+    @OneToMany(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
+    @JoinTable(name = "post_photo", joinColumns = { @JoinColumn(name = "photo_id", nullable = true, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = true) })
+    private Set<Post> posts;
 
     @Column(nullable = true)
     private float averageRating;
@@ -128,21 +127,6 @@ public class Photo implements Serializable {
     }
 
     /**
-     * @return the post
-     */
-    public Post getPost() {
-        return post;
-    }
-
-    /**
-     * @param post
-     *            the post to set
-     */
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    /**
      * @return the estimations
      */
     public Set<Estimation> getEstimations() {
@@ -160,6 +144,26 @@ public class Photo implements Serializable {
     public Photo addEstimation(Estimation estimation) {
         this.estimations.add(estimation);
         return this;
+    }
+
+    public Photo addPost(Post post) {
+        this.posts.add(post);
+        return this;
+    }
+
+    /**
+     * @return the posts
+     */
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    /**
+     * @param posts
+     *            the posts to set
+     */
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 
 }

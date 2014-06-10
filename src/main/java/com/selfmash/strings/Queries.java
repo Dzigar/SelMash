@@ -30,8 +30,10 @@ public class Queries {
 
     public static final String QUERY_GET_NOTIFICATIONS_BY_USER_ID = "select * from notification as n "
             + "join notification_user as nu "
-            + "on nu.notification_id = n.id join sender_notification as sn"
-            + " on sn.notification_id = n.id where nu.user_id = :userId and review = 0";
+            + "on nu.notification_id = n.id "
+            + "join notification_sender as sn "
+            + "on sn.notification_id = n.id "
+            + "where nu.user_id = :userId and review = 0";
 
     // For Estimation entity
     public static String QUERY_GET_EDMIRERS_BY_PHOTO_ID = "select * from  user as u "

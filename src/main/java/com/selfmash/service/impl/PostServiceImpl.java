@@ -43,4 +43,9 @@ public class PostServiceImpl implements PostService {
         postDAO.deletePost(post);
     }
 
+    @Override
+    public void mergeWithEstimation(long postId, long estimationId) {
+        postDAO.mergeWithEstimation(postId, estimationId);
+    }
+
 }

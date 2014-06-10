@@ -41,4 +41,17 @@ public interface PostDAO {
      * @param followerId
      */
     void removeFollower(long postId, long followerId);
+
+    /**
+     * 
+     * @param post
+     * @param photo
+     */
+    void associatePhotoWithPost(Post post, User user);
+
+    /**
+     * 
+     * @param post
+     */
+    void mergeWithEstimation(long postId, long estimationId);
 }

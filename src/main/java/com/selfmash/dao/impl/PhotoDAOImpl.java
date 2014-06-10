@@ -39,7 +39,11 @@ public class PhotoDAOImpl implements PhotoDAO {
     @Override
     @Transactional
     public void addphoto(Photo selfShot) {
-        getCurrentSession().save(selfShot);
+        try {
+            getCurrentSession().save(selfShot);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -66,7 +70,7 @@ public class PhotoDAOImpl implements PhotoDAO {
     @Override
     public void updatePhoto(Photo photo) {
         try {
-            getCurrentSession().update(photo);
+            getCurrentSession().merge(photo);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

@@ -77,7 +77,7 @@ public class User implements Serializable {
     private Set<Photo> photos;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
-    @JoinTable(name = "post_user", joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = false, updatable = false) })
+    @JoinTable(name = "post_user", joinColumns = { @JoinColumn(name = "user_id", nullable = true, updatable = true, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "post_id", nullable = true, updatable = true) })
     private List<Post> userPosts;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -256,4 +256,8 @@ public class User implements Serializable {
         this.profilePhoto = profilePhoto;
     }
 
+    public User addPost(Post post) {
+        this.userPosts.add(post);
+        return this;
+    }
 }

@@ -37,4 +37,5 @@ public interface NotificationDAO {
      * @param notification
      */
     void updateNotification(Notification notification);
+   
 }

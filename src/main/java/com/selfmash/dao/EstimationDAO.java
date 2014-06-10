@@ -39,4 +39,10 @@ public interface EstimationDAO {
      * @return
      */
     boolean isAppreciated(long userId, long photoId);
+
+    /**
+     * 
+     * @param estimation
+     */
+    void deleteEstimation(Estimation estimation);
 }

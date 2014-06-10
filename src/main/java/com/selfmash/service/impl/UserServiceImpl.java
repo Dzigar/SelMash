@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.selfmash.beans.NotificationBean;
 import com.selfmash.beans.PostBean;
+import com.selfmash.beans.enums.NotificationBody;
 import com.selfmash.dao.UserDAO;
+import com.selfmash.model.Notification;
 import com.selfmash.model.User;
 import com.selfmash.service.NotificationService;
 import com.selfmash.service.PhotoService;
@@ -27,9 +28,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PostBean postBean;
-
-    @Autowired
-    private NotificationBean notificationBean;
 
     @Autowired
     private PhotoService photoService;
@@ -72,8 +70,11 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.subscribe(userId, admirerId);
             // Create new notification
-            notificationService.saveNotification(notificationBean.addFollow(
-                    userId, admirerId));
+            Notification notification = new Notification(NotificationBody.NEW_ADMIRER);
+            notificationService.saveNotification(notification);
+            notification.setSender(getUserById(userId));
+            notification.setReceiver(getUserById(admirerId));
+            notificationService.updateNotification(notification);
             // Create post with subscription.
             postBean.addPost(userId, admirerId);
         } catch (Exception e) {

@@ -96,7 +96,7 @@
 									<table width="100%">
 										<tr>
 											<td><spring:message code="lable.photo.count" />
-												${photoRows.size()}</td>
+												${photoRows.size() + 1}</td>
 											<td><spring:message code="lable.followers.count" />
 												${following.size()}</td>
 											<td><spring:message code="lable.admirers.count" />
