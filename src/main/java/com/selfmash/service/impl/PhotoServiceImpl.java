@@ -15,6 +15,7 @@ import com.selfmash.model.Photo;
 import com.selfmash.model.Post;
 import com.selfmash.model.User;
 import com.selfmash.service.EstimationService;
+import com.selfmash.service.NotificationService;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.PostService;
 import com.selfmash.service.UserService;
@@ -45,6 +46,9 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Autowired
     private EstimationService estimationService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * Logger for PhotoServiceImpl class.
@@ -119,8 +123,8 @@ public class PhotoServiceImpl implements PhotoService {
                 while (estimations.hasNext()) {
                     estimationService.deleteEstimation(estimations.next());
                 }
-
                 estimationService.removeEstimationsByPhotoId(photo.getId());
+                notificationService.deleteNotificationByPhoto(photo);
                 photoDAO.deletePhoto(photo);
             } catch (Exception e2) {
                 logger.error(e2.getLocalizedMessage());

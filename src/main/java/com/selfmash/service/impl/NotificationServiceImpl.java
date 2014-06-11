@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.selfmash.dao.NotificationDAO;
 import com.selfmash.model.Notification;
+import com.selfmash.model.Photo;
 import com.selfmash.service.NotificationService;
 
 @Service("NotificationService")
@@ -38,16 +39,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void setNotificationIsReview(long notificationId) {
-        Notification notification = notificationDAO
-                .getNotificationById(notificationId);
-        notification.setReview(true);
+    public void updateNotification(Notification notification) {
         notificationDAO.updateNotification(notification);
     }
 
     @Override
-    public void updateNotification(Notification notification) {
-        notificationDAO.updateNotification(notification);
+    public void deleteNotificationByPhoto(Photo photo) {
+        notificationDAO.deleteNotificationByPhoto(photo);
     }
 
 }

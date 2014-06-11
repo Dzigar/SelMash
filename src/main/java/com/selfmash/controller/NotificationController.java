@@ -42,7 +42,7 @@ public class NotificationController {
     @RequestMapping(value = "{id}/review", method = RequestMethod.POST)
     public String reviewNotification(HttpServletRequest request) {
         try {
-            notificationService.setNotificationIsReview(Long.parseLong(request
+            notificationService.removeNotificationById(Long.parseLong(request
                     .getParameter("notificationId").toString()));
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());

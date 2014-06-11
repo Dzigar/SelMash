@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.selfmash.dao.NotificationDAO;
 import com.selfmash.model.Notification;
+import com.selfmash.model.Photo;
 import com.selfmash.strings.Queries;
 
 @Repository
@@ -34,7 +35,7 @@ public class NotificationDAOImpl implements NotificationDAO {
     public void saveNotification(Notification notification) {
         try {
             getCurrentSession().save(notification);
-            } catch (Exception e) {
+        } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
     }
@@ -80,6 +81,18 @@ public class NotificationDAOImpl implements NotificationDAO {
     public void updateNotification(Notification notification) {
         try {
             getCurrentSession().merge(notification);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void deleteNotificationByPhoto(Photo photo) {
+        try {
+            getCurrentSession()
+                    .createQuery(
+                            "delete Notification as n where n.photo = :photo")
+                    .setParameter("photo", photo).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

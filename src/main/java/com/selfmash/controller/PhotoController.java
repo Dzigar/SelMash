@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -159,15 +160,13 @@ public class PhotoController {
             // update photo with estimation and post
             photo.addEstimation(estimation);
             photo.addPost(post);
+            photo.setAverageRating(getAverage(photo));
             photoService.updatePhoto(photo);
             postService.mergeWithEstimation(post.getId(), estimation.getId());
 
             try {
                 Notification notification = new Notification(user, photo);
                 notificationService.saveNotification(notification);
-                // notification.setReceiver(photo.getUser());
-                // notificationService.updateNotification(notification);
-
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage());
             }
@@ -198,14 +197,19 @@ public class PhotoController {
         return "redirect:/" + principal.getName();
     }
 
-    /*
-     * private Photo setAverageRating(long id) { float total = 0; Photo photo =
-     * photoService.getPhotoById(id); List<Estimation> estimations =
-     * estimationService .getEstimationsByPhotoId(id); for (int i = 0; i <
-     * estimations.size(); i++) { total = total +
-     * estimations.get(i).getEstimation(); }
+    /**
+     * Calculation average rating photo by number estimations.
      * 
-     * photo.setAverageRating(total / estimations.size());
-     * photoService.updatePhoto(photo); return photo; }
+     * @param photo
+     * @return average rating.
      */
+    private float getAverage(Photo photo) {
+        float total = 0;
+        Set<Estimation> estimations = photo.getEstimations();
+        for (Estimation estimation : estimations) {
+            total = total + estimation.getEstimation();
+        }
+        return total / estimations.size();
+    }
+
 }

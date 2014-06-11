@@ -52,7 +52,8 @@
 						<!-- Footer photo -->
 						<tr>
 							<td><c:choose>
-									<c:when test="${!isAppreciate}">
+									<c:when
+										test="${!isAppreciate and authentication ne photo.user.login}">
 										<form:form action="/photo/appreciate/${photo.id}"
 											method="POST">
 											<div align="center">
