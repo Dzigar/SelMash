@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.selfmash.dao.NotificationDAO;
 import com.selfmash.model.Notification;
 import com.selfmash.model.Photo;
-import com.selfmash.strings.Queries;
+import com.selfmash.strings.NotificationQueries;
 
 @Repository
 public class NotificationDAOImpl implements NotificationDAO {
@@ -54,7 +54,8 @@ public class NotificationDAOImpl implements NotificationDAO {
     public List<Notification> getNotificationsByUserId(long userId) {
         try {
             List<Notification> notifications = getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_GET_NOTIFICATIONS_BY_USER_ID)
+                    .createSQLQuery(
+                            NotificationQueries.GET_NOTIFICATIONS_BY_USER_ID)
                     .addEntity(Notification.class)
                     .setParameter("userId", userId).list();
             return notifications;
@@ -68,7 +69,7 @@ public class NotificationDAOImpl implements NotificationDAO {
     public Notification getNotificationById(long notificationId) {
         try {
             return (Notification) getCurrentSession()
-                    .createQuery(Queries.QUERY_GET_NOTIFICATION_BY_ID)
+                    .createQuery(NotificationQueries.GET_NOTIFICATION_BY_ID)
                     .setParameter("notificationId", notificationId)
                     .uniqueResult();
         } catch (Exception e) {
@@ -91,7 +92,7 @@ public class NotificationDAOImpl implements NotificationDAO {
         try {
             getCurrentSession()
                     .createQuery(
-                            "delete Notification as n where n.photo = :photo")
+                            NotificationQueries.DELETE_NOTIFICATION_BY_PHOTO)
                     .setParameter("photo", photo).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());

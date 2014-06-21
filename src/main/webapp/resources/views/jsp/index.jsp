@@ -21,11 +21,8 @@
 
 		<table width="80%">
 			<tr>
-				<td width="20%" valign="top">
-					<!-- following --> <%@include file="form/following.jsp"%>
-					<!-- end following -->
-				</td>
-				<td width="60%" valign="top">
+				<td width="25%" valign="top"><%@include file="form/top.jsp"%></td>
+				<td width="50%" valign="top">
 					<!-- Posts -->
 					<div align="left">
 						<c:choose>
@@ -53,8 +50,9 @@
 						<!--  -->
 					</div>
 				</td>
-				<td width="20%" valign="top"><%@include
-						file="form/admirers.jsp"%></td>
+				<td width="25%" valign="top">
+					<!-- following --> <%@include file="form/following.jsp"%>
+					<!-- end following --><%@include file="form/admirers.jsp"%></td>
 			</tr>
 		</table>
 

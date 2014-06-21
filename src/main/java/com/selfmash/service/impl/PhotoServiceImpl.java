@@ -1,7 +1,9 @@
 package com.selfmash.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,5 +132,62 @@ public class PhotoServiceImpl implements PhotoService {
                 logger.error(e2.getLocalizedMessage());
             }
         }
+    }
+
+    @Override
+    public void appreciatePhoto(Post post, Photo photo, Estimation estimation) {
+        // update photo with estimation and post
+        photo.addEstimation(estimation);
+        photo.addPost(post);
+        photo.setAverageRating(getAverageRatingPhoto(photo));
+        updatePhoto(photo);
+
+        User user = photo.getUser();
+        user.setRating(getAverageRatingUser(user));
+        userService.updateUser(user);
+    }
+
+    /**
+     * Calculation average rating photo by number estimations.
+     * 
+     * @param photo
+     * @return average rating.
+     */
+    private float getAverageRatingPhoto(Photo photo) {
+        float total = 0;
+        Set<Estimation> estimations = photo.getEstimations();
+        for (Estimation estimation : estimations) {
+            total = total + estimation.getEstimation();
+        }
+        return rounding(total / estimations.size());
+    }
+
+    /**
+     * Calculate average rating user by photos estimations.
+     * 
+     * @param user
+     * @return
+     */
+    private float getAverageRatingUser(User user) {
+        Iterator<Photo> photos = user.getPhotos().iterator();
+        float rating = 0;
+        int i = 0;
+        while (photos.hasNext()) {
+            rating = +photos.next().getAverageRating();
+            i++;
+        }
+        return rounding(rating / i);
+    }
+
+    /**
+     * Rounding rating to 1 decimal place.
+     * 
+     * @param number
+     * @return
+     */
+    private float rounding(float number) {
+        BigDecimal rating = new BigDecimal(number);
+        rating = rating.setScale(1, BigDecimal.ROUND_HALF_UP);
+        return rating.floatValue();
     }
 }

@@ -61,16 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getDaysOnline(String login) {
-        return userDAO.getDaysOnline(login);
-    }
-
-    @Override
     public void subscribe(long userId, long admirerId) {
         try {
             userDAO.subscribe(userId, admirerId);
             // Create new notification
-            Notification notification = new Notification(NotificationBody.NEW_ADMIRER);
+            Notification notification = new Notification(
+                    NotificationBody.NEW_ADMIRER);
             notificationService.saveNotification(notification);
             notification.setSender(getUserById(userId));
             notification.setReceiver(getUserById(admirerId));
@@ -108,5 +104,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void removeProfilePhoto(long userId) {
         userDAO.removeProfilePhoto(userId);
+    }
+
+    @Override
+    public List<User> getAll(long userId) {
+        return userDAO.getAll(userId);
+    }
+
+    @Override
+    public List<User> getRecommended(long userId) {
+        return userDAO.getRecommended(userId);
     }
 }

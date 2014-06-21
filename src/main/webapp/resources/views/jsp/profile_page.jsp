@@ -19,8 +19,7 @@
 		<table width="80%">
 			<tr>
 				<td width="25%" valign="top"><%@include file="form/top.jsp"%></td>
-				<td width="50%" valign="top">
-					<!-- Info about user -->
+				<td width="50%" valign="top"><!-- Info about user -->
 					<div id="block">
 						<table width="100%">
 							<tr>
@@ -60,32 +59,30 @@
 												</ul>
 											</td>
 										</tr>
-									</table> <a href="/dialog"><c:out value="write message" /> </a>
+									</table>
 								</td>
 							</tr>
 
 							<tr>
-								<td><%@include file="form/subscribe_form.jsp"%>
-								</td>
+								<td></td>
 								<td>
 									<table width="100%">
 										<tr>
 											<td><spring:message code="lable.photo.count" />
 												${photos.size()}</td>
 											<td><spring:message code="lable.followers.count" />
-												${userFollowers.size()}</td>
+												${following.size()}</td>
 											<td><spring:message code="lable.admirers.count" />
-												${userAdmirers.size()}</td>
+												${admirers.size()}</td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 						</table>
-
 					</div> <!-- End info about user --> <!-- Collection user photos --> <%@include
 						file="form/photo_collection.jsp"%> <!-- End collection photos -->
-
 				</td>
+
 				<td width="25%" valign="top">
 					<!-- following   --> <%@include file="form/following.jsp"%>
 					<!-- end following --> <!-- Admirers --> <%@include

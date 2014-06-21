@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -157,11 +156,8 @@ public class PhotoController {
             Post post = new Post(estimation.getUser(), estimation);
             postBean.addPost(post);
 
-            // update photo with estimation and post
-            photo.addEstimation(estimation);
-            photo.addPost(post);
-            photo.setAverageRating(getAverage(photo));
-            photoService.updatePhoto(photo);
+            photoService.appreciatePhoto(post, photo, estimation);
+
             postService.mergeWithEstimation(post.getId(), estimation.getId());
 
             try {
@@ -195,21 +191,6 @@ public class PhotoController {
             logger.info(e.getLocalizedMessage());
         }
         return "redirect:/" + principal.getName();
-    }
-
-    /**
-     * Calculation average rating photo by number estimations.
-     * 
-     * @param photo
-     * @return average rating.
-     */
-    private float getAverage(Photo photo) {
-        float total = 0;
-        Set<Estimation> estimations = photo.getEstimations();
-        for (Estimation estimation : estimations) {
-            total = total + estimation.getEstimation();
-        }
-        return total / estimations.size();
     }
 
 }

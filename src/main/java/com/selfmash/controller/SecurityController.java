@@ -28,7 +28,7 @@ import com.selfmash.service.UserService;
 /**
  * SecurityController class.
  * 
- * @author Dzigar
+ * @author Dzigar.
  * 
  */
 
@@ -42,31 +42,19 @@ public class SecurityController {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     /**
-     * id user role in DB.
+     * Id user role in DB.
      */
     private final long USER_ROLE_ID = 2;
 
-    /**
-     * 
-     */
     @Resource(name = "userServiceImpl")
     private UserService userService;
 
-    /**
-     * 
-     */
     @Resource(name = "roleService")
     private RoleService roleService;
 
-    /**
-     * 
-     */
     @Resource(name = "passwordEncoder")
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * 
-     */
     @Autowired
     @Qualifier("org.springframework.security.authenticationManager")
     private AuthenticationManager authenticationManager;
@@ -87,6 +75,15 @@ public class SecurityController {
 
     /**
      * 
+     * @return 404.jsp
+     */
+    @RequestMapping(value = "/404", method = RequestMethod.GET)
+    public String pageNotFound() {
+        return "404";
+    }
+
+    /**
+     * 
      * @return index.jsp
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -99,14 +96,12 @@ public class SecurityController {
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-
         return "index";
     }
 
     /**
      * 
      * @param model
-     *            -
      * @return access_page.jsp
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)

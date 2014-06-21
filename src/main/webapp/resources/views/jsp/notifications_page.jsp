@@ -21,24 +21,32 @@
 		<!-- end head -->
 		<table width="80%">
 			<tr>
-				<td width="20%" valign="top"><%@include
-						file="form/following.jsp"%></td>
-				<td width="60%" valign="top">
-					<!-- Notification list --> <c:forEach var="notification"
-						items="${notifications}">
-						<c:choose>
-							<c:when
-								test="${notification.notificationMessage eq 'NEW_ADMIRER'}">
-								<%@include file="form/notification_forms/new_admirer_form.jsp"%>
-							</c:when>
-							<c:when
-								test="${notification.notificationMessage eq 'APPRECIATE_PHOTO'}">
-								<%@include file="form/notification_forms/new_estimation_form.jsp"%>
-							</c:when>
-						</c:choose>
-					</c:forEach>
+				<td width="25%" valign="top"><%@include file="form/top.jsp"%></td>
+				<td width="50%" valign="top">
+					<!-- Notification list --> <c:choose>
+						<c:when test="${not empty notifications }">
+							<c:forEach var="notification" items="${notifications}">
+								<c:choose>
+									<c:when
+										test="${notification.notificationMessage eq 'NEW_ADMIRER'}">
+										<%@include file="form/notification_forms/new_admirer_form.jsp"%>
+									</c:when>
+									<c:when
+										test="${notification.notificationMessage eq 'APPRECIATE_PHOTO'}">
+										<%@include
+											file="form/notification_forms/new_estimation_form.jsp"%>
+									</c:when>
+								</c:choose>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<spring:message code="lable.empty" />
+						</c:otherwise>
+					</c:choose>
 				</td>
-				<td width="20%" valign="top"></td>
+				<td width="25%" valign="top">
+					<!-- following --> <%@include file="form/following.jsp"%>
+					<!-- end following --><%@include file="form/admirers.jsp"%></td>
 			</tr>
 		</table>
 

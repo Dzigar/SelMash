@@ -1,8 +1,6 @@
 package com.selfmash.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.selfmash.model.Photo;
+import com.selfmash.model.User;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.UserService;
 
@@ -54,15 +52,28 @@ public class UserPageController {
      */
     @RequestMapping(value = "{login}", method = RequestMethod.GET)
     public String showUserPage(@PathVariable String login, ModelMap model,
-            HttpServletRequest request) {
-        try {
-            request.getSession().setAttribute("userLogin", login);
-            model.addAttribute("user", userService.getUserByLogin(login));
-            model.addAttribute("photoRows", createUserPhotoCollection(login));
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        return "user_page";
+            HttpServletRequest request, Principal principal) throws Exception {
+        User user = userService.getUserByLogin(login);
+        if (user != null) {
+            try {
+                request.getSession().setAttribute("userLogin", login);
+                model.addAttribute("user", user);
+                model.addAttribute("photos", photoService
+                        .getUserPhotos(userService.getUserByLogin(login)));
+                model.addAttribute("userFollowers",
+                        userService.getFollowing(user.getId()));
+                model.addAttribute("userAdmirers",
+                        userService.getAdmirers(user.getId()));
+
+            } catch (Exception e) {
+                logger.error(e.getLocalizedMessage());
+            }
+            if (principal.getName().equals(login)) {
+                return "profile_page";
+            } else
+                return "user_page";
+        } else
+            throw new Exception();
     }
 
     /**
@@ -97,31 +108,18 @@ public class UserPageController {
         return "redirect:/" + request.getParameter("userLogin");
     }
 
-    /**
-     * Creating a collection of photo.
-     * 
-     * @param login
-     *            - User login
-     * @return collection of photos
-     */
-    private List<List<Photo>> createUserPhotoCollection(final String login) {
-        List<Photo> photos = photoService.getUserPhotos(userService
-                .getUserByLogin(login));
-        List<List<Photo>> photoColection = new ArrayList<List<Photo>>();
-        int i = 0;
-        while (i < photos.size()) {
-            List<Photo> array = new ArrayList<Photo>();
-            for (int j = 0; j < 2; j++) {
-                try {
-                    array.add(photos.get(i));
-                } catch (Exception e) {
-                    logger.info(e.getLocalizedMessage());
-                    break;
-                }
-                i++;
-            }
-            photoColection.add(array);
+    @RequestMapping(value = "/people", method = RequestMethod.GET)
+    public String getAll(HttpServletRequest request, Principal principal,
+            ModelMap map) {
+        try {
+            map.addAttribute(
+                    "people",
+                    userService.getAll(userService.getUserByLogin(
+                            principal.getName()).getId()));
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
         }
-        return photoColection;
+        return "people";
     }
+
 }

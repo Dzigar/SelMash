@@ -29,6 +29,12 @@ public interface UserService {
     User getUserById(long id);
 
     /**
+     * 
+     * @return
+     */
+    List<User> getAll(long userId);
+
+    /**
      * Save User in DB.
      * 
      * @param user
@@ -43,15 +49,6 @@ public interface UserService {
      *            - object User
      */
     void updateUser(User user);
-
-    /**
-     * Get how many days a user is registered on the service.
-     * 
-     * @param login
-     *            - User login
-     * @return number of days in service.
-     */
-    int getDaysOnline(String login);
 
     /**
      * Add new admirer.
@@ -90,6 +87,13 @@ public interface UserService {
      * @return list of admirers users.
      */
     List<User> getAdmirers(long userId);
+
+    /**
+     * 
+     * @param userId
+     * @return list of recommended users.
+     */
+    List<User> getRecommended(long userId);
 
     /**
      * 

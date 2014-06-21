@@ -23,6 +23,12 @@ public interface UserDAO {
 
     /**
      * 
+     * @return
+     */
+    List<User> getAll(long userId);
+
+    /**
+     * 
      * @param id
      *            - id of user
      * @return user by user id
@@ -37,13 +43,6 @@ public interface UserDAO {
      * @return
      */
     void updateUser(User user);
-
-    /**
-     * 
-     * @param login
-     * @return
-     */
-    int getDaysOnline(String login);
 
     /**
      * 
@@ -72,6 +71,13 @@ public interface UserDAO {
      * @return list of admirers users.
      */
     List<User> getAdmirers(long userId);
+
+    /**
+     * 
+     * @param userId
+     * @return list of recommended users.
+     */
+    List<User> getRecommended(long userId);
 
     /**
      * 

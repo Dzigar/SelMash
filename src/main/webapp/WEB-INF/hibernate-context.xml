@@ -30,7 +30,9 @@
 				<value>com.selfmash.model.Photo</value>
 				<value>com.selfmash.model.Post</value>
 				<value>com.selfmash.model.Notification</value>
-				<value>com.selfmash.model.Estimation</value><!-- <value>com.selfmash.model.Comment</value> -->
+				<value>com.selfmash.model.Message</value>
+				<value>com.selfmash.model.Dialog</value>
+				<value>com.selfmash.model.Estimation</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

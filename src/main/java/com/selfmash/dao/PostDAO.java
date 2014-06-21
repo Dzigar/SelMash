@@ -22,25 +22,13 @@ public interface PostDAO {
      * 
      * @return list of friends posts
      */
-    List<Post> getFollowPosts(List<User> friends);
+    List<Post> getFollowPosts(long userId);
 
     /**
      * 
      * @param postId
      */
     void deletePost(Post post);
-
-    /**
-     * 
-     * @param userId
-     */
-    void removeUser(long postId, long userId);
-
-    /**
-     * 
-     * @param followerId
-     */
-    void removeFollower(long postId, long followerId);
 
     /**
      * 

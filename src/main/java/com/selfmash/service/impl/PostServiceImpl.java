@@ -35,7 +35,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getFollowPosts(long userId) {
-        return postDAO.getFollowPosts(userService.getFollowing(userId));
+        return postDAO.getFollowPosts(userId);
     }
 
     @Override

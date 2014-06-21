@@ -7,7 +7,7 @@
 	prefix="sec"%><%@taglib uri="http://www.springframework.org/tags"
 	prefix="spring"%>
 <div align="left" id="block">
-	<table>
+	<table width="100%">
 		<tr>
 			<td width="50"><c:choose>
 					<c:when test="${not empty notification.sender.profilePhoto}">
@@ -27,8 +27,8 @@
 		<tr>
 			<td colspan="2"><spring:message
 					code="notification.appreciate_photo" /> <br> <a
-				href="/photo/${notification.photo.id}"> <img alt="" width="20%"
-					height="20%"
+				href="/photo/${notification.photo.id}"> <img alt="" width="100"
+					height="100"
 					src="/resources/selfshots/${notification.photo.user.login}/${notification.photo.title}" /></a>
 			</td>
 

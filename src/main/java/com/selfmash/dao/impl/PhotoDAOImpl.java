@@ -16,7 +16,7 @@ import com.selfmash.model.Photo;
 import com.selfmash.model.User;
 import com.selfmash.service.EstimationService;
 import com.selfmash.service.UserService;
-import com.selfmash.strings.Queries;
+import com.selfmash.strings.PhotoQueries;
 
 @Repository
 public class PhotoDAOImpl implements PhotoDAO {
@@ -50,10 +50,9 @@ public class PhotoDAOImpl implements PhotoDAO {
     @Override
     public List<Photo> getUserPhotos(User user) {
         try {
-            List<Photo> list = getCurrentSession()
-                    .createQuery("from Photo as p where p.user = :user")
+            return getCurrentSession()
+                    .createQuery(PhotoQueries.GET_USER_PHOTOS)
                     .setParameter("user", user).list();
-            return list;
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -63,7 +62,7 @@ public class PhotoDAOImpl implements PhotoDAO {
     @Override
     public Photo getPhotoById(long id) {
         return (Photo) getCurrentSession()
-                .createQuery("from Photo as u where u.id = :id")
+                .createQuery(PhotoQueries.GET_PHOTO_BY_ID)
                 .setParameter("id", id).uniqueResult();
     }
 
@@ -80,7 +79,7 @@ public class PhotoDAOImpl implements PhotoDAO {
     public void deletePhoto(Photo photo) {
         try {
             estimationService.removeEstimationsByPhotoId(photo.getId());
-            getCurrentSession().createQuery(Queries.QUERY_DELETE_PHOTO_BY_ID)
+            getCurrentSession().createQuery(PhotoQueries.DELETE_PHOTO_BY_ID)
                     .setParameter("photoId", photo.getId()).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());

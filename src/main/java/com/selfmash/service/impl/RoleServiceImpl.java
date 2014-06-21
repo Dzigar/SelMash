@@ -12,11 +12,11 @@ import com.selfmash.service.RoleService;
 @Transactional
 public class RoleServiceImpl implements RoleService {
 
-	@Autowired
-	private RoleDAO roleDAO;
+    @Autowired
+    private RoleDAO roleDAO;
 
-	public Role getRole(long id) {
-		return roleDAO.getRole(id);
-	}
+    public Role getRole(long id) {
+        return roleDAO.getRole(id);
+    }
 
 }

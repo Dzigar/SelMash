@@ -3,7 +3,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-
+<link rel="stylesheet" type="text/css"
+	href="<c:url value='/resources/css/photo-collection.css'/>" media="all" />
 <script type="text/javascript" src="/resources/js/jquery-1.3.1.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -108,15 +109,15 @@
 		});
 	});
 </script>
+<c:choose>
+	<c:when test="${authentication == login}">
+		<div id="block">
+			<table align="center">
+				<tr>
+					<td colspan="4">
+						<!-- Upload photo form -->
+						<div class="uploadfile_form" align="center">
 
-<div id="block">
-	<table align="center">
-		<tr>
-			<td colspan="4">
-				<!-- Upload photo form -->
-				<div class="uploadfile_form" align="center">
-					<c:choose>
-						<c:when test="${authentication == login}">
 							<form action="/photo/upload" method="post"
 								encType="multipart/form-data">
 								<c:out value="Upload photo" />
@@ -124,32 +125,18 @@
 									accept="image/jpeg,image/png"> <input type="submit"
 									value="Send" class="submit-button_no_style">
 							</form>
-						</c:when>
-					</c:choose>
-				</div>
-			<td>
-		</tr>
 
-		<c:forEach var="row" items="${photoRows}">
-			<tr>
-				<c:forEach var="photo" items="${row}">
-					<td>
-						<div class="boxgrid caption">
-							<a href="/photo/${photo.id}"><img
-								src="<c:out value="/resources/selfshots/${login}/${photo.title}" />"
-								width="100%" height="100%" alt="" /></a>
-							<div class="cover boxcaption">
-								<h3>Photoname</h3>
-								<p>${photo.dateUpload}<br /> <a
-										href='<c:url  value="/photo/${photo.id}"/>'>Fully</a>
-								</p>
-							</div>
 						</div>
-					</td>
-
-				</c:forEach>
-			</tr>
-
-		</c:forEach>
-	</table>
+					<td>
+				</tr>
+			</table>
+		</div>
+	</c:when>
+</c:choose>
+<div class="gallery">
+	<c:forEach var="photo" items="${photos}">
+		<a tabindex="1" href="/photo/${photo.id}"><img
+			src="<c:out value="/resources/selfshots/${user.login}/${photo.title}" />"
+			alt="" /></a>
+	</c:forEach>
 </div>

@@ -155,18 +155,6 @@ public class Post implements Serializable {
     }
 
     /**
-     * @param dateCreate
-     *            the dateCreate to set
-     */
-    // @DateTimeFormat(pattern = "dd.MM.yyyy HH:MM")
-    // @Past
-    // @Temporal(TemporalType.DATE)
-    // @Column(name = "date_create")
-    // public void setDateCreate(Date dateCreate) {
-    // this.dateCreate = dateCreate;
-    // }
-
-    /**
      * @return the action
      */
     public ActionBody getAction() {

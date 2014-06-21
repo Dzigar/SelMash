@@ -1,8 +1,7 @@
 package com.selfmash.dao.impl;
 
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.selfmash.dao.UserDAO;
 import com.selfmash.model.User;
-import com.selfmash.strings.Queries;
+import com.selfmash.strings.UserQueries;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -40,17 +39,21 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByLogin(String login) {
-
-        return (User) getCurrentSession()
-                .createQuery(Queries.QUERY_GET_USER_BY_LOGIN)
-                .setParameter("login", login).uniqueResult();
+        try {
+            return (User) getCurrentSession()
+                    .createQuery(UserQueries.GET_USER_BY_LOGIN)
+                    .setParameter("login", login).uniqueResult();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return null;
     }
 
     @Override
     public User getUserById(long id) {
         try {
             return (User) getCurrentSession()
-                    .createQuery(Queries.QUERY_GET_USER_BY_ID)
+                    .createQuery(UserQueries.GET_USER_BY_ID)
                     .setParameter("id", id).uniqueResult();
         } catch (Exception e) {
             logger.equals(e.getLocalizedMessage());
@@ -61,31 +64,16 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void updateUser(User user) {
         try {
-            getCurrentSession().update(user);
+            getCurrentSession().merge(user);
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }
     }
 
     @Override
-    public int getDaysOnline(String login) {
-        try {
-            String query = "SELECT DATEDIFF('"
-                    + new SimpleDateFormat("yyyy-MM-dd").format(new Date())
-                    + "', u.dateReg) from user u where u.login = '" + login
-                    + "'";
-            return ((BigInteger) getCurrentSession().createSQLQuery(query)
-                    .uniqueResult()).intValue();
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        return 0;
-    }
-
-    @Override
     public void subscribe(long admirerId, long followerId) {
         try {
-            getCurrentSession().createSQLQuery(Queries.QUERY_SUBSCRIBE)
+            getCurrentSession().createSQLQuery(UserQueries.SUBSCRIBE)
                     .setLong("followerId", followerId)
                     .setLong("admirerId", admirerId).executeUpdate();
         } catch (Exception e) {
@@ -97,10 +85,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getFollowing(long userId) {
         try {
-            List<User> following = getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_SELECT_FOLLOWING)
+            return getCurrentSession()
+                    .createSQLQuery(UserQueries.SELECT_FOLLOWING)
                     .addEntity(User.class).setLong("userId", userId).list();
-            return following;
         } catch (Exception e) {
             logger.error(e.getStackTrace());
         }
@@ -112,9 +99,8 @@ public class UserDAOImpl implements UserDAO {
     public List<User> getAdmirers(long userId) {
         try {
             return getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_SELECT_ADMIRERS)
+                    .createSQLQuery(UserQueries.SELECT_ADMIRERS)
                     .addEntity(User.class).setLong("userId", userId).list();
-
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -124,7 +110,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void unsubscribe(long followerId, long admirerId) {
         try {
-            getCurrentSession().createSQLQuery(Queries.QUERY_UNSUBSCRIBE)
+            getCurrentSession().createSQLQuery(UserQueries.UNSUBSCRIBE)
                     .setLong("followerId", followerId)
                     .setLong("admirerId", admirerId).executeUpdate();
         } catch (Exception e) {
@@ -136,12 +122,48 @@ public class UserDAOImpl implements UserDAO {
     public void removeProfilePhoto(long userId) {
         try {
             getCurrentSession()
-                    .createSQLQuery(
-                            "UPDATE user as u SET u.profilePhoto_id = NULL WHERE u.id = :userId")
+                    .createSQLQuery(UserQueries.REMOVE_PROFILE_PHOTO)
                     .setParameter("userId", userId).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> getAll(long userId) {
+        try {
+            return getCurrentSession()
+                    .createSQLQuery(UserQueries.GET_ALL_USERS)
+                    .addEntity(User.class).setLong("userId", userId).list();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return new ArrayList<User>();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> getRecommended(long userId) {
+        try {
+            List<BigInteger> usersId = getCurrentSession()
+                    .createSQLQuery(
+                            "select u.id from user as u where u.id in "
+                                    + "(select f.user_id from followers f join user_role as ur on f.user_id = ur.user_id where f.admirer_id in (select admirer_id from followers where admirer_id in (select user_id from followers where admirer_id = :userId))) and u.id != :userId order by u.rating desc")
+                    .setParameter("userId", userId).list();
+
+            return getCurrentSession()
+                    .createSQLQuery(
+                            "Select * from user u "
+                                    + "left join user_role as ur on "
+                                    + "ur.user_id = u.id "
+                                    + "where u.id in (:usersId) order by u.rating limit 3")
+                    .addEntity(User.class).setParameterList("usersId", usersId)
+                    .list();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return null;
     }
 
 }

@@ -2,7 +2,9 @@ package com.selfmash.service;
 
 import java.util.List;
 
+import com.selfmash.model.Estimation;
 import com.selfmash.model.Photo;
+import com.selfmash.model.Post;
 import com.selfmash.model.User;
 
 /**
@@ -46,4 +48,13 @@ public interface PhotoService {
      *            - id photo deleting
      */
     void deletePhoto(Photo photo);
+
+    /**
+     * 
+     * @param post
+     * @param photo
+     * @param estimation
+     */
+    void appreciatePhoto(Post post, Photo photo, Estimation estimation);
+
 }

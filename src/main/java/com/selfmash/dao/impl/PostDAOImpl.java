@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import com.selfmash.dao.PostDAO;
 import com.selfmash.model.Post;
 import com.selfmash.model.User;
 import com.selfmash.service.UserService;
+import com.selfmash.strings.PostQueries;
 
 @Repository
 public class PostDAOImpl implements PostDAO {
@@ -40,49 +40,25 @@ public class PostDAOImpl implements PostDAO {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public List<Post> getFollowPosts(List<User> following) {
-        List<Post> posts = new ArrayList<Post>();
-        for (User user : following) {
-            posts.addAll(user.getUserPosts());
+    public List<Post> getFollowPosts(long userId) {
+        try {
+            return getCurrentSession()
+                    .createSQLQuery(PostQueries.GET_FOLLOW_POSTS)
+                    .addEntity(Post.class).setParameter("userId", userId)
+                    .list();
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
         }
-        return posts;
+        return new ArrayList<Post>();
     }
 
     @Override
     public void deletePost(Post post) {
         try {
-            Query query = getCurrentSession().createQuery(
-                    "delete Post where id = :postId").setParameter("postId",
-                    post.getId());
-            query.executeUpdate();
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    @Override
-    public void removeUser(long postId, long userId) {
-        try {
-            Query query = getCurrentSession()
-                    .createSQLQuery(
-                            "delete from post_user where user_id = :userId and post_id = :postId")
-                    .setParameter("userId", userId)
-                    .setParameter("postId", postId);
-            query.executeUpdate();
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    @Override
-    public void removeFollower(long postId, long followerId) {
-        try {
-            getCurrentSession()
-                    .createSQLQuery(
-                            "delete from post_follower where follower_id = :userId and post_id = :postId")
-                    .setParameter("userId", followerId)
-                    .setParameter("postId", postId).executeUpdate();
+            getCurrentSession().createQuery(PostQueries.DELETE_POST_BY_ID)
+                    .setParameter("postId", post.getId()).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -91,13 +67,10 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public void associatePhotoWithPost(Post post, User user) {
         try {
-            Query query = getCurrentSession()
-                    .createSQLQuery(
-                            "insert into post_user value(:userId, :postId)")
+            getCurrentSession()
+                    .createSQLQuery(PostQueries.INSERT_INTO_POST_USER)
                     .setParameter("userId", user.getId())
-                    .setParameter("postId", post.getId());
-            query.executeUpdate();
-
+                    .setParameter("postId", post.getId()).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -106,12 +79,10 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public void mergeWithEstimation(long postId, long estimationId) {
         try {
-            Query query = getCurrentSession()
-                    .createSQLQuery(
-                            "insert into post_estimation value(:estimationId, :postId)")
+            getCurrentSession()
+                    .createSQLQuery(PostQueries.MERGE_WITH_ESTIMATION)
                     .setParameter("estimationId", estimationId)
-                    .setParameter("postId", postId);
-            query.executeUpdate();
+                    .setParameter("postId", postId).executeUpdate();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }

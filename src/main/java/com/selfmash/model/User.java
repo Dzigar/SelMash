@@ -32,9 +32,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
 public class User implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -67,6 +64,9 @@ public class User implements Serializable {
     @Column
     private Date birthDate;
 
+    @Column(nullable = true, columnDefinition = "float(1) default '0.0'")
+    private float rating;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
     private Role role;
@@ -85,7 +85,7 @@ public class User implements Serializable {
     @JoinTable(name = "notification_user", joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "notification_id", nullable = false, updatable = false) })
     private List<Notification> notifications;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = { javax.persistence.CascadeType.ALL })
     @Cascade({ CascadeType.ALL })
     private Photo profilePhoto;
 
@@ -260,4 +260,20 @@ public class User implements Serializable {
         this.userPosts.add(post);
         return this;
     }
+
+    /**
+     * @return the rating
+     */
+    public float getRating() {
+        return rating;
+    }
+
+    /**
+     * @param rating
+     *            the rating to set
+     */
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
 }

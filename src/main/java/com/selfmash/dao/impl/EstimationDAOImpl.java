@@ -15,7 +15,7 @@ import com.selfmash.dao.EstimationDAO;
 import com.selfmash.dao.PostDAO;
 import com.selfmash.model.Estimation;
 import com.selfmash.model.User;
-import com.selfmash.strings.Queries;
+import com.selfmash.strings.EstimationQueries;
 
 @Repository
 public class EstimationDAOImpl implements EstimationDAO {
@@ -51,8 +51,8 @@ public class EstimationDAOImpl implements EstimationDAO {
                 estimation.setUser(null);
                 estimation.setPhoto(null);
                 getCurrentSession()
-                        .createQuery("delete Estimation where id = :estId")
-                        .setParameter("estId", estimation.getId())
+                        .createQuery(EstimationQueries.DELETE_ESTIMATION)
+                        .setParameter("estimationId", estimation.getId())
                         .executeUpdate();
             }
         } catch (Exception e) {
@@ -65,7 +65,8 @@ public class EstimationDAOImpl implements EstimationDAO {
     public List<Estimation> getEstimationsByPhotoId(long id) {
         try {
             return getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_GET_ESTIMATION_BY_PHOTO_ID)
+                    .createSQLQuery(
+                            EstimationQueries.GET_ESTIMATION_BY_PHOTO_ID)
                     .addEntity(Estimation.class).setParameter("photoId", id)
                     .list();
 
@@ -80,7 +81,7 @@ public class EstimationDAOImpl implements EstimationDAO {
     public List<User> getAdmirersByPhotoId(long photoId) {
         try {
             return getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_GET_EDMIRERS_BY_PHOTO_ID)
+                    .createSQLQuery(EstimationQueries.GET_EDMIRERS_BY_PHOTO_ID)
                     .addEntity(User.class).setParameter("photoId", photoId)
                     .list();
         } catch (Exception e) {
@@ -93,7 +94,7 @@ public class EstimationDAOImpl implements EstimationDAO {
     public boolean isAppreciated(long userId, long photoId) {
         try {
             return (Boolean) getCurrentSession()
-                    .createSQLQuery(Queries.QUERY_CHECH_FOR_APPRECIATE)
+                    .createSQLQuery(EstimationQueries.CHECH_FOR_APPRECIATE)
                     .addScalar("containce", Hibernate.BOOLEAN)
                     .setParameter("userId", userId)
                     .setParameter("photoId", photoId).uniqueResult();
@@ -107,7 +108,7 @@ public class EstimationDAOImpl implements EstimationDAO {
     public void deleteEstimation(Estimation estimation) {
         try {
             Query query = getCurrentSession().createQuery(
-                    "delete Estimation where id = :estimationId").setParameter(
+                    EstimationQueries.DELETE_ESTIMATION).setParameter(
                     "estimationId", estimation.getId());
             query.executeUpdate();
         } catch (Exception e) {

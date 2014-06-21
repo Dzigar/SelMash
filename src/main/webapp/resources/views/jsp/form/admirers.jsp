@@ -9,13 +9,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page import="java.util.List"%>
 <%@page import="com.selfmash.model.User"%>
-<div class="following" id="block"><spring:message code="lable.admirers" /> <br />
+<div class="following" id="block">
+	<spring:message code="lable.admirers" />
+	<br />
 	<c:choose>
 		<c:when test="${not empty admirers}">
-			<c:forEach var="admirer" items="${admirers}">
-				<a href="/${admirer.login}"> <c:out
-						value="${admirer.name} ${admirer.lastname}" /></a>
-				<br>
+			<c:forEach var="user" items="${admirers}">
+				<%@include file="user_form.jsp"%>
 			</c:forEach>
 		</c:when>
 		<c:otherwise>

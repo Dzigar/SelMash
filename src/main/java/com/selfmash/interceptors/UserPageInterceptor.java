@@ -50,11 +50,13 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
             modelAndView.addObject("following", following);
             modelAndView.addObject("admirers",
                     userService.getAdmirers(user.getId()));
+            modelAndView.addObject("recommended",
+                    userService.getRecommended(user.getId()));
             if (subsrcibed(request.getSession().getAttribute("userLogin")
                     .toString())) {
-                modelAndView.addObject("isSubscribed", true);
+                request.setAttribute("isSubscribed", true);
+                // modelAndView.addObject("isSubscribed", true);
             }
-
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
