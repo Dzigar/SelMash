@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +29,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.selfmash.model.enums.Sex;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
@@ -64,6 +68,9 @@ public class User implements Serializable {
     @Column
     private Date birthDate;
 
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
+
     @Column(nullable = true, columnDefinition = "float(1) default '0.0'")
     private float rating;
 
@@ -94,7 +101,7 @@ public class User implements Serializable {
     }
 
     public User(String name, String lastname, Date birthDate, String login,
-            String password, String email, Role role) {
+            String password, String email, Role role, Sex sex) {
         this.name = name;
         this.lastname = lastname;
         this.birthDate = birthDate;
@@ -102,6 +109,7 @@ public class User implements Serializable {
         this.password = password;
         this.email = email;
         this.role = role;
+        this.sex = sex;
     }
 
     public long getId() {
@@ -274,6 +282,21 @@ public class User implements Serializable {
      */
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    /**
+     * @return the sex
+     */
+    public Sex getSex() {
+        return sex;
+    }
+
+    /**
+     * @param sex
+     *            the sex to set
+     */
+    public void setSex(Sex sex) {
+        this.sex = sex;
     }
 
 }

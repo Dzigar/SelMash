@@ -84,6 +84,12 @@
 										class="input login"
 										placeholder="<spring:message code="lable.form.login" />"
 										required /></li>
+									<li><form:errors path="sex" cssClass="error" /></li>
+									<li><spring:message code="lable.form.sex" /> <br />
+										<input type="radio" name="sex" value="MALE" placeholder="male"
+										required> <spring:message code="lable.sex.male" /> <input
+										type="radio" name="sex" value="FEMALE" required> <spring:message
+											code="lable.sex.female" /><br></li>
 									<li><form:errors path="password" cssClass="error" /></li>
 									<li><input type="password" name="password" type="password"
 										class="input password"
@@ -97,7 +103,9 @@
 					</tr>
 				</table>
 			</div>
-			<div class="footer" align="center"><spring:message code="lable.footer" /></div>
+			<div class="footer" align="center">
+				<spring:message code="lable.footer" />
+			</div>
 		</div>
 	</div>
 
