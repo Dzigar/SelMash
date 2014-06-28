@@ -165,5 +165,4 @@ public class Photo implements Serializable {
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
     }
-
 }

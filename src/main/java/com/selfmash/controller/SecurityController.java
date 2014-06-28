@@ -1,10 +1,13 @@
 package com.selfmash.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -19,10 +22,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.selfmash.model.City;
 import com.selfmash.model.User;
 import com.selfmash.service.PostService;
 import com.selfmash.service.RoleService;
+import com.selfmash.service.StateService;
 import com.selfmash.service.UserService;
 
 /**
@@ -61,6 +68,9 @@ public class SecurityController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private StateService stateService;
 
     /**
      * 
@@ -107,6 +117,7 @@ public class SecurityController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public final String viewRegistration(final Map<String, Object> model) {
         model.put("user", new User());
+        model.put("stateList", stateService.getAllStates());
         return "access_page";
     }
 
@@ -115,7 +126,7 @@ public class SecurityController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public final String logout() {
-        return "redirect:index";
+        return "redirect:login";
     }
 
     /**
@@ -141,6 +152,7 @@ public class SecurityController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public final String addUser(@Valid final User user,
             final BindingResult result, final HttpServletRequest request) {
+
         try {
             if (result.hasErrors()) {
                 logger.error("Error valigation registration : "
@@ -148,6 +160,7 @@ public class SecurityController {
                 logger.error(result.getFieldError());
                 return "access_page";
             } else {
+                user.setCity(stateService.getCityByName(request.getParameter("userCity")));
                 user.setRole(roleService.getRole(USER_ROLE_ID));
                 String password = user.getPassword();
                 user.setPassword(passwordEncoder.encodePassword(password,
@@ -177,4 +190,13 @@ public class SecurityController {
                         .authenticate(new UsernamePasswordAuthenticationToken(
                                 login, pass)));
     }
+
+    @RequestMapping(value = "/getCities", method = RequestMethod.GET)
+    @ResponseBody
+    public List<City> getCities(@RequestParam("countryId") long countryId,
+            HttpServletRequest request, HttpServletResponse response)
+            throws UnsupportedEncodingException {
+        return stateService.getCitiesByState(countryId);
+    }
+
 }

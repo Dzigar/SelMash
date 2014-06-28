@@ -38,6 +38,13 @@ public interface PhotoService {
     /**
      * 
      * @param photo
+     *            - object Photo for merge
+     */
+    void mergePhoto(Photo photo);
+
+    /**
+     * 
+     * @param photo
      *            - object Photo for update
      */
     void updatePhoto(Photo photo);

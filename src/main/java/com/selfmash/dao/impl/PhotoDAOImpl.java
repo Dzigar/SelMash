@@ -69,6 +69,15 @@ public class PhotoDAOImpl implements PhotoDAO {
     @Override
     public void updatePhoto(Photo photo) {
         try {
+            getCurrentSession().update(photo);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void mergePhoto(Photo photo) {
+        try {
             getCurrentSession().merge(photo);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -85,4 +94,5 @@ public class PhotoDAOImpl implements PhotoDAO {
             logger.error(e.getLocalizedMessage());
         }
     }
+
 }

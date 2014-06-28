@@ -39,6 +39,14 @@ public interface PhotoDAO {
     Photo getPhotoById(long id);
 
     /**
+     * Merge changed photo.
+     * 
+     * @param photo
+     *            - object Photo for m
+     */
+    void mergePhoto(Photo photo);
+
+    /**
      * Update changed photo.
      * 
      * @param photo

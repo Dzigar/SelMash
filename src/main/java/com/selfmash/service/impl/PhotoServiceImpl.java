@@ -94,6 +94,11 @@ public class PhotoServiceImpl implements PhotoService {
      *            - object Photo for update
      */
     @Override
+    public void mergePhoto(Photo photo) {
+        photoDAO.mergePhoto(photo);
+    }
+
+    @Override
     public void updatePhoto(Photo photo) {
         photoDAO.updatePhoto(photo);
     }
@@ -140,7 +145,7 @@ public class PhotoServiceImpl implements PhotoService {
         photo.addEstimation(estimation);
         photo.addPost(post);
         photo.setAverageRating(getAverageRatingPhoto(photo));
-        updatePhoto(photo);
+        mergePhoto(photo);
 
         User user = photo.getUser();
         user.setRating(getAverageRatingUser(user));
@@ -190,4 +195,5 @@ public class PhotoServiceImpl implements PhotoService {
         rating = rating.setScale(1, BigDecimal.ROUND_HALF_UP);
         return rating.floatValue();
     }
+
 }

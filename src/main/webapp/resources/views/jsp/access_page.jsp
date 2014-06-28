@@ -10,6 +10,7 @@
 
 <html>
 <head>
+
 <style>
 .error {
 	color: #ff0000;
@@ -24,9 +25,36 @@
 <link href="" rel="icon" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
 	href="<c:url value='/resources/css/login-style.css'/>" media="all" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+	function fillstates() {
+		var val = $('#state').val();
+		$.ajax({
+			url : 'getCities',
+			method : 'get',
+			ContentType : 'json',
+			data : {
+				countryId : val
+			},
+			success : function(response) {
+				var options = '';
+				if (response != null) {
+					$(response).each(
+							function(index, value) {
+								options = options + '<option>' + value.name
+										+ '</option>';
+							});
+					$('#city').html(options);
+				}
+			}
+		});
+	}
+</script>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>login</title>
 </head>
+
 <body>
 	<div id="wrapper">
 		<table width="100%">
@@ -85,11 +113,21 @@
 										placeholder="<spring:message code="lable.form.login" />"
 										required /></li>
 									<li><form:errors path="sex" cssClass="error" /></li>
-									<li><spring:message code="lable.form.sex" /> <br />
-										<input type="radio" name="sex" value="MALE" placeholder="male"
-										required> <spring:message code="lable.sex.male" /> <input
-										type="radio" name="sex" value="FEMALE" required> <spring:message
+									<li><spring:message code="lable.form.sex" /> <br /> <input
+										type="radio" name="sex" value="MALE" required> <spring:message
+											code="lable.sex.male" /> <input type="radio" name="sex"
+										value="FEMALE" required> <spring:message
 											code="lable.sex.female" /><br></li>
+
+									<li><form:errors path="city" cssClass="error" /><select
+										id="state" onchange="fillstates();">
+											<option value="Select state" />
+											<c:forEach items="${stateList}" var="state">
+												<option value="${state.id}">${state.name}</option>
+											</c:forEach>
+									</select> <select name="userCity" id="city">
+											<option value="${value}" />
+									</select></li>
 									<li><form:errors path="password" cssClass="error" /></li>
 									<li><input type="password" name="password" type="password"
 										class="input password"

@@ -33,6 +33,8 @@
 				<value>com.selfmash.model.Message</value>
 				<value>com.selfmash.model.Dialog</value>
 				<value>com.selfmash.model.Estimation</value>
+				<value>com.selfmash.model.State</value>
+				<value>com.selfmash.model.City</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

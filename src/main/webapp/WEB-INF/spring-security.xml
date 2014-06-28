@@ -5,11 +5,13 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<http auto-config="true">
-		<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/register" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN" />
+	<http auto-config="false" use-expressions="true">
+		<intercept-url pattern="/login" access="permitAll" />
+		<intercept-url pattern="/register" access="permitAll" />
+		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="/getCities" access="permitAll" />
+		<intercept-url pattern="/**" access="hasRole('USER')" />
+
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/error-login" always-use-default-target="true" />
 		<logout logout-success-url="/logout" />

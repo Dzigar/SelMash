@@ -33,7 +33,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.selfmash.model.enums.Sex;
 
 @Entity
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {
+        "id", "email", "login" }))
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,6 +71,9 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Sex sex;
+
+    @ManyToOne
+    private City city;
 
     @Column(nullable = true, columnDefinition = "float(1) default '0.0'")
     private float rating;
@@ -299,4 +303,18 @@ public class User implements Serializable {
         this.sex = sex;
     }
 
+    /**
+     * @return the city
+     */
+    public City getCity() {
+        return city;
+    }
+
+    /**
+     * @param city
+     *            the city to set
+     */
+    public void setCity(City city) {
+        this.city = city;
+    }
 }
