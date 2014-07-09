@@ -35,6 +35,7 @@
 				<value>com.selfmash.model.Estimation</value>
 				<value>com.selfmash.model.State</value>
 				<value>com.selfmash.model.City</value>
+								<value>com.selfmash.model.Meet</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

@@ -50,12 +50,12 @@
 										<tr>
 											<td>
 												<ul style="list-style-type: none;">
-													<li>Birth date:</li>
+													<li>Age:</li>
 												</ul>
 											</td>
 											<td>
 												<ul style="list-style-type: none;">
-													<li><c:out value="${user.birthDate}" /></li>
+													<li><c:out value="${age}" /></li>
 												</ul>
 											</td>
 										</tr>

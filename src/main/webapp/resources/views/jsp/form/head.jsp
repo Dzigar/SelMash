@@ -30,6 +30,10 @@
 								<a href=""><img alt=""
 									src="<c:url value='/resources/images/message.png'/>" /></a>
 								<c:out value="${messageCount}" />
+								<a href="/meets"><c:out value="Likes " /> <c:if
+										test="${likesCount ne 0}">
+										<c:out value=" ${likesCount}" />
+									</c:if> </a>
 							</div></td>
 						<td align="right"><span style="float: right"> <a
 								href="?lang=en">en</a> | <a href="?lang=ru">ru</a>

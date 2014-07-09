@@ -9,7 +9,32 @@
 <link href="" rel="icon" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
 	href="<c:url value='/resources/css/style.css'/>" media="all" />
-
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+	function fillstates() {
+		var val = $('#state').val();
+		$.ajax({
+			url : 'getCities',
+			method : 'get',
+			ContentType : 'json',
+			data : {
+				countryId : val
+			},
+			success : function(response) {
+				var options = '';
+				if (response != null) {
+					$(response).each(
+							function(index, value) {
+								options = options + '<option>' + value.name
+										+ '</option>';
+							});
+					$('#city').html(options);
+				}
+			}
+		});
+	}
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 </head>
@@ -18,47 +43,39 @@
 		<!-- Head -->
 		<%@include file="form/head.jsp"%>
 		<!-- end head -->
-
 		<table width="80%">
 			<tr>
-				<td width="25%" valign="top"><%@include file="form/top.jsp"%></td>
-				<td width="50%" valign="top">
-					<!-- Posts -->
-					<div align="left">
-						<c:choose>
-							<c:when test="${not empty posts}">
-								<c:forEach var="post" items="${posts}">
-									<c:choose>
-										<c:when test="${post.action eq 'SUBSCRIBE'}">
-											<%@include file="form/post_forms/subscribe_to.jsp"%>
-										</c:when>
-										<c:when test="${post.action eq 'UPLOAD_PHOTO'}">
-											<%@include file="form/post_forms/upload_photo.jsp"%>
-										</c:when>
-										<c:when test="${post.action eq 'APPRECIATE_PHOTO'}">
-											<%@include file="form/post_forms/appreciate_photo.jsp"%>
-										</c:when>
-									</c:choose>
-								</c:forEach>
-							</c:when>
-							<c:otherwise>
-								<div align="center" id="block">
-									<spring:message code="lable.empty" />
-								</div>
-							</c:otherwise>
-						</c:choose>
-						<!--  -->
-					</div>
+				<td width="80%" valign="top"><c:forEach items="${users}"
+						var="user">
+						<%@include file="form/user_form_extended.jsp"%>
+						<br />
+					</c:forEach></td>
+				<td width="20%" valign="top">
+					<form action="/index" method="get">
+						<select id="state" onchange="fillstates();">
+							<option value="Select state" />
+							<c:forEach items="${stateList}" var="state">
+								<option value="${state.id}">${state.name}</option>
+							</c:forEach>
+						</select> <select name="userCity" id="city">
+							<option value="${value}" />
+						</select> <br />
+						<c:out value="Age from" />
+						<select name="ageFrom">
+							<c:forEach var="i" begin="16" end="55">
+								<option><c:out value="${i}" /></option>
+							</c:forEach>
+						</select>
+						<c:out value="Age to" />
+						<select name="ageTo">
+							<c:forEach var="i" begin="16" end="55">
+								<option><c:out value="${i}" /></option>
+							</c:forEach>
+						</select> <input type="submit">
+					</form>
 				</td>
-				<td width="25%" valign="top">
-					<!-- following --> <%@include file="form/following.jsp"%>
-					<!-- end following --><%@include file="form/admirers.jsp"%></td>
 			</tr>
 		</table>
-
-
-
-
 	</div>
 </body>
 </html>

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.selfmash.model.User;
+import com.selfmash.service.MeetService;
 import com.selfmash.service.PhotoService;
 import com.selfmash.service.UserService;
 
@@ -35,6 +37,9 @@ public class UserPageController {
     @Resource(name = "userServiceImpl")
     private UserService userService;
 
+    @Autowired
+    private MeetService meetService;
+
     /**
      * Create logger.
      */
@@ -53,17 +58,21 @@ public class UserPageController {
     @RequestMapping(value = "{login}", method = RequestMethod.GET)
     public String showUserPage(@PathVariable String login, ModelMap model,
             HttpServletRequest request, Principal principal) throws Exception {
+        User userPrincipal = userService.getUserByLogin(principal.getName());
         User user = userService.getUserByLogin(login);
         if (user != null) {
             try {
                 request.getSession().setAttribute("userLogin", login);
                 model.addAttribute("user", user);
+                model.addAttribute("age", userService.getUserAge(login));
                 model.addAttribute("photos", photoService
                         .getUserPhotos(userService.getUserByLogin(login)));
                 model.addAttribute("userFollowers",
                         userService.getFollowing(user.getId()));
                 model.addAttribute("userAdmirers",
                         userService.getAdmirers(user.getId()));
+                model.addAttribute("meet", meetService.getMeetByUsersId(
+                        userPrincipal.getId(), user.getId()));
 
             } catch (Exception e) {
                 logger.error(e.getLocalizedMessage());

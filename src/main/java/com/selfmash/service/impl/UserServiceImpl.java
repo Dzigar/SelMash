@@ -10,10 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.selfmash.beans.PostBean;
 import com.selfmash.beans.enums.NotificationBody;
 import com.selfmash.dao.UserDAO;
+import com.selfmash.model.City;
 import com.selfmash.model.Notification;
 import com.selfmash.model.User;
+import com.selfmash.model.enums.Sex;
 import com.selfmash.service.NotificationService;
 import com.selfmash.service.PhotoService;
+import com.selfmash.service.StateService;
 import com.selfmash.service.UserService;
 
 @Service("userServiceImpl")
@@ -31,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PhotoService photoService;
+
+    @Autowired
+    private StateService stateService;
     /**
      * Logger for UserServiceImpl class.
      */
@@ -114,5 +120,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getRecommended(long userId) {
         return userDAO.getRecommended(userId);
+    }
+
+    @Override
+    public int getUserAge(String login) {
+        return userDAO.getUserAge(login);
+    }
+
+    @Override
+    public List<User> getUsersByParams(int ageFrom, int ageTo, String cityName,
+            Sex sex) {
+        switch (sex) {
+        case FEMALE:
+            sex = Sex.MALE;
+            break;
+        case MALE:
+            sex = Sex.FEMALE;
+            break;
+        default:
+            break;
+        }
+        City city = stateService.getCityByName(cityName);
+        return userDAO.getUsersByParams(ageFrom, ageTo, city, sex);
     }
 }

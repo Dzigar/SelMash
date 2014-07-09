@@ -12,7 +12,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.selfmash.dao.UserDAO;
+import com.selfmash.model.City;
 import com.selfmash.model.User;
+import com.selfmash.model.enums.Sex;
 import com.selfmash.strings.UserQueries;
 
 @Repository
@@ -149,7 +151,11 @@ public class UserDAOImpl implements UserDAO {
             List<BigInteger> usersId = getCurrentSession()
                     .createSQLQuery(
                             "select u.id from user as u where u.id in "
-                                    + "(select f.user_id from followers f join user_role as ur on f.user_id = ur.user_id where f.admirer_id in (select admirer_id from followers where admirer_id in (select user_id from followers where admirer_id = :userId))) and u.id != :userId order by u.rating desc")
+                                    + "(select f.user_id from followers f "
+                                    + "join user_role as ur on f.user_id = ur.user_id where f.admirer_id in "
+                                    + "(select admirer_id from followers where admirer_id in "
+                                    + "(select user_id from followers where admirer_id = :userId))) "
+                                    + "and u.id != :userId order by u.rating desc")
                     .setParameter("userId", userId).list();
 
             return getCurrentSession()
@@ -166,4 +172,31 @@ public class UserDAOImpl implements UserDAO {
         return null;
     }
 
+    @Override
+    public int getUserAge(String login) {
+        return ((Double) getCurrentSession()
+                .createSQLQuery(UserQueries.GET_USER_AGE)
+                .setParameter("login", login).uniqueResult()).intValue();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> getUsersByParams(int ageFrom, int ageTo, City city,
+            Sex sex) {
+        List<BigInteger> usersId = getCurrentSession()
+                .createSQLQuery(
+                        "SELECT u.id from user u where u.sex like :sex and u.city_id = :cityId and (DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(u.birthDate, '%Y')"
+                                + " - (DATE_FORMAT(NOW(), '00-%m-%d')"
+                                + " < DATE_FORMAT(u.birthDate, '00-%m-%d'))) "
+                                + " between :from and :to")
+                .setParameter("cityId", city.getId())
+                .setParameter("sex", sex.name()).setParameter("from", ageFrom)
+                .setParameter("to", ageTo).list();
+
+        return getCurrentSession()
+                .createSQLQuery(
+                        "select  * from user u join user_role ur on ur.user_id = u.id where u.id in (:usersId)")
+                .addEntity(User.class).setParameterList("usersId", usersId)
+                .list();
+    }
 }

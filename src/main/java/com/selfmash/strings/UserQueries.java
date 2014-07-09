@@ -28,4 +28,9 @@ public class UserQueries {
             + "and admirer_id = :admirerId";
 
     public static final String REMOVE_PROFILE_PHOTO = "UPDATE user as u SET u.profilePhoto_id = NULL WHERE u.id = :userId";
+
+    public static final String GET_USER_AGE = "SELECT DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(u.birthDate, '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d')"
+            + " < DATE_FORMAT(u.birthDate, '00-%m-%d')) AS age from user u where u.login = :login";
+
+
 }

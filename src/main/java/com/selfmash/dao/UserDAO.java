@@ -2,7 +2,9 @@ package com.selfmash.dao;
 
 import java.util.List;
 
+import com.selfmash.model.City;
 import com.selfmash.model.User;
+import com.selfmash.model.enums.Sex;
 
 public interface UserDAO {
 
@@ -84,4 +86,19 @@ public interface UserDAO {
      * @param userId
      */
     void removeProfilePhoto(long userId);
+
+    /**
+     * 
+     * @param login
+     * @return
+     */
+    int getUserAge(String login);
+
+    /**
+     * 
+     * @param age
+     * @param cityId
+     * @return
+     */
+    List<User> getUsersByParams(int from, int to, City city, Sex sex);
 }

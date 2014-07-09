@@ -3,6 +3,7 @@ package com.selfmash.service;
 import java.util.List;
 
 import com.selfmash.model.User;
+import com.selfmash.model.enums.Sex;
 
 /**
  * @author Dzigar.
@@ -100,4 +101,21 @@ public interface UserService {
      * @param userId
      */
     void removeProfilePhoto(long userId);
+
+    /**
+     * 
+     * @param login
+     * @return
+     */
+    int getUserAge(String login);
+
+    /**
+     * 
+     * @param ageFrom
+     * @param ageTo
+     * @param cityId
+     * @param sex
+     * @return
+     */
+    List<User> getUsersByParams(int ageFrom, int ageTo, String city, Sex sex);
 }

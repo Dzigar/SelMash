@@ -51,16 +51,23 @@
 										<tr>
 											<td>
 												<ul style="list-style-type: none;">
-													<li>Birth date:</li>
+													<li>Age:</li>
 												</ul>
 											</td>
 											<td>
 												<ul style="list-style-type: none;">
-													<li><c:out value="${user.birthDate}" /></li>
+													<li><c:out value="${age}" /></li>
 												</ul>
 											</td>
 										</tr>
-									</table> <a href="/dialog"><c:out value="write message" /> </a>
+									</table> <c:choose>
+										<c:when test="${ empty meet}">
+											<%@include file="form/meet_form.jsp"%>
+										</c:when>
+										<c:otherwise>
+											<c:out value="Meet send" />
+										</c:otherwise>
+									</c:choose>
 								</td>
 							</tr>
 

@@ -7,11 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.selfmash.model.User;
+import com.selfmash.service.MeetService;
 import com.selfmash.service.NotificationService;
 import com.selfmash.service.UserService;
 
@@ -26,12 +28,17 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
     @Resource(name = "NotificationService")
     private NotificationService notificationService;
 
+    @Autowired
+    private MeetService meetService;
+
     private Logger logger = Logger.getLogger(getClass().getName());
 
     /**
      * List following users
      */
     private List<User> following;
+
+    private User user;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -45,7 +52,7 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
             HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
         try {
-            User user = userService.getUserByLogin(getAuthenticationUserName());
+            user = userService.getUserByLogin(getAuthenticationUserName());
             following = userService.getFollowing(user.getId());
             modelAndView.addObject("following", following);
             modelAndView.addObject("admirers",
@@ -55,7 +62,6 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
             if (subsrcibed(request.getSession().getAttribute("userLogin")
                     .toString())) {
                 request.setAttribute("isSubscribed", true);
-                // modelAndView.addObject("isSubscribed", true);
             }
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -73,6 +79,12 @@ public class UserPageInterceptor extends HandlerInterceptorAdapter {
             logger.error(e.getLocalizedMessage());
         }
 
+        try {
+            modelAndView.addObject("likesCount",
+                    meetService.getMeetToFromUser(user.getId()).size());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
     }
 
     @Override
